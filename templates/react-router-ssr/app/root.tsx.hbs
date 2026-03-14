@@ -1,0 +1,90 @@
+import { useState, type PropsWithChildren } from "react";
+
+import { ConvexQueryClient } from "@convex-dev/react-query";
+import { HydrationBoundary, QueryClientProvider } from "@tanstack/react-query";
+import { ConvexProvider, ConvexReactClient } from "convex/react";
+import { isRouteErrorResponse, Outlet, Scripts, ScrollRestoration } from "react-router";
+
+import { useDehydratedState } from "./tanstack-query-integration/query-preloader.ts";
+import { setQueryClient } from "~/tanstack-query-integration/middleware.ts";
+import { createQueryClient } from "~/lib/client.ts";
+
+import type { Route } from "./+types/root.ts";
+
+const convex = new ConvexReactClient(import.meta.env.VITE_CONVEX_URL);
+const convexQueryClient = new ConvexQueryClient(convex);
+
+function createConvexQueryClient() {
+    const queryClient = createQueryClient({
+        queryKeyHashFn: convexQueryClient.hashFn(),
+        queryFn: convexQueryClient.queryFn(),
+    });
+
+    convexQueryClient.connect(queryClient);
+
+    return queryClient;
+}
+
+export const middleware = [setQueryClient(() => createConvexQueryClient())];
+
+export function Layout({ children }: PropsWithChildren) {
+    return (
+        <html lang="en">
+            <head>
+                <meta charSet="utf-8" />
+                <meta content="width=device-width, initial-scale=1" name="viewport" />
+                <meta content="#000000" name="theme-color" />
+                <title>{{repository}}</title>
+            </head>
+            <body>
+                {children}
+                <ScrollRestoration />
+                <Scripts />
+            </body>
+        </html>
+    );
+}
+
+export default function App() {
+    const [queryClient] = useState(() => createConvexQueryClient());
+    const state = useDehydratedState();
+
+    return (
+        <ConvexProvider client={convex}>
+            <QueryClientProvider client={queryClient}>
+                <HydrationBoundary state={state}>
+                    <Outlet />
+                </HydrationBoundary>
+            </QueryClientProvider>
+        </ConvexProvider>
+    );
+}
+
+export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
+    let message = "Oops!";
+    let details = "An unexpected error occurred.";
+    let stack: string | undefined;
+
+    if (isRouteErrorResponse(error)) {
+        message = error.status === 404 ? "404" : "Error";
+        details =
+            error.status === 404
+                ? "The requested page could not be found."
+                : error.statusText || details;
+    } else if (import.meta.env.DEV && error && error instanceof Error) {
+        details = error.message;
+        stack = error.stack;
+    }
+
+    return (
+        <main className="pt-16 p-4 container mx-auto">
+            <h1>{message}</h1>
+            <p>{details}</p>
+            {stack && (
+                <pre className="w-full p-4 overflow-x-auto">
+                    <code>{stack}</code>
+                </pre>
+            )}
+        </main>
+    );
+}

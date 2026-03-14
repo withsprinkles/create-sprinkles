@@ -1,0 +1,58 @@
+import type { PropsWithChildren } from "react";
+
+import { isRouteErrorResponse, Outlet, Scripts } from "react-router";
+
+import type { Route } from "./+types/root";
+
+import styles from "./styles/tailwind.css?url";
+
+export function Layout({ children }: PropsWithChildren) {
+    return (
+        <html lang="en">
+            <head>
+                <meta charSet="utf-8" />
+                <meta content="width=device-width, initial-scale=1" name="viewport" />
+                <meta content="#000000" name="theme-color" />
+                <link href={styles} rel="stylesheet" />
+                <title>{{repository}}</title>
+            </head>
+            <body>
+                {children}
+                <Scripts />
+            </body>
+        </html>
+    );
+}
+
+export function ServerComponent() {
+    return <Outlet />;
+}
+
+export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
+    let message = "Oops!";
+    let details = "An unexpected error occurred.";
+    let stack: string | undefined;
+
+    if (isRouteErrorResponse(error)) {
+        message = error.status === 404 ? "404" : "Error";
+        details =
+            error.status === 404
+                ? "The requested page could not be found."
+                : error.statusText || details;
+    } else if (import.meta.env.DEV && error && error instanceof Error) {
+        details = error.message;
+        stack = error.stack;
+    }
+
+    return (
+        <main>
+            <h1>{message}</h1>
+            <p>{details}</p>
+            {stack && (
+                <pre>
+                    <code>{stack}</code>
+                </pre>
+            )}
+        </main>
+    );
+}

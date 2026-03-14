@@ -1,0 +1,41 @@
+import { createFromReadableStream } from "@vitejs/plugin-rsc/ssr";
+import { renderToReadableStream as renderHTMLToReadableStream } from "react-dom/server.edge";
+import {
+    unstable_routeRSCServerRequest as routeRSCServerRequest,
+    unstable_RSCStaticRouter as RSCStaticRouter,
+} from "react-router";
+
+export async function generateHTML(request: Request, serverResponse: Response): Promise<Response> {
+    return await routeRSCServerRequest({
+        // The incoming request.
+        request,
+        // The React Server response.
+        serverResponse,
+        // Provide the React Server touchpoints.
+        createFromReadableStream,
+        // Render the router to HTML.
+        async renderHTML(getPayload) {
+            let payload = await getPayload();
+            let formState = payload.type === "render" ? await payload.formState : undefined;
+
+            let bootstrapScriptContent = await import.meta.viteRsc.loadBootstrapScriptContent(
+                "index",
+            );
+
+            return await renderHTMLToReadableStream(<RSCStaticRouter getPayload={getPayload} />, {
+                bootstrapScriptContent,
+                // @ts-expect-error - no types for this yet
+                formState,
+            });
+        },
+    });
+}
+
+let handler: ExportedHandler<Env> = {
+    async fetch(request, env) {
+        let serverResponse = await env.RSC.fetch(request);
+        return generateHTML(request, serverResponse);
+    },
+};
+
+export default handler;

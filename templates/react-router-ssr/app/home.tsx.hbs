@@ -1,0 +1,16 @@
+import type { Route } from "./+types/home.ts";
+
+import { createPreloader } from "~/tanstack-query-integration/query-preloader.ts";
+
+export const loader = createPreloader<Route.LoaderArgs, void>(async ({ preload }) => {
+    // Pre-populate query cache before render
+    // await preload(yourQueryOptions);
+});
+
+export default function Home() {
+    return (
+        <main>
+            <h1>Welcome to {{repository}}</h1>
+        </main>
+    );
+}
