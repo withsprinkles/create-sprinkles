@@ -2,11 +2,12 @@ import { testTemplate } from "bingo-testers";
 import { describe, expect, it } from "vite-plus/test";
 
 import { buildContext } from "../src/context.ts";
+import { mergeFiles } from "../src/merge.ts";
 import { options } from "../src/options.ts";
 import template from "../src/template.ts";
 
 describe("template", () => {
-    it("produces an empty creation for SPA kind", async () => {
+    it("produces shared files for SPA kind", async () => {
         const creation = await testTemplate(template, {
             options: {
                 kind: "react-router-spa",
@@ -15,10 +16,10 @@ describe("template", () => {
             },
         });
 
-        expect(creation.files).toEqual({});
+        expect(creation.files).toMatchSnapshot();
     });
 
-    it("produces an empty creation for ts-package kind", async () => {
+    it("produces shared files for ts-package kind", async () => {
         const creation = await testTemplate(template, {
             options: {
                 kind: "ts-package",
@@ -27,7 +28,31 @@ describe("template", () => {
             },
         });
 
-        expect(creation.files).toEqual({});
+        expect(creation.files).toMatchSnapshot();
+    });
+
+    it("produces shared files for RSC kind", async () => {
+        const creation = await testTemplate(template, {
+            options: {
+                kind: "react-router-rsc",
+                owner: "test-owner",
+                repository: "test-repo",
+            },
+        });
+
+        expect(creation.files).toMatchSnapshot();
+    });
+
+    it("produces shared files for SSR kind", async () => {
+        const creation = await testTemplate(template, {
+            options: {
+                kind: "react-router-ssr",
+                owner: "test-owner",
+                repository: "test-repo",
+            },
+        });
+
+        expect(creation.files).toMatchSnapshot();
     });
 });
 
@@ -92,5 +117,27 @@ describe("buildContext", () => {
         expect(ctx.isRSC).toBe(true);
         expect(ctx.isReactRouter).toBe(true);
         expect(ctx.hasConvex).toBe(false);
+    });
+});
+
+describe("mergeFiles", () => {
+    it("deep merges nested directories", () => {
+        const result = mergeFiles({ src: { "a.ts": "a" } }, { src: { "b.ts": "b" } });
+
+        expect(result).toEqual({
+            src: { "a.ts": "a", "b.ts": "b" },
+        });
+    });
+
+    it("later layers override earlier ones", () => {
+        const result = mergeFiles({ "file.ts": "old" }, { "file.ts": "new" });
+
+        expect(result).toEqual({ "file.ts": "new" });
+    });
+
+    it("skips null layers", () => {
+        const result = mergeFiles({ "a.ts": "a" }, null, { "b.ts": "b" });
+
+        expect(result).toEqual({ "a.ts": "a", "b.ts": "b" });
     });
 });

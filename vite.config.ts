@@ -3,6 +3,7 @@ import { defineConfig } from "vite-plus";
 export default defineConfig({
     fmt: {
         arrowParens: "avoid",
+        ignore: ["**/*.hbs"],
         overrides: [
             {
                 files: ["**/*.jsonc"],

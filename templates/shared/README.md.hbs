@@ -1,0 +1,16 @@
+# {{repository}}
+
+{{#if isSPA}}A React Router single-page application with Convex and TanStack Query.{{/if}}
+{{#if isSSR}}A server-rendered React Router application with Convex and TanStack Query.{{/if}}
+{{#if isRSC}}A React Router application with React Server Components and content-layer.{{/if}}
+{{#if isPackage}}A TypeScript package.{{/if}}
+
+## Getting Started
+
+```bash
+{{#if isReactRouter}}
+vp dev
+{{else}}
+vp run dev
+{{/if}}
+```

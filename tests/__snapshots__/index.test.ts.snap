@@ -1,0 +1,154 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`template > produces shared files for RSC kind 1`] = `
+{
+  ".gitignore": [
+    ".DS_Store
+.env
+.env.local
+/node_modules/
+
+# React Router
+/.react-router/
+/build/
+
+# Content Layer
+/.sprinkles/
+
+# Cloudflare
+.wrangler
+",
+    {
+      "executable": false,
+    },
+  ],
+  "README.md": [
+    "# test-repo
+
+
+
+A React Router application with React Server Components and content-layer.
+
+
+## Getting Started
+
+\`\`\`bash
+vp dev
+\`\`\`
+",
+    {
+      "executable": false,
+    },
+  ],
+}
+`;
+
+exports[`template > produces shared files for SPA kind 1`] = `
+{
+  ".gitignore": [
+    ".DS_Store
+.env
+.env.local
+/node_modules/
+
+# React Router
+/.react-router/
+/build/
+",
+    {
+      "executable": false,
+    },
+  ],
+  "README.md": [
+    "# test-repo
+
+A React Router single-page application with Convex and TanStack Query.
+
+
+
+
+## Getting Started
+
+\`\`\`bash
+vp dev
+\`\`\`
+",
+    {
+      "executable": false,
+    },
+  ],
+}
+`;
+
+exports[`template > produces shared files for SSR kind 1`] = `
+{
+  ".gitignore": [
+    ".DS_Store
+.env
+.env.local
+/node_modules/
+
+# React Router
+/.react-router/
+/build/
+",
+    {
+      "executable": false,
+    },
+  ],
+  "README.md": [
+    "# test-repo
+
+
+A server-rendered React Router application with Convex and TanStack Query.
+
+
+
+## Getting Started
+
+\`\`\`bash
+vp dev
+\`\`\`
+",
+    {
+      "executable": false,
+    },
+  ],
+}
+`;
+
+exports[`template > produces shared files for ts-package kind 1`] = `
+{
+  ".gitignore": [
+    ".DS_Store
+.env
+.env.local
+/node_modules/
+
+# Build
+/dist/
+",
+    {
+      "executable": false,
+    },
+  ],
+  "README.md": [
+    "# test-repo
+
+
+
+
+A TypeScript package.
+
+## Getting Started
+
+\`\`\`bash
+vp run dev
+\`\`\`
+",
+    {
+      "executable": false,
+    },
+  ],
+}
+`;

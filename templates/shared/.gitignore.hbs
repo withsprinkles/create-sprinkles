@@ -1,0 +1,23 @@
+.DS_Store
+.env
+.env.local
+/node_modules/
+{{#if isReactRouter}}
+
+# React Router
+/.react-router/
+/build/
+{{/if}}
+{{#if isRSC}}
+
+# Content Layer
+/.sprinkles/
+
+# Cloudflare
+.wrangler
+{{/if}}
+{{#if isPackage}}
+
+# Build
+/dist/
+{{/if}}
