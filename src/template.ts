@@ -9,6 +9,8 @@ import type { TemplateContext } from "./context.ts";
 import { buildContext } from "./context.ts";
 import { mergeFiles } from "./merge.ts";
 import { options } from "./options.ts";
+import { buildScripts } from "./scripts.ts";
+import { buildSuggestions } from "./suggestions.ts";
 
 const templatesDir = path.join(import.meta.dirname, "../templates");
 
@@ -82,6 +84,9 @@ export default createTemplate({
         const context = buildContext(opts as never);
         const files = await buildLayers(context);
 
-        return { files };
+        const scripts = buildScripts(context);
+        const suggestions = buildSuggestions(context);
+
+        return { files, scripts, suggestions };
     },
 });

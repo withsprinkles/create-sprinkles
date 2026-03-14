@@ -3,7 +3,7 @@ import { defineConfig } from "vite-plus";
 export default defineConfig({
     fmt: {
         arrowParens: "avoid",
-        ignore: ["**/*.hbs"],
+        ignore: ["templates"],
         overrides: [
             {
                 files: ["**/*.jsonc"],
@@ -45,6 +45,7 @@ export default defineConfig({
         env: {
             node: true,
         },
+        ignorePatterns: ["templates/**"],
         options: {
             typeAware: true,
             typeCheck: true,
@@ -103,9 +104,6 @@ export default defineConfig({
             },
         },
     },
-    test: {
-        exclude: ["templates/**", ".claude/**", "node_modules/**"],
-    },
     pack: {
         dts: {
             tsgo: true,
@@ -118,5 +116,8 @@ export default defineConfig({
             dev: { command: "vp pack --watch" },
             typecheck: { command: "tsgo --noEmit" },
         },
+    },
+    test: {
+        exclude: ["templates/**", ".claude/**", "node_modules/**"],
     },
 });
