@@ -1,12 +1,4 @@
-import tailwindcss from "@tailwindcss/vite";
-import { reactRouter } from "@react-router/dev/vite";
-import { defineConfig } from "vite-plus";
-
-import { reactCompiler } from "./react-compiler.plugin.ts";
-
-export default defineConfig({
-    plugins: [tailwindcss(), reactRouter(), reactCompiler()],
-    resolve: {
-        tsconfigPaths: true,
-    },
-});
+import tailwindcss from "@tailwindcss/vite"; import { reactRouter } from "@react-router/dev/vite";
+import { defineConfig } from "vite-plus"; import { reactCompiler } from
+"./react-compiler.plugin.ts"; export default defineConfig({ plugins: [tailwindcss(), reactRouter(),
+reactCompiler()], resolve: { tsconfigPaths: true, }, });

@@ -1,14 +1,4 @@
-/**
- * Single Executable Application entry point.
- *
- * This file is the main entry for the SEA build. It will be bundled
- * into a single file and embedded into the Node.js binary.
- *
- * @see https://nodejs.org/api/single-executable-applications.html
- */
-
-import { greet } from "./index.ts";
-
-const name = process.argv[2] ?? "world";
-
-console.log(greet(name));
+/** * Single Executable Application entry point. * * This file is the main entry for the SEA build.
+It will be bundled * into a single file and embedded into the Node.js binary. * * @see
+https://nodejs.org/api/single-executable-applications.html */ import { greet } from "./index.ts";
+const name = process.argv[2] ?? "world"; console.log(greet(name));

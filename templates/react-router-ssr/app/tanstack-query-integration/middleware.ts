@@ -1,6 +1,8 @@
 import type { QueryClient } from "@tanstack/react-query";
+
 import assert from "node:assert";
-import { createContext, RouterContextProvider, type MiddlewareFunction } from "react-router";
+import { createContext, RouterContextProvider } from 'react-router';
+import type { MiddlewareFunction } from 'react-router';
 
 const QUERY_CLIENT = createContext<QueryClient | null>(null);
 

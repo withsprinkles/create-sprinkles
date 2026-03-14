@@ -1,16 +1,3 @@
-import { defineConfig } from "vite-plus";
-
-export default defineConfig({
-    pack: {
-        dts: {
-            tsgo: true,
-        },
-        exports: true,
-    },
-    run: {
-        tasks: {
-            build: { command: "vp pack" },
-            dev: { command: "vp pack --watch" },
-        },
-    },
-});
+import { defineConfig } from "vite-plus"; export default defineConfig({ pack: { dts: { tsgo: true,
+}, exports: true, }, run: { tasks: { build: { command: "vp pack" }, dev: { command: "vp pack
+--watch" }, }, }, });

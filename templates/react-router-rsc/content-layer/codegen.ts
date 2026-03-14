@@ -8,9 +8,9 @@ export function generateTypes(
     collections: Record<string, CollectionInfo>,
     configPath: string,
 ): string {
-    let collectionEntries = Object.entries(collections);
+    const collectionEntries = Object.entries(collections);
 
-    let entryMapEntries = collectionEntries
+    const entryMapEntries = collectionEntries
         .map(([name]) => {
             return `		${name}: {
 			[id: string]: import("${CONTENT_LAYER_API_PATH}").DataEntry<
@@ -86,4 +86,4 @@ ${entryMapEntries}
 `;
 }
 
-let CONTENT_LAYER_API_PATH = "../../content-layer/api.ts";
+const CONTENT_LAYER_API_PATH = "../../content-layer/api.ts";

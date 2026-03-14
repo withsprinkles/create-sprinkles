@@ -14,20 +14,20 @@ import basename from "virtual:react-router/unstable_rsc/basename";
 
 export function fetchServer(request: Request) {
     return matchRSCServerRequest({
+        basename,
         createTemporaryReferenceSet,
         decodeAction,
         decodeFormState,
         decodeReply,
-        loadServerAction,
-        request,
-        routes,
-        basename,
         generateResponse(match, options) {
             return new Response(renderToReadableStream(match.payload, options), {
                 status: match.statusCode,
                 headers: match.headers,
             });
         },
+        loadServerAction,
+        request,
+        routes,
     });
 }
 
@@ -35,7 +35,7 @@ if (import.meta.hot) {
     import.meta.hot.accept();
 }
 
-let handler: ExportedHandler<Env> = {
+const handler: ExportedHandler<Env> = {
     fetch(request) {
         return fetchServer(request);
     },

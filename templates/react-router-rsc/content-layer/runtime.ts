@@ -17,9 +17,9 @@ export function createRuntime(
         collection: string,
         filter?: (entry: DataEntry) => unknown,
     ): Promise<DataEntry[]> {
-        let store = stores.get(collection);
-        if (!store) return [];
-        let entries = store.values();
+        const store = stores.get(collection);
+        if (!store) {return [];}
+        const entries = store.values();
         if (filter) {
             return entries.filter(filter);
         }
@@ -31,17 +31,17 @@ export function createRuntime(
         slug?: string,
     ): Promise<DataEntry | undefined> {
         if (typeof collectionOrRef === "object") {
-            let store = stores.get(collectionOrRef.collection);
+            const store = stores.get(collectionOrRef.collection);
             return store?.get(collectionOrRef.id);
         }
-        let store = stores.get(collectionOrRef);
+        const store = stores.get(collectionOrRef);
         return store?.get(slug!);
     }
 
     async function getEntries(refs: ReferenceEntry[]): Promise<DataEntry[]> {
-        let results: DataEntry[] = [];
-        for (let ref of refs) {
-            let entry = await getEntry(ref);
+        const results: DataEntry[] = [];
+        for (const ref of refs) {
+            const entry = await getEntry(ref);
             if (entry) {
                 results.push(entry);
             }
@@ -50,18 +50,18 @@ export function createRuntime(
     }
 
     async function render(entry: DataEntry): Promise<RenderedEntry> {
-        let collectionName = findCollectionForEntry(entry);
-        let key = `${collectionName}/${entry.id}`;
-        let importer = importers[key];
+        const collectionName = findCollectionForEntry(entry);
+        const key = `${collectionName}/${entry.id}`;
+        const importer = importers[key];
         if (!importer) {
             throw new Error(`No content found for entry "${key}"`);
         }
-        let mod = await importer();
+        const mod = await importer();
         return { Content: mod.default, headings: mod.headings ?? [] };
     }
 
     function findCollectionForEntry(entry: DataEntry): string {
-        for (let [name, store] of stores) {
+        for (const [name, store] of stores) {
             if (store.has(entry.id)) {
                 return name;
             }
@@ -69,5 +69,5 @@ export function createRuntime(
         throw new Error(`Entry "${entry.id}" not found in any collection`);
     }
 
-    return { getCollection, getEntry, getEntries, render };
+    return { getCollection, getEntries, getEntry, render };
 }

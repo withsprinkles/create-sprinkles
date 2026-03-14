@@ -339,7 +339,7 @@ export function glob(_globOptions: GlobOptions): ContentLoader {
 
 interface FileOptions {
     /**
-     * the parsing function to use for this data
+     * The parsing function to use for this data
      * @default jsr:@std/jsonc.parse or jsr:@std/yaml.parse, depending on the extension of the file
      * */
     parser?: (text: string) => Record<string, Record<string, unknown>> | Record<string, unknown>[];

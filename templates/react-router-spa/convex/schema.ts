@@ -3,5 +3,5 @@ import { v } from "convex/values";
 
 export default defineSchema({
     // Define your tables here
-    // example: defineTable({ name: v.string() }),
+    // Example: defineTable({ name: v.string() }),
 });

@@ -5,15 +5,15 @@ export interface FrontmatterResult {
     body: string;
 }
 
-let FRONTMATTER_RE = /^---\r?\n([\s\S]*?)\r?\n---\r?\n?/;
+const FRONTMATTER_RE = /^---\r?\n([\s\S]*?)\r?\n---\r?\n?/;
 
 export function parseFrontmatter(content: string): FrontmatterResult {
-    let match = FRONTMATTER_RE.exec(content);
+    const match = FRONTMATTER_RE.exec(content);
     if (!match) {
-        return { data: {}, body: content };
+        return { body: content, data: {} };
     }
-    let raw = match[1];
-    let body = content.slice(match[0].length).replace(/^\r?\n/, "");
-    let data = parseYaml(raw) as Record<string, unknown>;
-    return { data, body };
+    const raw = match[1];
+    const body = content.slice(match[0].length).replace(/^\r?\n/, "");
+    const data = parseYaml(raw) as Record<string, unknown>;
+    return { body, data };
 }

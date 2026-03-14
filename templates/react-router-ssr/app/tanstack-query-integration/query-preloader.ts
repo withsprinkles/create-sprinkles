@@ -1,13 +1,15 @@
-import { dehydrate } from "@tanstack/react-query";
 import type {
-    DehydratedState,
     DefaultError,
-    QueryKey,
+    DehydratedState,
     EnsureQueryDataOptions,
+    QueryKey,
 } from "@tanstack/react-query";
-import { useMatches } from "react-router";
 import type { LoaderFunctionArgs } from "react-router";
+
 import { on } from "@remix-run/interaction";
+import { dehydrate } from "@tanstack/react-query";
+import { useMatches } from "react-router";
+
 import { getQueryClient } from "./middleware";
 
 const DEHYDRATED_STATE_KEY = "@tanstack/react-query:dehydrated-state";
@@ -22,7 +24,7 @@ function mergeDehydratedStates(states: DehydratedState[]): DehydratedState {
     const byHash = new Map<string, (typeof allQueries)[number]>();
 
     for (const query of allQueries) {
-        if (!query) continue;
+        if (!query) {continue;}
         byHash.set(query.queryHash, query);
     }
 
@@ -36,16 +38,16 @@ export function useDehydratedState() {
     const matches = useMatches();
     const states = matches
         .map(m => (m.loaderData as any)?.[DEHYDRATED_STATE_KEY] as DehydratedState | undefined)
-        .filter((s): s is DehydratedState => !!s);
+        .filter((s): s is DehydratedState => Boolean(s));
 
     return states.length ? mergeDehydratedStates(states) : undefined;
 }
 
 export function createPreloader<
     TLoaderArgs extends LoaderFunctionArgs,
-    TData extends Record<string, unknown> | void
+    TData extends Record<string, unknown> | void,
 >(
-    fn: (args: QueryLoaderArgs<TLoaderArgs>) => MaybePromise<TData | Response>
+    fn: (args: QueryLoaderArgs<TLoaderArgs>) => MaybePromise<TData | Response>,
 ): QueryLoader<TLoaderArgs, TData> {
     return (async args => {
         const prefetches: Promise<any>[] = [];
@@ -58,10 +60,10 @@ export function createPreloader<
             } else {
                 on(args.request.signal, {
                     abort: {
-                        once: true,
                         listener: () => {
                             query.cancelQueries();
                         },
+                        once: true,
                     },
                 });
             }
@@ -71,7 +73,7 @@ export function createPreloader<
             TQueryFnData,
             TError = DefaultError,
             TData = TQueryFnData,
-            TQueryKey extends QueryKey = QueryKey
+            TQueryKey extends QueryKey = QueryKey,
         >(options: EnsureQueryDataOptions<TQueryFnData, TError, TData, TQueryKey>): Promise<TData> {
             const result = query.ensureQueryData(options);
             prefetches.push(result);
@@ -112,7 +114,7 @@ export type QueryLoaderReturn<TData extends object | void> = Promise<
 >;
 
 export type QueryLoader<LoaderArgs, TData extends object | void> = (
-    ctx: LoaderArgs
+    ctx: LoaderArgs,
 ) => QueryLoaderReturn<TData>;
 
 export type QueryLoaderArgs<Args extends LoaderFunctionArgs = LoaderFunctionArgs> = Args & {
@@ -120,8 +122,8 @@ export type QueryLoaderArgs<Args extends LoaderFunctionArgs = LoaderFunctionArgs
         TQueryFnData,
         TError = DefaultError,
         TData = TQueryFnData,
-        TQueryKey extends QueryKey = QueryKey
+        TQueryKey extends QueryKey = QueryKey,
     >(
-        options: EnsureQueryDataOptions<TQueryFnData, TError, TData, TQueryKey>
+        options: EnsureQueryDataOptions<TQueryFnData, TError, TData, TQueryKey>,
     ): Promise<TData>;
 };

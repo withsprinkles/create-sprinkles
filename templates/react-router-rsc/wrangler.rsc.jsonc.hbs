@@ -1,20 +1,5 @@
-{
-    "$schema": "node_modules/wrangler/config-schema.json",
-    "name": "{{repository}}",
-    "main": "workers/entry.rsc.tsx",
-    "assets": {
-        "directory": "./build/client"
-    },
-    "services": [{ "binding": "RSC", "service": "{{repository}}" }],
-    "workers_dev": true,
-    "compatibility_date": "2026-02-28",
-    "compatibility_flags": ["nodejs_als", "nodejs_compat"],
-    "observability": {
-        "logs": {
-            "enabled": true,
-            "head_sampling_rate": 1,
-            "invocation_logs": true,
-            "persist": true
-        }
-    }
-}
+{ "$schema": "node_modules/wrangler/config-schema.json", "name": "{{repository}}", "main":
+"workers/entry.rsc.tsx", "assets": { "directory": "./build/client" }, "services": [{ "binding":
+"RSC", "service": "{{repository}}" }], "workers_dev": true, "compatibility_date": "2026-02-28",
+"compatibility_flags": ["nodejs_als", "nodejs_compat"], "observability": { "logs": { "enabled":
+true, "head_sampling_rate": 1, "invocation_logs": true, "persist": true } } }

@@ -14,13 +14,13 @@ import { createDataStore, createMetaStore } from "./store.ts";
 
 /** Serializes a value to a JavaScript expression string, preserving Date instances. */
 function toJSLiteral(value: unknown): string {
-    if (value === null || value === undefined) return String(value);
-    if (typeof value === "boolean" || typeof value === "number") return String(value);
-    if (typeof value === "string") return JSON.stringify(value);
-    if (value instanceof Date) return `new Date(${JSON.stringify(value.toISOString())})`;
-    if (Array.isArray(value)) return `[${value.map(toJSLiteral).join(",")}]`;
+    if (value === null || value === undefined) {return String(value);}
+    if (typeof value === "boolean" || typeof value === "number") {return String(value);}
+    if (typeof value === "string") {return JSON.stringify(value);}
+    if (value instanceof Date) {return `new Date(${JSON.stringify(value.toISOString())})`;}
+    if (Array.isArray(value)) {return `[${value.map(toJSLiteral).join(",")}]`;}
     if (typeof value === "object") {
-        let entries = Object.entries(value as Record<string, unknown>).map(
+        const entries = Object.entries(value as Record<string, unknown>).map(
             ([k, v]) => `${JSON.stringify(k)}:${toJSLiteral(v)}`,
         );
         return `{${entries.join(",")}}`;
@@ -28,14 +28,14 @@ function toJSLiteral(value: unknown): string {
     return JSON.stringify(value);
 }
 
-let VIRTUAL_MODULE_ID = "sprinkles:content";
-let RESOLVED_VIRTUAL_ID = `\0${VIRTUAL_MODULE_ID}`;
-let VIRTUAL_STORE_ID = "virtual:sprinkles-content/store";
-let RESOLVED_STORE_ID = `\0${VIRTUAL_STORE_ID}`;
-let VIRTUAL_ENTRY_PREFIX = "virtual:sprinkles-content/entry/";
+const VIRTUAL_MODULE_ID = "sprinkles:content";
+const RESOLVED_VIRTUAL_ID = `\0${VIRTUAL_MODULE_ID}`;
+const VIRTUAL_STORE_ID = "virtual:sprinkles-content/store";
+const RESOLVED_STORE_ID = `\0${VIRTUAL_STORE_ID}`;
+const VIRTUAL_ENTRY_PREFIX = "virtual:sprinkles-content/entry/";
 // No \0 prefix so @mdx-js/rollup's transform hook can process these modules.
 // The .mdx suffix signals @mdx-js/rollup to compile the raw markdown.
-let RESOLVED_ENTRY_PREFIX = VIRTUAL_ENTRY_PREFIX;
+const RESOLVED_ENTRY_PREFIX = VIRTUAL_ENTRY_PREFIX;
 
 interface ContentLayerPluginOptions {
     /** Path to the content config file, relative to the project root. Defaults to "app/content.config.ts" */
@@ -43,7 +43,7 @@ interface ContentLayerPluginOptions {
 }
 
 export function contentLayer(options: ContentLayerPluginOptions = {}): Plugin {
-    let { configPath = "app/content.config.ts" } = options;
+    const { configPath = "app/content.config.ts" } = options;
     let config: ResolvedConfig;
     let stores = new Map<string, DataStore>();
     let collections: Record<string, Collection> = {};
@@ -54,9 +54,9 @@ export function contentLayer(options: ContentLayerPluginOptions = {}): Plugin {
     let watchedContentPaths = new Set<string>();
 
     async function loadConfig(root: string): Promise<Record<string, Collection>> {
-        let fullPath = resolve(root, configPath);
+        const fullPath = resolve(root, configPath);
         // Use dynamic import with timestamp to bust cache during dev
-        let mod = await import(/* @vite-ignore */ `${fullPath}?t=${Date.now()}`);
+        const mod = await import(/* @vite-ignore */ `${fullPath}?t=${Date.now()}`);
         return mod.collections ?? {};
     }
 
@@ -64,9 +64,9 @@ export function contentLayer(options: ContentLayerPluginOptions = {}): Plugin {
         return async <Data extends Record<string, unknown>>(
             props: ParseDataOptions<Data>,
         ): Promise<Data> => {
-            if (!schema) return props.data;
+            if (!schema) {return props.data;}
             // Resolve schema (may be a function that takes SchemaContext)
-            let resolvedSchema =
+            const resolvedSchema =
                 typeof schema === "function"
                     ? schema({
                           image: () =>
@@ -79,9 +79,9 @@ export function contentLayer(options: ContentLayerPluginOptions = {}): Plugin {
                               }) as never,
                       })
                     : schema;
-            let result = parseSafe(resolvedSchema, props.data);
+            const result = parseSafe(resolvedSchema, props.data);
             if (!result.success) {
-                let messages = result.issues.map(i => i.message).join(", ");
+                const messages = result.issues.map(i => i.message).join(", ");
                 throw new Error(`Validation failed for entry "${props.id}": ${messages}`);
             }
             return result.value as Data;
@@ -93,26 +93,26 @@ export function contentLayer(options: ContentLayerPluginOptions = {}): Plugin {
      * the previous valid state is preserved.
      */
     async function runLoaders(root: string, server?: ViteDevServer) {
-        let newCollections = await loadConfig(root);
-        let newStores = new Map<string, DataStore>();
-        let newEntryFilePaths = new Map<string, { collection: string; id: string }[]>();
-        let newWatchedPaths = new Set<string>();
+        const newCollections = await loadConfig(root);
+        const newStores = new Map<string, DataStore>();
+        const newEntryFilePaths = new Map<string, { collection: string; id: string }[]>();
+        const newWatchedPaths = new Set<string>();
 
         // Always watch the config file itself
         newWatchedPaths.add(resolve(root, configPath));
 
-        for (let [name, collection] of Object.entries(newCollections)) {
-            let store = createDataStore();
-            let meta = createMetaStore();
+        for (const [name, collection] of Object.entries(newCollections)) {
+            const store = createDataStore();
+            const meta = createMetaStore();
             newStores.set(name, store);
 
             // Collect watched paths from loader
-            let loaderPaths = collection.loader.getWatchedPaths?.() ?? [];
-            for (let p of loaderPaths) {
+            const loaderPaths = collection.loader.getWatchedPaths?.() ?? [];
+            for (const p of loaderPaths) {
                 newWatchedPaths.add(resolve(root, p));
             }
 
-            let context: LoaderContext = {
+            const context: LoaderContext = {
                 collection: name,
                 store,
                 meta,
@@ -125,10 +125,10 @@ export function contentLayer(options: ContentLayerPluginOptions = {}): Plugin {
             await collection.loader.load(context);
 
             // Track file paths for HMR
-            for (let entry of store.values()) {
+            for (const entry of store.values()) {
                 if (entry.filePath) {
-                    let key = resolve(root, entry.filePath);
-                    let existing = newEntryFilePaths.get(key) ?? [];
+                    const key = resolve(root, entry.filePath);
+                    const existing = newEntryFilePaths.get(key) ?? [];
                     existing.push({ collection: name, id: entry.id });
                     newEntryFilePaths.set(key, existing);
                 }
@@ -144,24 +144,24 @@ export function contentLayer(options: ContentLayerPluginOptions = {}): Plugin {
 
     /** Checks whether a file path is a content-related path that should trigger a reload. */
     function isContentPath(filePath: string): boolean {
-        let resolved = resolve(filePath);
+        const resolved = resolve(filePath);
         // Direct match: tracked entry file or watched path
-        if (entryFilePaths.has(resolved)) return true;
-        if (watchedContentPaths.has(resolved)) return true;
+        if (entryFilePaths.has(resolved)) {return true;}
+        if (watchedContentPaths.has(resolved)) {return true;}
         // Check if file is under a watched directory
-        for (let watched of watchedContentPaths) {
-            if (resolved.startsWith(`${watched}/`)) return true;
+        for (const watched of watchedContentPaths) {
+            if (resolved.startsWith(`${watched}/`)) {return true;}
         }
         return false;
     }
 
     function serializeStores(): string {
-        let data: Record<string, Record<string, unknown>> = {};
-        for (let [name, store] of stores) {
-            let entries: Record<string, unknown> = {};
-            for (let entry of store.values()) {
+        const data: Record<string, Record<string, unknown>> = {};
+        for (const [name, store] of stores) {
+            const entries: Record<string, unknown> = {};
+            for (const entry of store.values()) {
                 // Exclude body from serialized store (it's in virtual entry modules)
-                let { body, rendered, ...rest } = entry;
+                const { body, rendered, ...rest } = entry;
                 entries[entry.id] = { ...rest, collection: name };
             }
             data[name] = entries;
@@ -171,11 +171,11 @@ export function contentLayer(options: ContentLayerPluginOptions = {}): Plugin {
 
     /** Generates a static import map for all entries with body content. */
     function generateImporterMap(): string {
-        let lines: string[] = [];
-        for (let [name, store] of stores) {
-            for (let entry of store.values()) {
+        const lines: string[] = [];
+        for (const [name, store] of stores) {
+            for (const entry of store.values()) {
                 if (entry.body) {
-                    let key = `${name}/${entry.id}`;
+                    const key = `${name}/${entry.id}`;
                     lines.push(
                         `${JSON.stringify(key)}: () => import(${JSON.stringify(`${VIRTUAL_ENTRY_PREFIX}${key}`)})`,
                     );
@@ -186,15 +186,15 @@ export function contentLayer(options: ContentLayerPluginOptions = {}): Plugin {
     }
 
     async function writeTypes(root: string) {
-        let outDir = join(root, ".sprinkles", "content-layer");
+        const outDir = join(root, ".sprinkles", "content-layer");
         await mkdir(outDir, { recursive: true });
 
-        let collectionInfos: Record<string, { schema: unknown }> = {};
-        for (let [name, collection] of Object.entries(collections)) {
+        const collectionInfos: Record<string, { schema: unknown }> = {};
+        for (const [name, collection] of Object.entries(collections)) {
             collectionInfos[name] = { schema: collection.schema };
         }
-        let configRelPath = relative(outDir, resolve(root, configPath)).replace(/\\/g, "/");
-        let types = generateTypes(
+        const configRelPath = relative(outDir, resolve(root, configPath)).replace(/\\/g, "/");
+        const types = generateTypes(
             collectionInfos as Record<string, { schema: never }>,
             configRelPath,
         );
@@ -203,31 +203,31 @@ export function contentLayer(options: ContentLayerPluginOptions = {}): Plugin {
 
     /** Invalidates all content virtual modules across all Vite environments (client, ssr, rsc). */
     function invalidateContentModules(server: ViteDevServer, entryKeys?: string[]) {
-        let moduleIds = [RESOLVED_VIRTUAL_ID, RESOLVED_STORE_ID];
+        const moduleIds = [RESOLVED_VIRTUAL_ID, RESOLVED_STORE_ID];
         if (entryKeys) {
-            for (let key of entryKeys) {
+            for (const key of entryKeys) {
                 moduleIds.push(`${VIRTUAL_ENTRY_PREFIX}${key}.mdx`);
             }
         }
 
-        for (let env of Object.values(server.environments)) {
-            for (let id of moduleIds) {
-                let mod = env.moduleGraph.getModuleById(id);
-                if (mod) env.moduleGraph.invalidateModule(mod);
+        for (const env of Object.values(server.environments)) {
+            for (const id of moduleIds) {
+                const mod = env.moduleGraph.getModuleById(id);
+                if (mod) {env.moduleGraph.invalidateModule(mod);}
             }
         }
     }
 
     /** Handles a content-related file event during development. */
     async function handleContentChange(server: ViteDevServer, filePath: string) {
-        let resolvedPath = resolve(filePath);
-        if (!isContentPath(resolvedPath)) return;
+        const resolvedPath = resolve(filePath);
+        if (!isContentPath(resolvedPath)) {return;}
 
         // Collect entry keys that existed before reload for module invalidation
-        let previousEntryKeys: string[] = [];
-        let mappings = entryFilePaths.get(resolvedPath);
+        const previousEntryKeys: string[] = [];
+        const mappings = entryFilePaths.get(resolvedPath);
         if (mappings) {
-            for (let m of mappings) {
+            for (const m of mappings) {
                 previousEntryKeys.push(`${m.collection}/${m.id}`);
             }
         }
@@ -244,12 +244,12 @@ export function contentLayer(options: ContentLayerPluginOptions = {}): Plugin {
         }
 
         // Collect new entry keys for the changed file
-        let newMappings = entryFilePaths.get(resolvedPath);
-        let entryKeys = [...previousEntryKeys];
+        const newMappings = entryFilePaths.get(resolvedPath);
+        const entryKeys = [...previousEntryKeys];
         if (newMappings) {
-            for (let m of newMappings) {
-                let key = `${m.collection}/${m.id}`;
-                if (!entryKeys.includes(key)) entryKeys.push(key);
+            for (const m of newMappings) {
+                const key = `${m.collection}/${m.id}`;
+                if (!entryKeys.includes(key)) {entryKeys.push(key);}
             }
         }
 
@@ -258,16 +258,6 @@ export function contentLayer(options: ContentLayerPluginOptions = {}): Plugin {
     }
 
     return {
-        name: "sprinkles-content-layer",
-
-        configResolved(resolvedConfig) {
-            config = resolvedConfig;
-            // Register a Node.js resolve hook so native import() can handle sprinkles: imports.
-            // This is needed because loadConfig uses native import() which bypasses Vite's plugin pipeline.
-            let hookPath = resolve(config.root, "content-layer/resolve-hook.js");
-            register(pathToFileURL(hookPath));
-        },
-
         async buildStart() {
             try {
                 await runLoaders(config.root);
@@ -282,16 +272,26 @@ export function contentLayer(options: ContentLayerPluginOptions = {}): Plugin {
             }
         },
 
-        resolveId(id) {
-            if (id === VIRTUAL_MODULE_ID) {
-                return RESOLVED_VIRTUAL_ID;
-            }
-            if (id === VIRTUAL_STORE_ID) {
-                return RESOLVED_STORE_ID;
-            }
-            if (id.startsWith(VIRTUAL_ENTRY_PREFIX) && !id.endsWith(".mdx")) {
-                // Add .mdx extension so @mdx-js/rollup's transform hook compiles it
-                return `${id}.mdx`;
+        configResolved(resolvedConfig) {
+            config = resolvedConfig;
+            // Register a Node.js resolve hook so native import() can handle sprinkles: imports.
+            // This is needed because loadConfig uses native import() which bypasses Vite's plugin pipeline.
+            let hookPath = resolve(config.root, "content-layer/resolve-hook.js");
+            register(pathToFileURL(hookPath));
+        },
+
+        configureServer(server) {
+            // Watch for content file changes, additions, and deletions
+            server.watcher.on("change", filePath => handleContentChange(server, filePath));
+            server.watcher.on("add", filePath => handleContentChange(server, filePath));
+            server.watcher.on("unlink", filePath => handleContentChange(server, filePath));
+        },
+
+        handleHotUpdate({ file }) {
+            let resolvedPath = resolve(file);
+            if (isContentPath(resolvedPath)) {
+                // Already handled in configureServer watcher
+                return [];
             }
         },
 
@@ -351,18 +351,18 @@ export let render = runtime.render;
             }
         },
 
-        configureServer(server) {
-            // Watch for content file changes, additions, and deletions
-            server.watcher.on("change", filePath => handleContentChange(server, filePath));
-            server.watcher.on("add", filePath => handleContentChange(server, filePath));
-            server.watcher.on("unlink", filePath => handleContentChange(server, filePath));
-        },
+        name: "sprinkles-content-layer",
 
-        handleHotUpdate({ file }) {
-            let resolvedPath = resolve(file);
-            if (isContentPath(resolvedPath)) {
-                // Already handled in configureServer watcher
-                return [];
+        resolveId(id) {
+            if (id === VIRTUAL_MODULE_ID) {
+                return RESOLVED_VIRTUAL_ID;
+            }
+            if (id === VIRTUAL_STORE_ID) {
+                return RESOLVED_STORE_ID;
+            }
+            if (id.startsWith(VIRTUAL_ENTRY_PREFIX) && !id.endsWith(".mdx")) {
+                // Add .mdx extension so @mdx-js/rollup's transform hook compiles it
+                return `${id}.mdx`;
             }
         },
     };

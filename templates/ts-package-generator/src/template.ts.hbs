@@ -1,25 +1,6 @@
-import { createTemplate } from "bingo";
-import { handlebars } from "bingo-handlebars";
-import path from "node:path";
-import { z } from "zod";
-
-const templatesDir = path.join(import.meta.dirname, "../templates");
-
-const options = {
-    name: z.string().describe("Project name"),
-};
-
-export default createTemplate({
-    about: {
-        description: "Scaffold a new project with {{repository}}.",
-        name: "@{{owner}}/{{repository}}",
-    },
-
-    options,
-
-    async produce({ options: opts }) {
-        const files = await handlebars(path.join(templatesDir, "default"), opts);
-
-        return { files };
-    },
-});
+import { createTemplate } from "bingo"; import { handlebars } from "bingo-handlebars"; import path
+from "node:path"; import { z } from "zod"; const templatesDir = path.join(import.meta.dirname,
+"../templates"); const options = { name: z.string().describe("Project name"), }; export default
+createTemplate({ about: { description: "Scaffold a new project with
+{{repository}}.", name: "@{{owner}}/{{repository}}", }, options, async produce({ options: opts }) {
+const files = await handlebars(path.join(templatesDir, "default"), opts); return { files }; }, });

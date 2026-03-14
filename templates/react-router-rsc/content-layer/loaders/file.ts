@@ -9,7 +9,7 @@ interface FileOptions {
     parser?: (text: string) => Record<string, Record<string, unknown>> | Record<string, unknown>[];
 }
 
-let YAML_EXTENSIONS = new Set([".yaml", ".yml"]);
+const YAML_EXTENSIONS = new Set([".yaml", ".yml"]);
 
 function defaultParser(text: string, ext: string) {
     if (YAML_EXTENSIONS.has(ext)) {
@@ -23,8 +23,6 @@ function defaultParser(text: string, ext: string) {
 
 export function file(fileName: string, options?: FileOptions): ContentLoader {
     return {
-        name: "file",
-        schema: null as never,
         getWatchedPaths() {
             return [fileName];
         },
@@ -51,5 +49,7 @@ export function file(fileName: string, options?: FileOptions): ContentLoader {
                 }
             }
         },
+        name: "file",
+        schema: null as never,
     };
 }
