@@ -1,172 +1,109 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`template > produces shared files for RSC kind 1`] = `
+exports[`template snapshots > RSC kind 1`] = `
 {
   ".gitignore": [
-    ".DS_Store
-.env
-.env.local
-/node_modules/
+    ".DS_Store .env .env.local /node_modules/
 
-# React Router
-/.react-router/
-/build/
+    # React Router /.react-router/ /build/
 
-# Content Layer
-/.sprinkles/
-
-# Cloudflare
-.wrangler
+    # Content Layer /.sprinkles/ # Cloudflare .wrangler
 ",
     {
       "executable": false,
     },
   ],
   "README.md": [
-    "# test-repo
+    "#
+test-repo
 
 
 
 A React Router application with React Server Components and content-layer.
 
 
-## Getting Started
-
-\`\`\`bash
-vp dev
-\`\`\`
-",
+## Getting Started \`\`\`bash
+    vp dev
+\`\`\`",
     {
       "executable": false,
     },
   ],
   "app": {
     "content.config.ts": [
-      "import * as s from "@remix-run/data-schema";
-import { defineCollection } from "sprinkles:content";
-
-import { file, glob } from "../content-layer/loaders/index.ts";
-
-let posts = defineCollection({
-    loader: glob({ pattern: "**/[^_]*.{md,mdx}", base: "app/content/posts" }),
-    schema: s.object({
-        title: s.string(),
-        description: s.string(),
-        publishedOn: s.string(),
-        isDraft: s.defaulted(s.boolean(), false),
-    }),
-});
-
-let settings = defineCollection({
-    loader: file("app/content/settings.jsonc"),
-    schema: s.object({
-        id: s.string(),
-        label: s.string(),
-    }),
-});
-
-export let collections = { posts, settings };
-",
+      "import * as s from "@remix-run/data-schema"; import { defineCollection } from "sprinkles:content";
+import { file, glob } from "../content-layer/loaders/index.ts"; let posts = defineCollection({
+loader: glob({ pattern: "**/[^_]*.{md,mdx}", base: "app/content/posts" }), schema: s.object({ title:
+s.string(), description: s.string(), publishedOn: s.string(), isDraft: s.defaulted(s.boolean(),
+false), }), }); let settings = defineCollection({ loader: file("app/content/settings.jsonc"),
+schema: s.object({ id: s.string(), label: s.string(), }), }); export let collections = { posts,
+settings };",
       {
         "executable": false,
       },
     ],
     "home.tsx": [
-      "import { getCollection } from "sprinkles:content";
-
-export async function ServerComponent() {
-    let posts = await getCollection("posts");
-
-    return (
-        <main>
-            <h1>Welcome to test-repo</h1>
-            <section>
-                <h2>Posts</h2>
-                <ul>
-                    {posts.map(post => (
-                        <li key={post.id}>
-                            <h3>{post.data.title}</h3>
-                        </li>
-                    ))}
-                </ul>
-            </section>
-        </main>
-    );
-}
-",
+      "import { getCollection } from "sprinkles:content"; export async function ServerComponent() { let
+posts = await getCollection("posts"); return (
+<main>
+    <h1>Welcome to test-repo</h1>
+    <section>
+        <h2>Posts</h2>
+        <ul>
+            {posts.map(post => (
+            <li key="{post.id}">
+                <h3>{post.data.title}</h3>
+            </li>
+            ))}
+        </ul>
+    </section>
+</main>
+); }",
       {
         "executable": false,
       },
     ],
     "root.tsx": [
-      "import type { PropsWithChildren } from "react";
-
-import { isRouteErrorResponse, Outlet, Scripts } from "react-router";
-
-import type { Route } from "./+types/root";
-
-import styles from "./styles/tailwind.css?url";
-
-export function Layout({ children }: PropsWithChildren) {
-    return (
-        <html lang="en">
-            <head>
-                <meta charSet="utf-8" />
-                <meta content="width=device-width, initial-scale=1" name="viewport" />
-                <meta content="#000000" name="theme-color" />
-                <link href={styles} rel="stylesheet" />
-                <title>test-repo</title>
-            </head>
-            <body>
-                {children}
-                <Scripts />
-            </body>
-        </html>
-    );
-}
-
-export function ServerComponent() {
-    return <Outlet />;
-}
-
-export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
-    let message = "Oops!";
-    let details = "An unexpected error occurred.";
-    let stack: string | undefined;
-
-    if (isRouteErrorResponse(error)) {
-        message = error.status === 404 ? "404" : "Error";
-        details =
-            error.status === 404
-                ? "The requested page could not be found."
-                : error.statusText || details;
-    } else if (import.meta.env.DEV && error && error instanceof Error) {
-        details = error.message;
-        stack = error.stack;
-    }
-
-    return (
-        <main>
-            <h1>{message}</h1>
-            <p>{details}</p>
-            {stack && (
-                <pre>
+      "import type { PropsWithChildren } from "react"; import { isRouteErrorResponse, Outlet, Scripts }
+from "react-router"; import type { Route } from "./+types/root"; import styles from
+"./styles/tailwind.css?url"; export function Layout({ children }: PropsWithChildren) { return (
+<html lang="en">
+    <head>
+        <meta charSet="utf-8" />
+        <meta content="width=device-width, initial-scale=1" name="viewport" />
+        <meta content="#000000" name="theme-color" />
+        <link href="{styles}" rel="stylesheet" />
+        <title>test-repo</title>
+    </head>
+    <body>
+        {children}
+        <Scripts />
+    </body>
+</html>
+); } export function ServerComponent() { return
+<Outlet />; } export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) { let message =
+"Oops!"; let details = "An unexpected error occurred."; let stack: string | undefined; if
+(isRouteErrorResponse(error)) { message = error.status === 404 ? "404" : "Error"; details =
+error.status === 404 ? "The requested page could not be found." : error.statusText || details; }
+else if (import.meta.env.DEV && error && error instanceof Error) { details = error.message; stack =
+error.stack; } return (
+<main>
+    <h1>{message}</h1>
+    <p>{details}</p>
+    {stack && (
+    <pre>
                     <code>{stack}</code>
                 </pre>
-            )}
-        </main>
-    );
-}
-",
+    )}
+</main>
+); }",
       {
         "executable": false,
       },
     ],
     "routes.ts": [
-      "import { type RouteConfig, index } from "@react-router/dev/routes";
-
-export default [index("home.tsx")] satisfies RouteConfig;
-",
+      "import { type RouteConfig, index } from "@react-router/dev/routes"; export default
+[index("home.tsx")] satisfies RouteConfig;",
       {
         "executable": false,
       },
@@ -515,7 +452,7 @@ export function glob(_globOptions: GlobOptions): ContentLoader {
 
 interface FileOptions {
     /**
-     * the parsing function to use for this data
+     * The parsing function to use for this data
      * @default jsr:@std/jsonc.parse or jsr:@std/yaml.parse, depending on the extension of the file
      * */
     parser?: (text: string) => Record<string, Record<string, unknown>> | Record<string, unknown>[];
@@ -540,9 +477,9 @@ export function generateTypes(
     collections: Record<string, CollectionInfo>,
     configPath: string,
 ): string {
-    let collectionEntries = Object.entries(collections);
+    const collectionEntries = Object.entries(collections);
 
-    let entryMapEntries = collectionEntries
+    const entryMapEntries = collectionEntries
         .map(([name]) => {
             return \`		\${name}: {
 			[id: string]: import("\${CONTENT_LAYER_API_PATH}").DataEntry<
@@ -618,7 +555,7 @@ declare module "sprinkles:content" {
 \`;
 }
 
-let CONTENT_LAYER_API_PATH = "../../content-layer/api.ts";
+const CONTENT_LAYER_API_PATH = "../../content-layer/api.ts";
 ",
       {
         "executable": false,
@@ -654,7 +591,7 @@ export function reference(collection: string): Schema<string, { collection: stri
       "import { createHash } from "node:crypto";
 
 export function generateDigest(data: Record<string, unknown> | string): string {
-    let input = typeof data === "string" ? data : JSON.stringify(data);
+    const input = typeof data === "string" ? data : JSON.stringify(data);
     return createHash("sha256").update(input).digest("hex");
 }
 ",
@@ -670,17 +607,17 @@ export interface FrontmatterResult {
     body: string;
 }
 
-let FRONTMATTER_RE = /^---\\r?\\n([\\s\\S]*?)\\r?\\n---\\r?\\n?/;
+const FRONTMATTER_RE = /^---\\r?\\n([\\s\\S]*?)\\r?\\n---\\r?\\n?/;
 
 export function parseFrontmatter(content: string): FrontmatterResult {
-    let match = FRONTMATTER_RE.exec(content);
+    const match = FRONTMATTER_RE.exec(content);
     if (!match) {
-        return { data: {}, body: content };
+        return { body: content, data: {} };
     }
-    let raw = match[1];
-    let body = content.slice(match[0].length).replace(/^\\r?\\n/, "");
-    let data = parseYaml(raw) as Record<string, unknown>;
-    return { data, body };
+    const raw = match[1];
+    const body = content.slice(match[0].length).replace(/^\\r?\\n/, "");
+    const data = parseYaml(raw) as Record<string, unknown>;
+    return { body, data };
 }
 ",
       {
@@ -700,7 +637,7 @@ interface FileOptions {
     parser?: (text: string) => Record<string, Record<string, unknown>> | Record<string, unknown>[];
 }
 
-let YAML_EXTENSIONS = new Set([".yaml", ".yml"]);
+const YAML_EXTENSIONS = new Set([".yaml", ".yml"]);
 
 function defaultParser(text: string, ext: string) {
     if (YAML_EXTENSIONS.has(ext)) {
@@ -714,8 +651,6 @@ function defaultParser(text: string, ext: string) {
 
 export function file(fileName: string, options?: FileOptions): ContentLoader {
     return {
-        name: "file",
-        schema: null as never,
         getWatchedPaths() {
             return [fileName];
         },
@@ -742,6 +677,8 @@ export function file(fileName: string, options?: FileOptions): ContentLoader {
                 }
             }
         },
+        name: "file",
+        schema: null as never,
     };
 }
 ",
@@ -766,19 +703,19 @@ interface GlobOptions {
     generateId?: (options: GenerateIdOptions) => string;
 }
 
-let MARKDOWN_EXTENSIONS = new Set([".md", ".mdx"]);
-let JSON_EXTENSIONS = new Set([".json", ".jsonc"]);
-let YAML_EXTENSIONS = new Set([".yaml", ".yml"]);
+const MARKDOWN_EXTENSIONS = new Set([".md", ".mdx"]);
+const JSON_EXTENSIONS = new Set([".json", ".jsonc"]);
+const YAML_EXTENSIONS = new Set([".yaml", ".yml"]);
 
 function defaultGenerateId({ entry }: GenerateIdOptions): string {
     // Strip extension, use forward slashes
-    let ext = extname(entry);
+    const ext = extname(entry);
     return entry.slice(0, -ext.length).replaceAll("\\\\", "/");
 }
 
 export function glob(globOptions: GlobOptions): ContentLoader {
-    let { pattern, base = ".", generateId = defaultGenerateId } = globOptions;
-    let baseDir = base instanceof URL ? base.pathname : base;
+    const { pattern, base = ".", generateId = defaultGenerateId } = globOptions;
+    const baseDir = base instanceof URL ? base.pathname : base;
 
     return {
         name: "glob",
@@ -787,45 +724,45 @@ export function glob(globOptions: GlobOptions): ContentLoader {
             return [baseDir];
         },
         async load(context) {
-            let patterns = Array.isArray(pattern) ? pattern : [pattern];
+            const patterns = Array.isArray(pattern) ? pattern : [pattern];
 
-            for (let pat of patterns) {
-                let fullPattern = join(baseDir, pat);
-                for await (let filePath of fsGlob(fullPattern)) {
-                    let relativePath = relative(baseDir, filePath);
-                    let ext = extname(filePath);
-                    let raw = await readFile(filePath, "utf-8");
+            for (const pat of patterns) {
+                const fullPattern = join(baseDir, pat);
+                for await (const filePath of fsGlob(fullPattern)) {
+                    const relativePath = relative(baseDir, filePath);
+                    const ext = extname(filePath);
+                    const raw = await readFile(filePath, "utf-8");
 
                     if (MARKDOWN_EXTENSIONS.has(ext)) {
-                        let { data, body } = parseFrontmatter(raw);
-                        let id = generateId({
+                        const { data, body } = parseFrontmatter(raw);
+                        const id = generateId({
                             entry: relativePath,
                             base: new URL(\`file://\${baseDir}\`),
                             data,
                         });
-                        let parsedData = await context.parseData({ id, data, filePath });
-                        let digest = context.generateDigest(raw);
-                        context.store.set({ id, data: parsedData, body, filePath, digest });
+                        const parsedData = await context.parseData({ id, data, filePath });
+                        const digest = context.generateDigest(raw);
+                        context.store.set({ body, data: parsedData, digest, filePath, id });
                     } else if (JSON_EXTENSIONS.has(ext)) {
-                        let data = parseJsonc(raw) as Record<string, unknown>;
-                        let id = generateId({
+                        const data = parseJsonc(raw) as Record<string, unknown>;
+                        const id = generateId({
                             entry: relativePath,
                             base: new URL(\`file://\${baseDir}\`),
                             data,
                         });
-                        let parsedData = await context.parseData({ id, data, filePath });
-                        let digest = context.generateDigest(raw);
-                        context.store.set({ id, data: parsedData, filePath, digest });
+                        const parsedData = await context.parseData({ id, data, filePath });
+                        const digest = context.generateDigest(raw);
+                        context.store.set({ data: parsedData, digest, filePath, id });
                     } else if (YAML_EXTENSIONS.has(ext)) {
-                        let data = parseYaml(raw) as Record<string, unknown>;
-                        let id = generateId({
+                        const data = parseYaml(raw) as Record<string, unknown>;
+                        const id = generateId({
                             entry: relativePath,
                             base: new URL(\`file://\${baseDir}\`),
                             data,
                         });
-                        let parsedData = await context.parseData({ id, data, filePath });
-                        let digest = context.generateDigest(raw);
-                        context.store.set({ id, data: parsedData, filePath, digest });
+                        const parsedData = await context.parseData({ id, data, filePath });
+                        const digest = context.generateDigest(raw);
+                        context.store.set({ data: parsedData, digest, filePath, id });
                     }
                 }
             }
@@ -863,13 +800,13 @@ import { createDataStore, createMetaStore } from "./store.ts";
 
 /** Serializes a value to a JavaScript expression string, preserving Date instances. */
 function toJSLiteral(value: unknown): string {
-    if (value === null || value === undefined) return String(value);
-    if (typeof value === "boolean" || typeof value === "number") return String(value);
-    if (typeof value === "string") return JSON.stringify(value);
-    if (value instanceof Date) return \`new Date(\${JSON.stringify(value.toISOString())})\`;
-    if (Array.isArray(value)) return \`[\${value.map(toJSLiteral).join(",")}]\`;
+    if (value === null || value === undefined) {return String(value);}
+    if (typeof value === "boolean" || typeof value === "number") {return String(value);}
+    if (typeof value === "string") {return JSON.stringify(value);}
+    if (value instanceof Date) {return \`new Date(\${JSON.stringify(value.toISOString())})\`;}
+    if (Array.isArray(value)) {return \`[\${value.map(toJSLiteral).join(",")}]\`;}
     if (typeof value === "object") {
-        let entries = Object.entries(value as Record<string, unknown>).map(
+        const entries = Object.entries(value as Record<string, unknown>).map(
             ([k, v]) => \`\${JSON.stringify(k)}:\${toJSLiteral(v)}\`,
         );
         return \`{\${entries.join(",")}}\`;
@@ -877,14 +814,14 @@ function toJSLiteral(value: unknown): string {
     return JSON.stringify(value);
 }
 
-let VIRTUAL_MODULE_ID = "sprinkles:content";
-let RESOLVED_VIRTUAL_ID = \`\\0\${VIRTUAL_MODULE_ID}\`;
-let VIRTUAL_STORE_ID = "virtual:sprinkles-content/store";
-let RESOLVED_STORE_ID = \`\\0\${VIRTUAL_STORE_ID}\`;
-let VIRTUAL_ENTRY_PREFIX = "virtual:sprinkles-content/entry/";
+const VIRTUAL_MODULE_ID = "sprinkles:content";
+const RESOLVED_VIRTUAL_ID = \`\\0\${VIRTUAL_MODULE_ID}\`;
+const VIRTUAL_STORE_ID = "virtual:sprinkles-content/store";
+const RESOLVED_STORE_ID = \`\\0\${VIRTUAL_STORE_ID}\`;
+const VIRTUAL_ENTRY_PREFIX = "virtual:sprinkles-content/entry/";
 // No \\0 prefix so @mdx-js/rollup's transform hook can process these modules.
 // The .mdx suffix signals @mdx-js/rollup to compile the raw markdown.
-let RESOLVED_ENTRY_PREFIX = VIRTUAL_ENTRY_PREFIX;
+const RESOLVED_ENTRY_PREFIX = VIRTUAL_ENTRY_PREFIX;
 
 interface ContentLayerPluginOptions {
     /** Path to the content config file, relative to the project root. Defaults to "app/content.config.ts" */
@@ -892,7 +829,7 @@ interface ContentLayerPluginOptions {
 }
 
 export function contentLayer(options: ContentLayerPluginOptions = {}): Plugin {
-    let { configPath = "app/content.config.ts" } = options;
+    const { configPath = "app/content.config.ts" } = options;
     let config: ResolvedConfig;
     let stores = new Map<string, DataStore>();
     let collections: Record<string, Collection> = {};
@@ -903,9 +840,9 @@ export function contentLayer(options: ContentLayerPluginOptions = {}): Plugin {
     let watchedContentPaths = new Set<string>();
 
     async function loadConfig(root: string): Promise<Record<string, Collection>> {
-        let fullPath = resolve(root, configPath);
+        const fullPath = resolve(root, configPath);
         // Use dynamic import with timestamp to bust cache during dev
-        let mod = await import(/* @vite-ignore */ \`\${fullPath}?t=\${Date.now()}\`);
+        const mod = await import(/* @vite-ignore */ \`\${fullPath}?t=\${Date.now()}\`);
         return mod.collections ?? {};
     }
 
@@ -913,9 +850,9 @@ export function contentLayer(options: ContentLayerPluginOptions = {}): Plugin {
         return async <Data extends Record<string, unknown>>(
             props: ParseDataOptions<Data>,
         ): Promise<Data> => {
-            if (!schema) return props.data;
+            if (!schema) {return props.data;}
             // Resolve schema (may be a function that takes SchemaContext)
-            let resolvedSchema =
+            const resolvedSchema =
                 typeof schema === "function"
                     ? schema({
                           image: () =>
@@ -928,9 +865,9 @@ export function contentLayer(options: ContentLayerPluginOptions = {}): Plugin {
                               }) as never,
                       })
                     : schema;
-            let result = parseSafe(resolvedSchema, props.data);
+            const result = parseSafe(resolvedSchema, props.data);
             if (!result.success) {
-                let messages = result.issues.map(i => i.message).join(", ");
+                const messages = result.issues.map(i => i.message).join(", ");
                 throw new Error(\`Validation failed for entry "\${props.id}": \${messages}\`);
             }
             return result.value as Data;
@@ -942,26 +879,26 @@ export function contentLayer(options: ContentLayerPluginOptions = {}): Plugin {
      * the previous valid state is preserved.
      */
     async function runLoaders(root: string, server?: ViteDevServer) {
-        let newCollections = await loadConfig(root);
-        let newStores = new Map<string, DataStore>();
-        let newEntryFilePaths = new Map<string, { collection: string; id: string }[]>();
-        let newWatchedPaths = new Set<string>();
+        const newCollections = await loadConfig(root);
+        const newStores = new Map<string, DataStore>();
+        const newEntryFilePaths = new Map<string, { collection: string; id: string }[]>();
+        const newWatchedPaths = new Set<string>();
 
         // Always watch the config file itself
         newWatchedPaths.add(resolve(root, configPath));
 
-        for (let [name, collection] of Object.entries(newCollections)) {
-            let store = createDataStore();
-            let meta = createMetaStore();
+        for (const [name, collection] of Object.entries(newCollections)) {
+            const store = createDataStore();
+            const meta = createMetaStore();
             newStores.set(name, store);
 
             // Collect watched paths from loader
-            let loaderPaths = collection.loader.getWatchedPaths?.() ?? [];
-            for (let p of loaderPaths) {
+            const loaderPaths = collection.loader.getWatchedPaths?.() ?? [];
+            for (const p of loaderPaths) {
                 newWatchedPaths.add(resolve(root, p));
             }
 
-            let context: LoaderContext = {
+            const context: LoaderContext = {
                 collection: name,
                 store,
                 meta,
@@ -974,10 +911,10 @@ export function contentLayer(options: ContentLayerPluginOptions = {}): Plugin {
             await collection.loader.load(context);
 
             // Track file paths for HMR
-            for (let entry of store.values()) {
+            for (const entry of store.values()) {
                 if (entry.filePath) {
-                    let key = resolve(root, entry.filePath);
-                    let existing = newEntryFilePaths.get(key) ?? [];
+                    const key = resolve(root, entry.filePath);
+                    const existing = newEntryFilePaths.get(key) ?? [];
                     existing.push({ collection: name, id: entry.id });
                     newEntryFilePaths.set(key, existing);
                 }
@@ -993,24 +930,24 @@ export function contentLayer(options: ContentLayerPluginOptions = {}): Plugin {
 
     /** Checks whether a file path is a content-related path that should trigger a reload. */
     function isContentPath(filePath: string): boolean {
-        let resolved = resolve(filePath);
+        const resolved = resolve(filePath);
         // Direct match: tracked entry file or watched path
-        if (entryFilePaths.has(resolved)) return true;
-        if (watchedContentPaths.has(resolved)) return true;
+        if (entryFilePaths.has(resolved)) {return true;}
+        if (watchedContentPaths.has(resolved)) {return true;}
         // Check if file is under a watched directory
-        for (let watched of watchedContentPaths) {
-            if (resolved.startsWith(\`\${watched}/\`)) return true;
+        for (const watched of watchedContentPaths) {
+            if (resolved.startsWith(\`\${watched}/\`)) {return true;}
         }
         return false;
     }
 
     function serializeStores(): string {
-        let data: Record<string, Record<string, unknown>> = {};
-        for (let [name, store] of stores) {
-            let entries: Record<string, unknown> = {};
-            for (let entry of store.values()) {
+        const data: Record<string, Record<string, unknown>> = {};
+        for (const [name, store] of stores) {
+            const entries: Record<string, unknown> = {};
+            for (const entry of store.values()) {
                 // Exclude body from serialized store (it's in virtual entry modules)
-                let { body, rendered, ...rest } = entry;
+                const { body, rendered, ...rest } = entry;
                 entries[entry.id] = { ...rest, collection: name };
             }
             data[name] = entries;
@@ -1020,11 +957,11 @@ export function contentLayer(options: ContentLayerPluginOptions = {}): Plugin {
 
     /** Generates a static import map for all entries with body content. */
     function generateImporterMap(): string {
-        let lines: string[] = [];
-        for (let [name, store] of stores) {
-            for (let entry of store.values()) {
+        const lines: string[] = [];
+        for (const [name, store] of stores) {
+            for (const entry of store.values()) {
                 if (entry.body) {
-                    let key = \`\${name}/\${entry.id}\`;
+                    const key = \`\${name}/\${entry.id}\`;
                     lines.push(
                         \`\${JSON.stringify(key)}: () => import(\${JSON.stringify(\`\${VIRTUAL_ENTRY_PREFIX}\${key}\`)})\`,
                     );
@@ -1035,15 +972,15 @@ export function contentLayer(options: ContentLayerPluginOptions = {}): Plugin {
     }
 
     async function writeTypes(root: string) {
-        let outDir = join(root, ".sprinkles", "content-layer");
+        const outDir = join(root, ".sprinkles", "content-layer");
         await mkdir(outDir, { recursive: true });
 
-        let collectionInfos: Record<string, { schema: unknown }> = {};
-        for (let [name, collection] of Object.entries(collections)) {
+        const collectionInfos: Record<string, { schema: unknown }> = {};
+        for (const [name, collection] of Object.entries(collections)) {
             collectionInfos[name] = { schema: collection.schema };
         }
-        let configRelPath = relative(outDir, resolve(root, configPath)).replace(/\\\\/g, "/");
-        let types = generateTypes(
+        const configRelPath = relative(outDir, resolve(root, configPath)).replace(/\\\\/g, "/");
+        const types = generateTypes(
             collectionInfos as Record<string, { schema: never }>,
             configRelPath,
         );
@@ -1052,31 +989,31 @@ export function contentLayer(options: ContentLayerPluginOptions = {}): Plugin {
 
     /** Invalidates all content virtual modules across all Vite environments (client, ssr, rsc). */
     function invalidateContentModules(server: ViteDevServer, entryKeys?: string[]) {
-        let moduleIds = [RESOLVED_VIRTUAL_ID, RESOLVED_STORE_ID];
+        const moduleIds = [RESOLVED_VIRTUAL_ID, RESOLVED_STORE_ID];
         if (entryKeys) {
-            for (let key of entryKeys) {
+            for (const key of entryKeys) {
                 moduleIds.push(\`\${VIRTUAL_ENTRY_PREFIX}\${key}.mdx\`);
             }
         }
 
-        for (let env of Object.values(server.environments)) {
-            for (let id of moduleIds) {
-                let mod = env.moduleGraph.getModuleById(id);
-                if (mod) env.moduleGraph.invalidateModule(mod);
+        for (const env of Object.values(server.environments)) {
+            for (const id of moduleIds) {
+                const mod = env.moduleGraph.getModuleById(id);
+                if (mod) {env.moduleGraph.invalidateModule(mod);}
             }
         }
     }
 
     /** Handles a content-related file event during development. */
     async function handleContentChange(server: ViteDevServer, filePath: string) {
-        let resolvedPath = resolve(filePath);
-        if (!isContentPath(resolvedPath)) return;
+        const resolvedPath = resolve(filePath);
+        if (!isContentPath(resolvedPath)) {return;}
 
         // Collect entry keys that existed before reload for module invalidation
-        let previousEntryKeys: string[] = [];
-        let mappings = entryFilePaths.get(resolvedPath);
+        const previousEntryKeys: string[] = [];
+        const mappings = entryFilePaths.get(resolvedPath);
         if (mappings) {
-            for (let m of mappings) {
+            for (const m of mappings) {
                 previousEntryKeys.push(\`\${m.collection}/\${m.id}\`);
             }
         }
@@ -1093,12 +1030,12 @@ export function contentLayer(options: ContentLayerPluginOptions = {}): Plugin {
         }
 
         // Collect new entry keys for the changed file
-        let newMappings = entryFilePaths.get(resolvedPath);
-        let entryKeys = [...previousEntryKeys];
+        const newMappings = entryFilePaths.get(resolvedPath);
+        const entryKeys = [...previousEntryKeys];
         if (newMappings) {
-            for (let m of newMappings) {
-                let key = \`\${m.collection}/\${m.id}\`;
-                if (!entryKeys.includes(key)) entryKeys.push(key);
+            for (const m of newMappings) {
+                const key = \`\${m.collection}/\${m.id}\`;
+                if (!entryKeys.includes(key)) {entryKeys.push(key);}
             }
         }
 
@@ -1107,16 +1044,6 @@ export function contentLayer(options: ContentLayerPluginOptions = {}): Plugin {
     }
 
     return {
-        name: "sprinkles-content-layer",
-
-        configResolved(resolvedConfig) {
-            config = resolvedConfig;
-            // Register a Node.js resolve hook so native import() can handle sprinkles: imports.
-            // This is needed because loadConfig uses native import() which bypasses Vite's plugin pipeline.
-            let hookPath = resolve(config.root, "content-layer/resolve-hook.js");
-            register(pathToFileURL(hookPath));
-        },
-
         async buildStart() {
             try {
                 await runLoaders(config.root);
@@ -1131,16 +1058,26 @@ export function contentLayer(options: ContentLayerPluginOptions = {}): Plugin {
             }
         },
 
-        resolveId(id) {
-            if (id === VIRTUAL_MODULE_ID) {
-                return RESOLVED_VIRTUAL_ID;
-            }
-            if (id === VIRTUAL_STORE_ID) {
-                return RESOLVED_STORE_ID;
-            }
-            if (id.startsWith(VIRTUAL_ENTRY_PREFIX) && !id.endsWith(".mdx")) {
-                // Add .mdx extension so @mdx-js/rollup's transform hook compiles it
-                return \`\${id}.mdx\`;
+        configResolved(resolvedConfig) {
+            config = resolvedConfig;
+            // Register a Node.js resolve hook so native import() can handle sprinkles: imports.
+            // This is needed because loadConfig uses native import() which bypasses Vite's plugin pipeline.
+            let hookPath = resolve(config.root, "content-layer/resolve-hook.js");
+            register(pathToFileURL(hookPath));
+        },
+
+        configureServer(server) {
+            // Watch for content file changes, additions, and deletions
+            server.watcher.on("change", filePath => handleContentChange(server, filePath));
+            server.watcher.on("add", filePath => handleContentChange(server, filePath));
+            server.watcher.on("unlink", filePath => handleContentChange(server, filePath));
+        },
+
+        handleHotUpdate({ file }) {
+            let resolvedPath = resolve(file);
+            if (isContentPath(resolvedPath)) {
+                // Already handled in configureServer watcher
+                return [];
             }
         },
 
@@ -1200,18 +1137,18 @@ export let render = runtime.render;
             }
         },
 
-        configureServer(server) {
-            // Watch for content file changes, additions, and deletions
-            server.watcher.on("change", filePath => handleContentChange(server, filePath));
-            server.watcher.on("add", filePath => handleContentChange(server, filePath));
-            server.watcher.on("unlink", filePath => handleContentChange(server, filePath));
-        },
+        name: "sprinkles-content-layer",
 
-        handleHotUpdate({ file }) {
-            let resolvedPath = resolve(file);
-            if (isContentPath(resolvedPath)) {
-                // Already handled in configureServer watcher
-                return [];
+        resolveId(id) {
+            if (id === VIRTUAL_MODULE_ID) {
+                return RESOLVED_VIRTUAL_ID;
+            }
+            if (id === VIRTUAL_STORE_ID) {
+                return RESOLVED_STORE_ID;
+            }
+            if (id.startsWith(VIRTUAL_ENTRY_PREFIX) && !id.endsWith(".mdx")) {
+                // Add .mdx extension so @mdx-js/rollup's transform hook compiles it
+                return \`\${id}.mdx\`;
             }
         },
     };
@@ -1226,11 +1163,11 @@ export let render = runtime.render;
 import { fileURLToPath, pathToFileURL } from "node:url";
 
 // Resolve config.ts relative to this hook file (same directory)
-let configUrl = pathToFileURL(join(dirname(fileURLToPath(import.meta.url)), "config.ts")).href;
+const configUrl = pathToFileURL(join(dirname(fileURLToPath(import.meta.url)), "config.ts")).href;
 
 export async function resolve(specifier, context, nextResolve) {
     if (specifier === "sprinkles:content") {
-        return { url: configUrl, shortCircuit: true };
+        return { shortCircuit: true, url: configUrl };
     }
     return nextResolve(specifier, context);
 }
@@ -1259,9 +1196,9 @@ export function createRuntime(
         collection: string,
         filter?: (entry: DataEntry) => unknown,
     ): Promise<DataEntry[]> {
-        let store = stores.get(collection);
-        if (!store) return [];
-        let entries = store.values();
+        const store = stores.get(collection);
+        if (!store) {return [];}
+        const entries = store.values();
         if (filter) {
             return entries.filter(filter);
         }
@@ -1273,17 +1210,17 @@ export function createRuntime(
         slug?: string,
     ): Promise<DataEntry | undefined> {
         if (typeof collectionOrRef === "object") {
-            let store = stores.get(collectionOrRef.collection);
+            const store = stores.get(collectionOrRef.collection);
             return store?.get(collectionOrRef.id);
         }
-        let store = stores.get(collectionOrRef);
+        const store = stores.get(collectionOrRef);
         return store?.get(slug!);
     }
 
     async function getEntries(refs: ReferenceEntry[]): Promise<DataEntry[]> {
-        let results: DataEntry[] = [];
-        for (let ref of refs) {
-            let entry = await getEntry(ref);
+        const results: DataEntry[] = [];
+        for (const ref of refs) {
+            const entry = await getEntry(ref);
             if (entry) {
                 results.push(entry);
             }
@@ -1292,18 +1229,18 @@ export function createRuntime(
     }
 
     async function render(entry: DataEntry): Promise<RenderedEntry> {
-        let collectionName = findCollectionForEntry(entry);
-        let key = \`\${collectionName}/\${entry.id}\`;
-        let importer = importers[key];
+        const collectionName = findCollectionForEntry(entry);
+        const key = \`\${collectionName}/\${entry.id}\`;
+        const importer = importers[key];
         if (!importer) {
             throw new Error(\`No content found for entry "\${key}"\`);
         }
-        let mod = await importer();
+        const mod = await importer();
         return { Content: mod.default, headings: mod.headings ?? [] };
     }
 
     function findCollectionForEntry(entry: DataEntry): string {
-        for (let [name, store] of stores) {
+        for (const [name, store] of stores) {
             if (store.has(entry.id)) {
                 return name;
             }
@@ -1311,7 +1248,7 @@ export function createRuntime(
         throw new Error(\`Entry "\${entry.id}" not found in any collection\`);
     }
 
-    return { getCollection, getEntry, getEntries, render };
+    return { getCollection, getEntries, getEntry, render };
 }
 ",
       {
@@ -1324,11 +1261,26 @@ export function createRuntime(
 export function createDataStore<
     D extends Record<string, unknown> = Record<string, unknown>,
 >(): DataStore<D> {
-    let map = new Map<string, DataEntry>();
+    const map = new Map<string, DataEntry>();
 
     return {
+        clear() {
+            map.clear();
+        },
+        delete(key) {
+            map.delete(key);
+        },
+        entries() {
+            return [...map.entries()] as [string, DataEntry<D>][];
+        },
         get(key) {
             return map.get(key) as DataEntry<D> | undefined;
+        },
+        has(key) {
+            return map.has(key);
+        },
+        keys() {
+            return [...map.keys()];
         },
         set(entry) {
             let existing = map.get(entry.id);
@@ -1339,42 +1291,27 @@ export function createDataStore<
             map.set(entry.id, entry);
             return true;
         },
-        entries() {
-            return [...map.entries()] as [string, DataEntry<D>][];
-        },
-        keys() {
-            return [...map.keys()];
-        },
         values() {
             return [...map.values()] as DataEntry<D>[];
-        },
-        delete(key) {
-            map.delete(key);
-        },
-        clear() {
-            map.clear();
-        },
-        has(key) {
-            return map.has(key);
         },
     };
 }
 
 export function createMetaStore(): MetaStore {
-    let map = new Map<string, string>();
+    const map = new Map<string, string>();
 
     return {
-        get(key) {
-            return map.get(key);
-        },
-        set(key, value) {
-            map.set(key, value);
-        },
         delete(key) {
             map.delete(key);
         },
+        get(key) {
+            return map.get(key);
+        },
         has(key) {
             return map.has(key);
+        },
+        set(key, value) {
+            map.set(key, value);
         },
     };
 }
@@ -1385,240 +1322,76 @@ export function createMetaStore(): MetaStore {
     ],
   },
   "package.json": [
-    "{
-    "name": "test-repo",
-    "private": true,
-    "type": "module",
-    "sideEffects": false,
-    "scripts": {
-        "postinstall": "[ -n \\"$CI\\" ] || (vp run typegen:react-router && vp run typegen:cloudflare)"
-    },
-    "dependencies": {
-        "@remix-run/data-schema": "^0.1.0",
-        "@std/jsonc": "jsr:^1.0.2",
-        "@std/yaml": "jsr:^1.0.12",
-        "github-slugger": "^2.0.0",
-        "gray-matter": "^4.0.3",
-        "isbot": "^5.1.35",
-        "react": "^19.2.4",
-        "react-dom": "^19.2.4",
-        "react-router": "^7.13.1",
-        "server-only": "^0.0.1"
-    },
-    "devDependencies": {
-        "@cloudflare/vite-plugin": "^1.25.6",
-        "@mdx-js/rollup": "^3.1.1",
-        "@react-router/dev": "^7.13.1",
-        "@tailwindcss/vite": "^4.2.1",
-        "@types/node": "^25.3.2",
-        "@types/react": "^19.2.14",
-        "@types/react-dom": "^19.2.3",
-        "@vitejs/plugin-rsc": "^0.5.21",
-        "babel-plugin-react-compiler": "^1.0.0",
-        "tailwindcss": "^4.2.1",
-        "wrangler": "^4.69.0"
-    }
-}
-",
+    "{ "name": "test-repo", "private": true, "type": "module", "sideEffects": false, "scripts": {
+"postinstall": "[ -n \\"$CI\\" ] || (vp run typegen:react-router && vp run typegen:cloudflare)" },
+"dependencies": { "@remix-run/data-schema": "^0.1.0", "@std/jsonc": "jsr:^1.0.2", "@std/yaml":
+"jsr:^1.0.12", "github-slugger": "^2.0.0", "gray-matter": "^4.0.3", "isbot": "^5.1.35", "react":
+"^19.2.4", "react-dom": "^19.2.4", "react-router": "^7.13.1", "server-only": "^0.0.1" },
+"devDependencies": { "@cloudflare/vite-plugin": "^1.25.6", "@mdx-js/rollup": "^3.1.1",
+"@react-router/dev": "^7.13.1", "@tailwindcss/vite": "^4.2.1", "@types/node": "^25.3.2",
+"@types/react": "^19.2.14", "@types/react-dom": "^19.2.3", "@vitejs/plugin-rsc": "^0.5.21",
+"babel-plugin-react-compiler": "^1.0.0", "tailwindcss": "^4.2.1", "wrangler": "^4.69.0" } }",
     {
       "executable": false,
     },
   ],
   "react-compiler.plugin.ts": [
-    "import babel from "vite-plugin-babel";
-
-export interface LoggerEvent extends Event {
-    kind:
-        | "CompileSuccess"
-        | "CompileError"
-        | "CompileDiagnostic"
-        | "CompileSkip"
-        | "PipelineError"
-        | "Timing";
-
-    detail: {
-        description: string;
-        suggestions: string;
-        loc: {
-            start: { line: number; column: number };
-            end: { line: number; column: number };
-        };
-    };
-}
-
-export interface ReactCompilerConfig {
-    /** Controls the strategy for determining which functions the React Compiler will optimize. */
-    compilationMode?: "infer" | "annotation" | "syntax" | "all";
-    /** Configures the React version compatibility for the compiled output. */
-    target?: "17" | "18" | "19";
-    /** Determines whether compilation errors should fail the build or skip optimization. */
-    panicThreshold?: "none" | "critical_errors" | "all_errors";
-    /** Configures custom logging to track compiler behavior and debug issues. */
-    logger?: {
-        logEvent: (filename: string | null, event: LoggerEvent) => void;
-    };
-    /** Configures runtime feature flag gating for compiled functions. */
-    gating?: {
-        /** Module path to import the feature flag from */
-        source: string;
-        /** Name of the exported function to import */
-        importSpecifierName: string;
-    };
-}
-
-const FILTER = /\\.[jt]sx?$/;
-
-export function reactCompiler(config: ReactCompilerConfig = {}) {
-    return babel({
-        filter: FILTER,
-        babelConfig: {
-            presets: ["@babel/preset-typescript"],
-            plugins: [["babel-plugin-react-compiler", config]],
-        },
-    });
-}
-",
+    "import babel from "vite-plugin-babel"; export interface LoggerEvent extends Event { kind: |
+"CompileSuccess" | "CompileError" | "CompileDiagnostic" | "CompileSkip" | "PipelineError" |
+"Timing"; detail: { description: string; suggestions: string; loc: { start: { line: number; column:
+number }; end: { line: number; column: number }; }; }; } export interface ReactCompilerConfig { /**
+Controls the strategy for determining which functions the React Compiler will optimize. */
+compilationMode?: "infer" | "annotation" | "syntax" | "all"; /** Configures the React version
+compatibility for the compiled output. */ target?: "17" | "18" | "19"; /** Determines whether
+compilation errors should fail the build or skip optimization. */ panicThreshold?: "none" |
+"critical_errors" | "all_errors"; /** Configures custom logging to track compiler behavior and debug
+issues. */ logger?: { logEvent: (filename: string | null, event: LoggerEvent) => void; }; /**
+Configures runtime feature flag gating for compiled functions. */ gating?: { /** Module path to
+import the feature flag from */ source: string; /** Name of the exported function to import */
+importSpecifierName: string; }; } const FILTER = /\\.[jt]sx?$/; export function reactCompiler(config:
+ReactCompilerConfig = {}) { return babel({ filter: FILTER, babelConfig: { presets:
+["@babel/preset-typescript"], plugins: [["babel-plugin-react-compiler", config]], }, }); }",
     {
       "executable": false,
     },
   ],
   "react-router.config.ts": [
-    "import type { Config } from "@react-router/dev/config";
-
-export default {
-    future: {
-        v8_viteEnvironmentApi: true,
-        v8_middleware: true,
-    },
-} satisfies Config;
-",
+    "import type { Config } from "@react-router/dev/config"; export default { future: {
+v8_viteEnvironmentApi: true, v8_middleware: true, }, } satisfies Config;",
     {
       "executable": false,
     },
   ],
   "tsconfig.json": [
-    "{
-    "include": [
-        "**/*.ts",
-        "**/*.tsx",
-        "./.react-router/types/**/*",
-        "./.sprinkles/content-layer/**/*"
-    ],
-    "compilerOptions": {
-        "allowImportingTsExtensions": true,
-        "strict": true,
-        "noUnusedLocals": true,
-        "noUnusedParameters": true,
-        "skipLibCheck": true,
-        "verbatimModuleSyntax": true,
-        "noEmit": true,
-        "moduleResolution": "Bundler",
-        "module": "ESNext",
-        "target": "ESNext",
-        "lib": ["ESNext", "DOM", "DOM.Iterable"],
-        "types": ["vite/client", "@vitejs/plugin-rsc/types", "@types/node"],
-        "jsx": "react-jsx",
-        "rootDirs": [".", "./.react-router/types"],
-        "paths": {
-            "~/*": ["./app/*"]
-        }
-    }
-}
-",
+    "{ "include": [ "**/*.ts", "**/*.tsx", "./.react-router/types/**/*",
+"./.sprinkles/content-layer/**/*" ], "compilerOptions": { "allowImportingTsExtensions": true,
+"strict": true, "noUnusedLocals": true, "noUnusedParameters": true, "skipLibCheck": true,
+"verbatimModuleSyntax": true, "noEmit": true, "moduleResolution": "Bundler", "module": "ESNext",
+"target": "ESNext", "lib": ["ESNext", "DOM", "DOM.Iterable"], "types": ["vite/client",
+"@vitejs/plugin-rsc/types", "@types/node"], "jsx": "react-jsx", "rootDirs": [".",
+"./.react-router/types"], "paths": { "~/*": ["./app/*"] } } }",
     {
       "executable": false,
     },
   ],
   "vite.config.ts": [
-    "import { cloudflare } from "@cloudflare/vite-plugin";
-import mdx from "@mdx-js/rollup";
-import { unstable_reactRouterRSC as reactRouter } from "@react-router/dev/vite";
-import tailwindcss from "@tailwindcss/vite";
-import rsc from "@vitejs/plugin-rsc";
-import { defineConfig } from "vite-plus";
-
-import { contentLayer } from "./content-layer/plugin.ts";
-import { reactCompiler } from "./react-compiler.plugin.ts";
-
-let IS_TEST = !!process.env.VITEST;
-
-export default defineConfig({
-    plugins: [
-        contentLayer(),
-        mdx(),
-        reactRouter(),
-        rsc(),
-        reactCompiler(),
-        !IS_TEST &&
-            cloudflare({
-                viteEnvironment: {
-                    name: "ssr",
-                },
-                configPath: "./wrangler.ssr.jsonc",
-                auxiliaryWorkers: [
-                    {
-                        configPath: "./wrangler.rsc.jsonc",
-                        viteEnvironment: {
-                            name: "rsc",
-                        },
-                    },
-                ],
-            }),
-        tailwindcss(),
-    ],
-    resolve: {
-        tsconfigPaths: true,
-    },
-    css: {
-        transformer: "lightningcss",
-    },
-    environments: {
-        client: {
-            optimizeDeps: {
-                include: [
-                    "react-router",
-                    "react-router/dom",
-                    "react-router/internal/react-server-client",
-                ],
-            },
-        },
-        ssr: {
-            optimizeDeps: {
-                exclude: ["react-router"],
-            },
-        },
-        rsc: {
-            optimizeDeps: {
-                exclude: ["react-router"],
-            },
-            resolve: {
-                conditions: ["react-server"],
-            },
-        },
-    },
-    run: {
-        tasks: {
-            "typegen:react-router": {
-                command: "react-router typegen",
-            },
-            "typegen:cloudflare": {
-                command: "wrangler types -c wrangler.rsc.jsonc",
-            },
-            typecheck: {
-                command: "tsgo --noEmit",
-                dependsOn: ["typegen:react-router", "typegen:cloudflare"],
-            },
-            deploy: {
-                command: "vp build && wrangler deploy",
-                cache: false,
-            },
-        },
-    },
-    test: {
-        include: ["**/*.test.ts"],
-    },
-});
-",
+    "import { cloudflare } from "@cloudflare/vite-plugin"; import mdx from "@mdx-js/rollup"; import {
+unstable_reactRouterRSC as reactRouter } from "@react-router/dev/vite"; import tailwindcss from
+"@tailwindcss/vite"; import rsc from "@vitejs/plugin-rsc"; import { defineConfig } from "vite-plus";
+import { contentLayer } from "./content-layer/plugin.ts"; import { reactCompiler } from
+"./react-compiler.plugin.ts"; let IS_TEST = !!process.env.VITEST; export default defineConfig({
+plugins: [ contentLayer(), mdx(), reactRouter(), rsc(), reactCompiler(), !IS_TEST && cloudflare({
+viteEnvironment: { name: "ssr", }, configPath: "./wrangler.ssr.jsonc", auxiliaryWorkers: [ {
+configPath: "./wrangler.rsc.jsonc", viteEnvironment: { name: "rsc", }, }, ], }), tailwindcss(), ],
+resolve: { tsconfigPaths: true, }, css: { transformer: "lightningcss", }, environments: { client: {
+optimizeDeps: { include: [ "react-router", "react-router/dom",
+"react-router/internal/react-server-client", ], }, }, ssr: { optimizeDeps: { exclude:
+["react-router"], }, }, rsc: { optimizeDeps: { exclude: ["react-router"], }, resolve: { conditions:
+["react-server"], }, }, }, run: { tasks: { "typegen:react-router": { command: "react-router
+typegen", }, "typegen:cloudflare": { command: "wrangler types -c wrangler.rsc.jsonc", }, typecheck:
+{ command: "tsgo --noEmit", dependsOn: ["typegen:react-router", "typegen:cloudflare"], }, deploy: {
+command: "vp build && wrangler deploy", cache: false, }, }, }, test: { include: ["**/*.test.ts"], },
+});",
     {
       "executable": false,
     },
@@ -1641,20 +1414,20 @@ import basename from "virtual:react-router/unstable_rsc/basename";
 
 export function fetchServer(request: Request) {
     return matchRSCServerRequest({
+        basename,
         createTemporaryReferenceSet,
         decodeAction,
         decodeFormState,
         decodeReply,
-        loadServerAction,
-        request,
-        routes,
-        basename,
         generateResponse(match, options) {
             return new Response(renderToReadableStream(match.payload, options), {
                 status: match.statusCode,
                 headers: match.headers,
             });
         },
+        loadServerAction,
+        request,
+        routes,
     });
 }
 
@@ -1662,7 +1435,7 @@ if (import.meta.hot) {
     import.meta.hot.accept();
 }
 
-let handler: ExportedHandler<Env> = {
+const handler: ExportedHandler<Env> = {
     fetch(request) {
         return fetchServer(request);
     },
@@ -1678,8 +1451,8 @@ export default handler;
       "import { createFromReadableStream } from "@vitejs/plugin-rsc/ssr";
 import { renderToReadableStream as renderHTMLToReadableStream } from "react-dom/server.edge";
 import {
-    unstable_routeRSCServerRequest as routeRSCServerRequest,
     unstable_RSCStaticRouter as RSCStaticRouter,
+    unstable_routeRSCServerRequest as routeRSCServerRequest,
 } from "react-router";
 
 export async function generateHTML(request: Request, serverResponse: Response): Promise<Response> {
@@ -1692,10 +1465,10 @@ export async function generateHTML(request: Request, serverResponse: Response): 
         createFromReadableStream,
         // Render the router to HTML.
         async renderHTML(getPayload) {
-            let payload = await getPayload();
-            let formState = payload.type === "render" ? await payload.formState : undefined;
+            const payload = await getPayload();
+            const formState = payload.type === "render" ? await payload.formState : undefined;
 
-            let bootstrapScriptContent = await import.meta.viteRsc.loadBootstrapScriptContent(
+            const bootstrapScriptContent = await import.meta.viteRsc.loadBootstrapScriptContent(
                 "index",
             );
 
@@ -1708,7 +1481,7 @@ export async function generateHTML(request: Request, serverResponse: Response): 
     });
 }
 
-let handler: ExportedHandler<Env> = {
+const handler: ExportedHandler<Env> = {
     async fetch(request, env) {
         let serverResponse = await env.RSC.fetch(request);
         return generateHTML(request, serverResponse);
@@ -1723,42 +1496,19 @@ export default handler;
     ],
   },
   "wrangler.rsc.jsonc": [
-    "{
-    "$schema": "node_modules/wrangler/config-schema.json",
-    "name": "test-repo",
-    "main": "workers/entry.rsc.tsx",
-    "assets": {
-        "directory": "./build/client"
-    },
-    "services": [{ "binding": "RSC", "service": "test-repo" }],
-    "workers_dev": true,
-    "compatibility_date": "2026-02-28",
-    "compatibility_flags": ["nodejs_als", "nodejs_compat"],
-    "observability": {
-        "logs": {
-            "enabled": true,
-            "head_sampling_rate": 1,
-            "invocation_logs": true,
-            "persist": true
-        }
-    }
-}
-",
+    "{ "$schema": "node_modules/wrangler/config-schema.json", "name": "test-repo", "main":
+"workers/entry.rsc.tsx", "assets": { "directory": "./build/client" }, "services": [{ "binding":
+"RSC", "service": "test-repo" }], "workers_dev": true, "compatibility_date": "2026-02-28",
+"compatibility_flags": ["nodejs_als", "nodejs_compat"], "observability": { "logs": { "enabled":
+true, "head_sampling_rate": 1, "invocation_logs": true, "persist": true } } }",
     {
       "executable": false,
     },
   ],
   "wrangler.ssr.jsonc": [
-    "{
-    "$schema": "node_modules/wrangler/config-schema.json",
-    "name": "test-repo-ssr",
-    "main": "workers/entry.ssr.tsx",
-    "workers_dev": true,
-    "services": [{ "binding": "RSC", "service": "test-repo" }],
-    "compatibility_date": "2026-02-28",
-    "compatibility_flags": ["nodejs_als", "nodejs_compat"]
-}
-",
+    "{ "$schema": "node_modules/wrangler/config-schema.json", "name": "test-repo-ssr", "main":
+"workers/entry.ssr.tsx", "workers_dev": true, "services": [{ "binding": "RSC", "service": "test-repo"
+}], "compatibility_date": "2026-02-28", "compatibility_flags": ["nodejs_als", "nodejs_compat"] }",
     {
       "executable": false,
     },
@@ -1766,133 +1516,90 @@ export default handler;
 }
 `;
 
-exports[`template > produces shared files for SPA kind 1`] = `
+exports[`template snapshots > SPA kind 1`] = `
 {
   ".env.local": [
-    "VITE_CONVEX_URL=# Set by \`npx convex dev\`
-",
+    "VITE_CONVEX_URL=# Set by \`npx convex dev\`",
     {
       "executable": false,
     },
   ],
   ".gitignore": [
-    ".DS_Store
-.env
-.env.local
-/node_modules/
+    ".DS_Store .env .env.local /node_modules/
 
-# React Router
-/.react-router/
-/build/
+    # React Router /.react-router/ /build/
 ",
     {
       "executable": false,
     },
   ],
   "README.md": [
-    "# test-repo
+    "#
+test-repo
 
 A React Router single-page application with Convex and TanStack Query.
 
 
 
 
-## Getting Started
-
-\`\`\`bash
-vp dev
-\`\`\`
-",
+## Getting Started \`\`\`bash
+    vp dev
+\`\`\`",
     {
       "executable": false,
     },
   ],
   "app": {
     "home.tsx": [
-      "import type { Route } from "./+types/home.ts";
-
-import { queryClient } from "./root.tsx";
-
-export async function clientLoader(_args: Route.ClientLoaderArgs) {
-    // Pre-populate query cache before render
-    // await queryClient.ensureQueryData(yourQueryOptions);
-    return {};
-}
-
-export default function Home() {
-    return (
-        <main>
-            <h1>Welcome to test-repo</h1>
-        </main>
-    );
-}
-",
+      "import type { Route } from "./+types/home.ts"; import { queryClient } from "./root.tsx"; export
+async function clientLoader(_args: Route.ClientLoaderArgs) { // Pre-populate query cache before
+render // await queryClient.ensureQueryData(yourQueryOptions); return {}; } export default function
+Home() { return (
+<main>
+    <h1>Welcome to test-repo</h1>
+</main>
+); }",
       {
         "executable": false,
       },
     ],
     "root.tsx": [
-      "import type { PropsWithChildren } from "react";
-
-import { ConvexQueryClient } from "@convex-dev/react-query";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ConvexProvider, ConvexReactClient } from "convex/react";
-import { Outlet, Scripts } from "react-router";
-
-const convex = new ConvexReactClient(import.meta.env.VITE_CONVEX_URL);
-const convexQueryClient = new ConvexQueryClient(convex);
-export const queryClient = new QueryClient({
-    defaultOptions: {
-        queries: {
-            queryKeyHashFn: convexQueryClient.hashFn(),
-            queryFn: convexQueryClient.queryFn(),
-            experimental_prefetchInRender: true,
-        },
-    },
-});
-
-convexQueryClient.connect(queryClient);
-
-export function Layout({ children }: PropsWithChildren) {
-    return (
-        <html lang="en">
-            <head>
-                <meta charSet="utf-8" />
-                <meta content="width=device-width, initial-scale=1" name="viewport" />
-                <meta content="#000000" name="theme-color" />
-                <title>test-repo</title>
-            </head>
-            <body>
-                {children}
-                <Scripts />
-            </body>
-        </html>
-    );
-}
-
-export function HydrateFallback() {
-    return <div>Loading...</div>;
-}
-
-export default function App() {
-    return (
-        <ConvexProvider client={convex}>
-            <QueryClientProvider client={queryClient}>
-                <Outlet />
-            </QueryClientProvider>
-        </ConvexProvider>
-    );
-}
-",
+      "import type { PropsWithChildren } from "react"; import { ConvexQueryClient } from
+"@convex-dev/react-query"; import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ConvexProvider, ConvexReactClient } from "convex/react"; import { Outlet, Scripts } from
+"react-router"; const convex = new ConvexReactClient(import.meta.env.VITE_CONVEX_URL); const
+convexQueryClient = new ConvexQueryClient(convex); export const queryClient = new QueryClient({
+defaultOptions: { queries: { queryKeyHashFn: convexQueryClient.hashFn(), queryFn:
+convexQueryClient.queryFn(), experimental_prefetchInRender: true, }, }, });
+convexQueryClient.connect(queryClient); export function Layout({ children }: PropsWithChildren) {
+return (
+<html lang="en">
+    <head>
+        <meta charSet="utf-8" />
+        <meta content="width=device-width, initial-scale=1" name="viewport" />
+        <meta content="#000000" name="theme-color" />
+        <title>test-repo</title>
+    </head>
+    <body>
+        {children}
+        <Scripts />
+    </body>
+</html>
+); } export function HydrateFallback() { return
+<div>Loading...</div>; } export default function App() { return (
+<ConvexProvider client="{convex}">
+    <QueryClientProvider client="{queryClient}">
+        <Outlet />
+    </QueryClientProvider>
+</ConvexProvider>
+); }",
       {
         "executable": false,
       },
     ],
     "routes.ts": [
-      "import { type RouteConfig, index } from "@react-router/dev/routes";
-
-export default [index("home.tsx")] satisfies RouteConfig;
-",
+      "import { type RouteConfig, index } from "@react-router/dev/routes"; export default
+[index("home.tsx")] satisfies RouteConfig;",
       {
         "executable": false,
       },
@@ -1905,7 +1612,7 @@ import { v } from "convex/values";
 
 export default defineSchema({
     // Define your tables here
-    // example: defineTable({ name: v.string() }),
+    // Example: defineTable({ name: v.string() }),
 });
 ",
       {
@@ -1914,147 +1621,58 @@ export default defineSchema({
     ],
   },
   "package.json": [
-    "{
-    "name": "test-repo",
-    "private": true,
-    "type": "module",
-    "sideEffects": false,
-    "dependencies": {
-        "@convex-dev/react-query": "^0.1.0",
-        "@tanstack/react-query": "^5.90.21",
-        "convex": "^1.32.0",
-        "react": "^19.2.4",
-        "react-dom": "^19.2.4",
-        "react-router": "^7.13.1"
-    },
-    "devDependencies": {
-        "@babel/preset-typescript": "^7.28.5",
-        "@react-router/dev": "^7.13.1",
-        "@tailwindcss/vite": "^4.1.11",
-        "@types/react": "^19.2.14",
-        "@types/react-dom": "^19.2.3",
-        "babel-plugin-react-compiler": "^1.0.0",
-        "tailwindcss": "^4.1.11",
-        "vite-plugin-babel": "^1.5.1"
-    }
-}
-",
+    "{ "name": "test-repo", "private": true, "type": "module", "sideEffects": false, "dependencies":
+{ "@convex-dev/react-query": "^0.1.0", "@tanstack/react-query": "^5.90.21", "convex": "^1.32.0",
+"react": "^19.2.4", "react-dom": "^19.2.4", "react-router": "^7.13.1" }, "devDependencies": {
+"@babel/preset-typescript": "^7.28.5", "@react-router/dev": "^7.13.1", "@tailwindcss/vite":
+"^4.1.11", "@types/react": "^19.2.14", "@types/react-dom": "^19.2.3", "babel-plugin-react-compiler":
+"^1.0.0", "tailwindcss": "^4.1.11", "vite-plugin-babel": "^1.5.1" } }",
     {
       "executable": false,
     },
   ],
   "react-compiler.plugin.ts": [
-    "import babel from "vite-plugin-babel";
-
-export interface LoggerEvent extends Event {
-    kind:
-        | "CompileSuccess"
-        | "CompileError"
-        | "CompileDiagnostic"
-        | "CompileSkip"
-        | "PipelineError"
-        | "Timing";
-
-    detail: {
-        description: string;
-        suggestions: string;
-        loc: {
-            start: { line: number; column: number };
-            end: { line: number; column: number };
-        };
-    };
-}
-
-export interface ReactCompilerConfig {
-    /** Controls the strategy for determining which functions the React Compiler will optimize. */
-    compilationMode?: "infer" | "annotation" | "syntax" | "all";
-    /** Configures the React version compatibility for the compiled output. */
-    target?: "17" | "18" | "19";
-    /** Determines whether compilation errors should fail the build or skip optimization. */
-    panicThreshold?: "none" | "critical_errors" | "all_errors";
-    /** Configures custom logging to track compiler behavior and debug issues. */
-    logger?: {
-        logEvent: (filename: string | null, event: LoggerEvent) => void;
-    };
-    /** Configures runtime feature flag gating for compiled functions. */
-    gating?: {
-        /** Module path to import the feature flag from */
-        source: string;
-        /** Name of the exported function to import */
-        importSpecifierName: string;
-    };
-}
-
-const FILTER = /\\.[jt]sx?$/;
-
-export function reactCompiler(config: ReactCompilerConfig = {}) {
-    return babel({
-        filter: FILTER,
-        babelConfig: {
-            presets: ["@babel/preset-typescript"],
-            plugins: [["babel-plugin-react-compiler", config]],
-        },
-    });
-}
-",
+    "import babel from "vite-plugin-babel"; export interface LoggerEvent extends Event { kind: |
+"CompileSuccess" | "CompileError" | "CompileDiagnostic" | "CompileSkip" | "PipelineError" |
+"Timing"; detail: { description: string; suggestions: string; loc: { start: { line: number; column:
+number }; end: { line: number; column: number }; }; }; } export interface ReactCompilerConfig { /**
+Controls the strategy for determining which functions the React Compiler will optimize. */
+compilationMode?: "infer" | "annotation" | "syntax" | "all"; /** Configures the React version
+compatibility for the compiled output. */ target?: "17" | "18" | "19"; /** Determines whether
+compilation errors should fail the build or skip optimization. */ panicThreshold?: "none" |
+"critical_errors" | "all_errors"; /** Configures custom logging to track compiler behavior and debug
+issues. */ logger?: { logEvent: (filename: string | null, event: LoggerEvent) => void; }; /**
+Configures runtime feature flag gating for compiled functions. */ gating?: { /** Module path to
+import the feature flag from */ source: string; /** Name of the exported function to import */
+importSpecifierName: string; }; } const FILTER = /\\.[jt]sx?$/; export function reactCompiler(config:
+ReactCompilerConfig = {}) { return babel({ filter: FILTER, babelConfig: { presets:
+["@babel/preset-typescript"], plugins: [["babel-plugin-react-compiler", config]], }, }); }",
     {
       "executable": false,
     },
   ],
   "react-router.config.ts": [
-    "import type { Config } from "@react-router/dev/config";
-
-export default {
-    ssr: ,
-} satisfies Config;
-",
+    "import type { Config } from "@react-router/dev/config"; export default { ssr:
+, } satisfies Config;",
     {
       "executable": false,
     },
   ],
   "tsconfig.json": [
-    "{
-    "include": [
-        "**/*.ts",
-        "**/*.tsx"
-    ],
-    "compilerOptions": {
-        "allowImportingTsExtensions": true,
-        "strict": true,
-        "noUnusedLocals": true,
-        "noUnusedParameters": true,
-        "skipLibCheck": true,
-        "verbatimModuleSyntax": true,
-        "noEmit": true,
-        "moduleResolution": "Bundler",
-        "module": "ESNext",
-        "target": "ESNext",
-        "lib": ["ESNext", "DOM", "DOM.Iterable"],
-        "jsx": "react-jsx",
-        "paths": {
-            "~/*": ["./app/*"]
-        }
-    }
-}
-",
+    "{ "include": [ "**/*.ts", "**/*.tsx" ], "compilerOptions": { "allowImportingTsExtensions": true,
+"strict": true, "noUnusedLocals": true, "noUnusedParameters": true, "skipLibCheck": true,
+"verbatimModuleSyntax": true, "noEmit": true, "moduleResolution": "Bundler", "module": "ESNext",
+"target": "ESNext", "lib": ["ESNext", "DOM", "DOM.Iterable"], "jsx": "react-jsx", "paths": { "~/*":
+["./app/*"] } } }",
     {
       "executable": false,
     },
   ],
   "vite.config.ts": [
-    "import tailwindcss from "@tailwindcss/vite";
-import { reactRouter } from "@react-router/dev/vite";
-import { defineConfig } from "vite-plus";
-
-import { reactCompiler } from "./react-compiler.plugin.ts";
-
-export default defineConfig({
-    plugins: [tailwindcss(), reactRouter(), reactCompiler()],
-    resolve: {
-        tsconfigPaths: true,
-    },
-});
-",
+    "import tailwindcss from "@tailwindcss/vite"; import { reactRouter } from "@react-router/dev/vite";
+import { defineConfig } from "vite-plus"; import { reactCompiler } from
+"./react-compiler.plugin.ts"; export default defineConfig({ plugins: [tailwindcss(), reactRouter(),
+reactCompiler()], resolve: { tsconfigPaths: true, }, });",
     {
       "executable": false,
     },
@@ -2062,43 +1680,35 @@ export default defineConfig({
 }
 `;
 
-exports[`template > produces shared files for SSR kind 1`] = `
+exports[`template snapshots > SSR kind 1`] = `
 {
   ".env.local": [
-    "VITE_CONVEX_URL=# Set by \`npx convex dev\`
-",
+    "VITE_CONVEX_URL=# Set by \`npx convex dev\`",
     {
       "executable": false,
     },
   ],
   ".gitignore": [
-    ".DS_Store
-.env
-.env.local
-/node_modules/
+    ".DS_Store .env .env.local /node_modules/
 
-# React Router
-/.react-router/
-/build/
+    # React Router /.react-router/ /build/
 ",
     {
       "executable": false,
     },
   ],
   "README.md": [
-    "# test-repo
+    "#
+test-repo
 
 
 A server-rendered React Router application with Convex and TanStack Query.
 
 
 
-## Getting Started
-
-\`\`\`bash
-vp dev
-\`\`\`
-",
+## Getting Started \`\`\`bash
+    vp dev
+\`\`\`",
     {
       "executable": false,
     },
@@ -2128,15 +1738,16 @@ export default function Home() {
     ],
     "lib": {
       "client.ts": [
-        "import { QueryClient } from "@tanstack/react-query";
-import type { DefaultOptions } from "@tanstack/react-query";
+        "import type { DefaultOptions } from "@tanstack/react-query";
+
+import { QueryClient } from "@tanstack/react-query";
 
 export function createQueryClient(overrides: DefaultOptions["queries"] = {}) {
     return new QueryClient({
         defaultOptions: {
             queries: {
                 // With SSR, we usually want to set some default staleTime
-                // above 0 to avoid refetching immediately on the client
+                // Above 0 to avoid refetching immediately on the client
                 staleTime: 60 * 1000,
                 // Allows us to use \`const { promise } = useQuery(...)\`
                 // Along with \`React.use(promise)\`
@@ -2153,106 +1764,64 @@ export function createQueryClient(overrides: DefaultOptions["queries"] = {}) {
       ],
     },
     "root.tsx": [
-      "import { useState, type PropsWithChildren } from "react";
-
-import { ConvexQueryClient } from "@convex-dev/react-query";
-import { HydrationBoundary, QueryClientProvider } from "@tanstack/react-query";
-import { ConvexProvider, ConvexReactClient } from "convex/react";
-import { isRouteErrorResponse, Outlet, Scripts, ScrollRestoration } from "react-router";
-
-import { useDehydratedState } from "./tanstack-query-integration/query-preloader.ts";
-import { setQueryClient } from "~/tanstack-query-integration/middleware.ts";
-import { createQueryClient } from "~/lib/client.ts";
-
-import type { Route } from "./+types/root.ts";
-
-const convex = new ConvexReactClient(import.meta.env.VITE_CONVEX_URL);
-const convexQueryClient = new ConvexQueryClient(convex);
-
-function createConvexQueryClient() {
-    const queryClient = createQueryClient({
-        queryKeyHashFn: convexQueryClient.hashFn(),
-        queryFn: convexQueryClient.queryFn(),
-    });
-
-    convexQueryClient.connect(queryClient);
-
-    return queryClient;
-}
-
-export const middleware = [setQueryClient(() => createConvexQueryClient())];
-
-export function Layout({ children }: PropsWithChildren) {
-    return (
-        <html lang="en">
-            <head>
-                <meta charSet="utf-8" />
-                <meta content="width=device-width, initial-scale=1" name="viewport" />
-                <meta content="#000000" name="theme-color" />
-                <title>test-repo</title>
-            </head>
-            <body>
-                {children}
-                <ScrollRestoration />
-                <Scripts />
-            </body>
-        </html>
-    );
-}
-
-export default function App() {
-    const [queryClient] = useState(() => createConvexQueryClient());
-    const state = useDehydratedState();
-
-    return (
-        <ConvexProvider client={convex}>
-            <QueryClientProvider client={queryClient}>
-                <HydrationBoundary state={state}>
-                    <Outlet />
-                </HydrationBoundary>
-            </QueryClientProvider>
-        </ConvexProvider>
-    );
-}
-
-export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
-    let message = "Oops!";
-    let details = "An unexpected error occurred.";
-    let stack: string | undefined;
-
-    if (isRouteErrorResponse(error)) {
-        message = error.status === 404 ? "404" : "Error";
-        details =
-            error.status === 404
-                ? "The requested page could not be found."
-                : error.statusText || details;
-    } else if (import.meta.env.DEV && error && error instanceof Error) {
-        details = error.message;
-        stack = error.stack;
-    }
-
-    return (
-        <main className="pt-16 p-4 container mx-auto">
-            <h1>{message}</h1>
-            <p>{details}</p>
-            {stack && (
-                <pre className="w-full p-4 overflow-x-auto">
+      "import { useState, type PropsWithChildren } from "react"; import { ConvexQueryClient } from
+"@convex-dev/react-query"; import { HydrationBoundary, QueryClientProvider } from
+"@tanstack/react-query"; import { ConvexProvider, ConvexReactClient } from "convex/react"; import {
+isRouteErrorResponse, Outlet, Scripts, ScrollRestoration } from "react-router"; import {
+useDehydratedState } from "./tanstack-query-integration/query-preloader.ts"; import { setQueryClient
+} from "~/tanstack-query-integration/middleware.ts"; import { createQueryClient } from
+"~/lib/client.ts"; import type { Route } from "./+types/root.ts"; const convex = new
+ConvexReactClient(import.meta.env.VITE_CONVEX_URL); const convexQueryClient = new
+ConvexQueryClient(convex); function createConvexQueryClient() { const queryClient =
+createQueryClient({ queryKeyHashFn: convexQueryClient.hashFn(), queryFn:
+convexQueryClient.queryFn(), }); convexQueryClient.connect(queryClient); return queryClient; }
+export const middleware = [setQueryClient(() => createConvexQueryClient())]; export function
+Layout({ children }: PropsWithChildren) { return (
+<html lang="en">
+    <head>
+        <meta charSet="utf-8" />
+        <meta content="width=device-width, initial-scale=1" name="viewport" />
+        <meta content="#000000" name="theme-color" />
+        <title>test-repo</title>
+    </head>
+    <body>
+        {children}
+        <ScrollRestoration />
+        <Scripts />
+    </body>
+</html>
+); } export default function App() { const [queryClient] = useState(() =>
+createConvexQueryClient()); const state = useDehydratedState(); return (
+<ConvexProvider client="{convex}">
+    <QueryClientProvider client="{queryClient}">
+        <HydrationBoundary state="{state}">
+            <Outlet />
+        </HydrationBoundary>
+    </QueryClientProvider>
+</ConvexProvider>
+); } export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) { let message = "Oops!"; let
+details = "An unexpected error occurred."; let stack: string | undefined; if
+(isRouteErrorResponse(error)) { message = error.status === 404 ? "404" : "Error"; details =
+error.status === 404 ? "The requested page could not be found." : error.statusText || details; }
+else if (import.meta.env.DEV && error && error instanceof Error) { details = error.message; stack =
+error.stack; } return (
+<main className="pt-16 p-4 container mx-auto">
+    <h1>{message}</h1>
+    <p>{details}</p>
+    {stack && (
+    <pre className="w-full p-4 overflow-x-auto">
                     <code>{stack}</code>
                 </pre>
-            )}
-        </main>
-    );
-}
-",
+    )}
+</main>
+); }",
       {
         "executable": false,
       },
     ],
     "routes.ts": [
-      "import { type RouteConfig, index } from "@react-router/dev/routes";
-
-export default [index("home.tsx")] satisfies RouteConfig;
-",
+      "import { type RouteConfig, index } from "@react-router/dev/routes"; export default
+[index("home.tsx")] satisfies RouteConfig;",
       {
         "executable": false,
       },
@@ -2260,8 +1829,10 @@ export default [index("home.tsx")] satisfies RouteConfig;
     "tanstack-query-integration": {
       "middleware.ts": [
         "import type { QueryClient } from "@tanstack/react-query";
+
 import assert from "node:assert";
-import { createContext, RouterContextProvider, type MiddlewareFunction } from "react-router";
+import { createContext, RouterContextProvider } from 'react-router';
+import type { MiddlewareFunction } from 'react-router';
 
 const QUERY_CLIENT = createContext<QueryClient | null>(null);
 
@@ -2280,16 +1851,18 @@ export function getQueryClient(context: Readonly<RouterContextProvider>): QueryC
         },
       ],
       "query-preloader.ts": [
-        "import { dehydrate } from "@tanstack/react-query";
-import type {
-    DehydratedState,
+        "import type {
     DefaultError,
-    QueryKey,
+    DehydratedState,
     EnsureQueryDataOptions,
+    QueryKey,
 } from "@tanstack/react-query";
-import { useMatches } from "react-router";
 import type { LoaderFunctionArgs } from "react-router";
+
 import { on } from "@remix-run/interaction";
+import { dehydrate } from "@tanstack/react-query";
+import { useMatches } from "react-router";
+
 import { getQueryClient } from "./middleware";
 
 const DEHYDRATED_STATE_KEY = "@tanstack/react-query:dehydrated-state";
@@ -2304,7 +1877,7 @@ function mergeDehydratedStates(states: DehydratedState[]): DehydratedState {
     const byHash = new Map<string, (typeof allQueries)[number]>();
 
     for (const query of allQueries) {
-        if (!query) continue;
+        if (!query) {continue;}
         byHash.set(query.queryHash, query);
     }
 
@@ -2318,16 +1891,16 @@ export function useDehydratedState() {
     const matches = useMatches();
     const states = matches
         .map(m => (m.loaderData as any)?.[DEHYDRATED_STATE_KEY] as DehydratedState | undefined)
-        .filter((s): s is DehydratedState => !!s);
+        .filter((s): s is DehydratedState => Boolean(s));
 
     return states.length ? mergeDehydratedStates(states) : undefined;
 }
 
 export function createPreloader<
     TLoaderArgs extends LoaderFunctionArgs,
-    TData extends Record<string, unknown> | void
+    TData extends Record<string, unknown> | void,
 >(
-    fn: (args: QueryLoaderArgs<TLoaderArgs>) => MaybePromise<TData | Response>
+    fn: (args: QueryLoaderArgs<TLoaderArgs>) => MaybePromise<TData | Response>,
 ): QueryLoader<TLoaderArgs, TData> {
     return (async args => {
         const prefetches: Promise<any>[] = [];
@@ -2340,10 +1913,10 @@ export function createPreloader<
             } else {
                 on(args.request.signal, {
                     abort: {
-                        once: true,
                         listener: () => {
                             query.cancelQueries();
                         },
+                        once: true,
                     },
                 });
             }
@@ -2353,7 +1926,7 @@ export function createPreloader<
             TQueryFnData,
             TError = DefaultError,
             TData = TQueryFnData,
-            TQueryKey extends QueryKey = QueryKey
+            TQueryKey extends QueryKey = QueryKey,
         >(options: EnsureQueryDataOptions<TQueryFnData, TError, TData, TQueryKey>): Promise<TData> {
             const result = query.ensureQueryData(options);
             prefetches.push(result);
@@ -2394,7 +1967,7 @@ export type QueryLoaderReturn<TData extends object | void> = Promise<
 >;
 
 export type QueryLoader<LoaderArgs, TData extends object | void> = (
-    ctx: LoaderArgs
+    ctx: LoaderArgs,
 ) => QueryLoaderReturn<TData>;
 
 export type QueryLoaderArgs<Args extends LoaderFunctionArgs = LoaderFunctionArgs> = Args & {
@@ -2402,9 +1975,9 @@ export type QueryLoaderArgs<Args extends LoaderFunctionArgs = LoaderFunctionArgs
         TQueryFnData,
         TError = DefaultError,
         TData = TQueryFnData,
-        TQueryKey extends QueryKey = QueryKey
+        TQueryKey extends QueryKey = QueryKey,
     >(
-        options: EnsureQueryDataOptions<TQueryFnData, TError, TData, TQueryKey>
+        options: EnsureQueryDataOptions<TQueryFnData, TError, TData, TQueryKey>,
     ): Promise<TData>;
 };
 ",
@@ -2415,179 +1988,70 @@ export type QueryLoaderArgs<Args extends LoaderFunctionArgs = LoaderFunctionArgs
     },
   },
   "package.json": [
-    "{
-    "name": "test-repo",
-    "private": true,
-    "type": "module",
-    "sideEffects": false,
-    "dependencies": {
-        "@convex-dev/react-query": "^0.1.0",
-        "@react-router/node": "^7.13.1",
-        "@remix-run/interaction": "^0.2.1",
-        "@tanstack/react-query": "^5.90.21",
-        "convex": "^1.32.0",
-        "isbot": "^5.1.31",
-        "react": "^19.2.4",
-        "react-dom": "^19.2.4",
-        "react-router": "^7.13.1",
-        "server-only": "^0.0.1"
-    },
-    "devDependencies": {
-        "@babel/preset-typescript": "^7.28.5",
-        "@react-router/dev": "^7.13.1",
-        "@tailwindcss/vite": "^4.1.11",
-        "@types/react": "^19.2.14",
-        "@types/react-dom": "^19.2.3",
-        "babel-plugin-react-compiler": "^1.0.0",
-        "tailwindcss": "^4.1.11",
-        "vite-plugin-babel": "^1.5.1",
-        "wrangler": "^4.22.0"
-    }
-}
-",
+    "{ "name": "test-repo", "private": true, "type": "module", "sideEffects": false, "dependencies":
+{ "@convex-dev/react-query": "^0.1.0", "@react-router/node": "^7.13.1", "@remix-run/interaction":
+"^0.2.1", "@tanstack/react-query": "^5.90.21", "convex": "^1.32.0", "isbot": "^5.1.31", "react":
+"^19.2.4", "react-dom": "^19.2.4", "react-router": "^7.13.1", "server-only": "^0.0.1" },
+"devDependencies": { "@babel/preset-typescript": "^7.28.5", "@react-router/dev": "^7.13.1",
+"@tailwindcss/vite": "^4.1.11", "@types/react": "^19.2.14", "@types/react-dom": "^19.2.3",
+"babel-plugin-react-compiler": "^1.0.0", "tailwindcss": "^4.1.11", "vite-plugin-babel": "^1.5.1",
+"wrangler": "^4.22.0" } }",
     {
       "executable": false,
     },
   ],
   "react-compiler.plugin.ts": [
-    "import babel from "vite-plugin-babel";
-
-export interface LoggerEvent extends Event {
-    kind:
-        | "CompileSuccess"
-        | "CompileError"
-        | "CompileDiagnostic"
-        | "CompileSkip"
-        | "PipelineError"
-        | "Timing";
-
-    detail: {
-        description: string;
-        suggestions: string;
-        loc: {
-            start: { line: number; column: number };
-            end: { line: number; column: number };
-        };
-    };
-}
-
-export interface ReactCompilerConfig {
-    /** Controls the strategy for determining which functions the React Compiler will optimize. */
-    compilationMode?: "infer" | "annotation" | "syntax" | "all";
-    /** Configures the React version compatibility for the compiled output. */
-    target?: "17" | "18" | "19";
-    /** Determines whether compilation errors should fail the build or skip optimization. */
-    panicThreshold?: "none" | "critical_errors" | "all_errors";
-    /** Configures custom logging to track compiler behavior and debug issues. */
-    logger?: {
-        logEvent: (filename: string | null, event: LoggerEvent) => void;
-    };
-    /** Configures runtime feature flag gating for compiled functions. */
-    gating?: {
-        /** Module path to import the feature flag from */
-        source: string;
-        /** Name of the exported function to import */
-        importSpecifierName: string;
-    };
-}
-
-const FILTER = /\\.[jt]sx?$/;
-
-export function reactCompiler(config: ReactCompilerConfig = {}) {
-    return babel({
-        filter: FILTER,
-        babelConfig: {
-            presets: ["@babel/preset-typescript"],
-            plugins: [["babel-plugin-react-compiler", config]],
-        },
-    });
-}
-",
+    "import babel from "vite-plugin-babel"; export interface LoggerEvent extends Event { kind: |
+"CompileSuccess" | "CompileError" | "CompileDiagnostic" | "CompileSkip" | "PipelineError" |
+"Timing"; detail: { description: string; suggestions: string; loc: { start: { line: number; column:
+number }; end: { line: number; column: number }; }; }; } export interface ReactCompilerConfig { /**
+Controls the strategy for determining which functions the React Compiler will optimize. */
+compilationMode?: "infer" | "annotation" | "syntax" | "all"; /** Configures the React version
+compatibility for the compiled output. */ target?: "17" | "18" | "19"; /** Determines whether
+compilation errors should fail the build or skip optimization. */ panicThreshold?: "none" |
+"critical_errors" | "all_errors"; /** Configures custom logging to track compiler behavior and debug
+issues. */ logger?: { logEvent: (filename: string | null, event: LoggerEvent) => void; }; /**
+Configures runtime feature flag gating for compiled functions. */ gating?: { /** Module path to
+import the feature flag from */ source: string; /** Name of the exported function to import */
+importSpecifierName: string; }; } const FILTER = /\\.[jt]sx?$/; export function reactCompiler(config:
+ReactCompilerConfig = {}) { return babel({ filter: FILTER, babelConfig: { presets:
+["@babel/preset-typescript"], plugins: [["babel-plugin-react-compiler", config]], }, }); }",
     {
       "executable": false,
     },
   ],
   "react-router.config.ts": [
-    "import type { Config } from "@react-router/dev/config";
-
-export default {
-    ssr: ,
-    future: {
-        v8_middleware: true,
-    },
-} satisfies Config;
-",
+    "import type { Config } from "@react-router/dev/config"; export default { ssr:
+, future: { v8_middleware: true, }, } satisfies Config;",
     {
       "executable": false,
     },
   ],
   "tsconfig.json": [
-    "{
-    "include": [
-        "**/*.ts",
-        "**/*.tsx",
-        "**/.server/**/*",
-        "**/.client/**/*",
-        ".react-router/types/**/*"
-    ],
-    "compilerOptions": {
-        "allowImportingTsExtensions": true,
-        "strict": true,
-        "noUnusedLocals": true,
-        "noUnusedParameters": true,
-        "skipLibCheck": true,
-        "verbatimModuleSyntax": true,
-        "noEmit": true,
-        "moduleResolution": "Bundler",
-        "module": "ESNext",
-        "target": "ESNext",
-        "lib": ["ESNext", "DOM", "DOM.Iterable"],
-        "jsx": "react-jsx",
-        "rootDirs": [".", "./.react-router/types"],
-        "paths": {
-            "~/*": ["./app/*"]
-        }
-    }
-}
-",
+    "{ "include": [ "**/*.ts", "**/*.tsx", "**/.server/**/*", "**/.client/**/*",
+".react-router/types/**/*" ], "compilerOptions": { "allowImportingTsExtensions": true, "strict":
+true, "noUnusedLocals": true, "noUnusedParameters": true, "skipLibCheck": true,
+"verbatimModuleSyntax": true, "noEmit": true, "moduleResolution": "Bundler", "module": "ESNext",
+"target": "ESNext", "lib": ["ESNext", "DOM", "DOM.Iterable"], "jsx": "react-jsx", "rootDirs": [".",
+"./.react-router/types"], "paths": { "~/*": ["./app/*"] } } }",
     {
       "executable": false,
     },
   ],
   "vite.config.ts": [
-    "import tailwindcss from "@tailwindcss/vite";
-import { reactRouter } from "@react-router/dev/vite";
-import { defineConfig } from "vite-plus";
-
-import { reactCompiler } from "./react-compiler.plugin.ts";
-
-export default defineConfig({
-    plugins: [tailwindcss(), reactRouter(), reactCompiler()],
-    resolve: {
-        tsconfigPaths: true,
-    },
-});
-",
+    "import tailwindcss from "@tailwindcss/vite"; import { reactRouter } from "@react-router/dev/vite";
+import { defineConfig } from "vite-plus"; import { reactCompiler } from
+"./react-compiler.plugin.ts"; export default defineConfig({ plugins: [tailwindcss(), reactRouter(),
+reactCompiler()], resolve: { tsconfigPaths: true, }, });",
     {
       "executable": false,
     },
   ],
   "wrangler.jsonc": [
-    "{
-    "$schema": "node_modules/wrangler/config-schema.json",
-    "name": "test-repo",
-    "main": "./build/server/index.js",
-    "compatibility_date": "2025-04-01",
-    "compatibility_flags": ["nodejs_compat"],
-    "assets": {
-        "directory": "./build/client",
-        "binding": "ASSETS"
-    },
-    "observability": {
-        "enabled": true
-    }
-}
-",
+    "{ "$schema": "node_modules/wrangler/config-schema.json", "name": "test-repo", "main":
+"./build/server/index.js", "compatibility_date": "2025-04-01", "compatibility_flags":
+["nodejs_compat"], "assets": { "directory": "./build/client", "binding": "ASSETS" },
+"observability": { "enabled": true } }",
     {
       "executable": false,
     },
@@ -2595,75 +2059,43 @@ export default defineConfig({
 }
 `;
 
-exports[`template > produces shared files for ts-package kind 1`] = `
+exports[`template snapshots > ts-package base 1`] = `
 {
   ".gitignore": [
-    ".DS_Store
-.env
-.env.local
-/node_modules/
+    ".DS_Store .env .env.local /node_modules/
 
-# Build
-/dist/
+    # Build /dist/
 ",
     {
       "executable": false,
     },
   ],
   "README.md": [
-    "# test-repo
+    "#
+test-repo
 
 
 
 
 A TypeScript package.
 
-## Getting Started
-
-\`\`\`bash
-vp run dev
-\`\`\`
-",
+## Getting Started \`\`\`bash
+    vp run dev
+\`\`\`",
     {
       "executable": false,
     },
   ],
   "package.json": [
-    "{
-    "name": "@test-owner/test-repo",
-    "version": "0.1.0",
-    "description": "",
-    "license": "MIT",
-    "type": "module",
-    "types": "./dist/index.d.mts",
-    "exports": {
-        ".": "./dist/index.mjs",
-        "./package.json": "./package.json"
-    },
-    "files": [
-        "dist",
-        "src"
-    ],
-    "scripts": {
-        "prepublishOnly": "vp pack"
-    },
-    "dependencies": {
-        "zod": "^4.3.6"
-    },
-    "devDependencies": {
-        "@types/node": "^25.3.5",
-        "vite-plus": "latest",
-        "vitest": "npm:@voidzero-dev/vite-plus-test@latest"
-    },
-    "packageManager": "pnpm@10.32.1",
-    "pnpm": {
-        "overrides": {
-            "vite": "npm:@voidzero-dev/vite-plus-core@latest",
-            "vitest": "npm:@voidzero-dev/vite-plus-test@latest"
-        }
-    }
-}
-",
+    "{ "name": "@test-owner/test-repo", "version": "0.1.0", "description": "", "license": "MIT",
+"type": "module", "types": "./dist/index.d.mts", "exports": { ".": "./dist/index.mjs",
+"./package.json": "./package.json" },
+"files": [
+"dist", "src" ], "scripts": { "prepublishOnly": "vp pack" }, "dependencies": {
+"zod": "^4.3.6" }, "devDependencies": { "@types/node": "^25.3.5", "vite-plus": "latest", "vitest":
+"npm:@voidzero-dev/vite-plus-test@latest" }, "packageManager": "pnpm@10.32.1", "pnpm": {
+"overrides": { "vite": "npm:@voidzero-dev/vite-plus-core@latest", "vitest":
+"npm:@voidzero-dev/vite-plus-test@latest" } } }",
     {
       "executable": false,
     },
@@ -2721,23 +2153,989 @@ describe("greet", () => {
     },
   ],
   "vite.config.ts": [
-    "import { defineConfig } from "vite-plus";
+    "import { defineConfig } from "vite-plus"; export default defineConfig({ pack: { dts: { tsgo: true,
+}, exports: true, }, run: { tasks: { build: { command: "vp pack" }, dev: { command: "vp pack
+--watch" }, }, }, });",
+    {
+      "executable": false,
+    },
+  ],
+}
+`;
 
-export default defineConfig({
-    pack: {
-        dts: {
-            tsgo: true,
-        },
-        exports: true,
+exports[`ts-package feature combinations > cli + generator + sea 1`] = `
+{
+  ".gitignore": [
+    ".DS_Store .env .env.local /node_modules/
+
+    # Build /dist/
+",
+    {
+      "executable": false,
     },
-    run: {
-        tasks: {
-            build: { command: "vp pack" },
-            dev: { command: "vp pack --watch" },
-        },
+  ],
+  "README.md": [
+    "#
+test-repo
+
+
+
+
+A TypeScript package.
+
+## Getting Started \`\`\`bash
+    vp run dev
+\`\`\`",
+    {
+      "executable": false,
     },
+  ],
+  "bin": {
+    "create.ts": [
+      "#!/usr/bin/env node import { runTemplateCLI } from "bingo"; import template from
+"../src/template.ts"; await runTemplateCLI(template);",
+      {
+        "executable": false,
+      },
+    ],
+    "index.ts": [
+      "#!/usr/bin/env node import { cli } from "../src/cli.ts"; cli();",
+      {
+        "executable": false,
+      },
+    ],
+  },
+  "package.json": [
+    "{ "name": "@test-owner/test-repo", "version": "0.1.0", "description": "", "license": "MIT",
+"type": "module", "types": "./dist/index.d.mts", "exports": { ".": "./dist/index.mjs",
+"./package.json": "./package.json" },
+    "bin": "./bin/index.ts",
+"files": [
+    "bin",
+"dist", "src" ], "scripts": { "prepublishOnly": "vp pack" }, "dependencies": {
+    "@bomb.sh/args": "^0.3.1",
+    "bingo": "^0.9.2", "bingo-fs": "^0.5.6", "bingo-handlebars": "^0.1.0",
+"zod": "^4.3.6" }, "devDependencies": { "@types/node": "^25.3.5", "vite-plus": "latest", "vitest":
+"npm:@voidzero-dev/vite-plus-test@latest" }, "packageManager": "pnpm@10.32.1", "pnpm": {
+"overrides": { "vite": "npm:@voidzero-dev/vite-plus-core@latest", "vitest":
+"npm:@voidzero-dev/vite-plus-test@latest" } } }",
+    {
+      "executable": false,
+    },
+  ],
+  "sea-config.json": [
+    "{ "main": "dist/sea-entry.mjs", "output": "sea-prep.blob", "disableExperimentalSEAWarning": true,
+"useSnapshot": false, "useCodeCache": true }",
+    {
+      "executable": false,
+    },
+  ],
+  "src": {
+    "cli.ts": [
+      "import { args } from "@bomb.sh/args"; export function cli(): void { const { positionals, values } =
+args({ allowPositionals: true, options: { help: { short: "h", type: "boolean", default: false,
+description: "Show help", }, version: { short: "v", type: "boolean", default: false, description:
+"Show version", }, }, }); if (values.version) { console.log("0.1.0"); return; } if (values.help ||
+positionals.length === 0) { console.log(\`Usage:
+test-repo
+[options]
+<command />\`); console.log(); console.log("Options:"); console.log(" -h, --help Show help");
+console.log(" -v, --version Show version"); return; } console.log(\`Running
+test-repo
+with args:\`, positionals); }",
+      {
+        "executable": false,
+      },
+    ],
+    "index.ts": [
+      "export function greet(name: string): string {
+    return \`Hello, \${name}!\`;
+}
+",
+      {
+        "executable": false,
+      },
+    ],
+    "sea-entry.ts": [
+      "/** * Single Executable Application entry point. * * This file is the main entry for the SEA build.
+It will be bundled * into a single file and embedded into the Node.js binary. * * @see
+https://nodejs.org/api/single-executable-applications.html */ import { greet } from "./index.ts";
+const name = process.argv[2] ?? "world"; console.log(greet(name));",
+      {
+        "executable": false,
+      },
+    ],
+    "template.ts": [
+      "import { createTemplate } from "bingo"; import { handlebars } from "bingo-handlebars"; import path
+from "node:path"; import { z } from "zod"; const templatesDir = path.join(import.meta.dirname,
+"../templates"); const options = { name: z.string().describe("Project name"), }; export default
+createTemplate({ about: { description: "Scaffold a new project with
+test-repo.", name: "@test-owner/test-repo", }, options, async produce({ options: opts }) {
+const files = await handlebars(path.join(templatesDir, "default"), opts); return { files }; }, });",
+      {
+        "executable": false,
+      },
+    ],
+  },
+  "tests": {
+    "index.test.ts": [
+      "import { describe, expect, it } from "vite-plus/test";
+
+import { greet } from "../src/index.ts";
+
+describe("greet", () => {
+    it("should return a greeting", () => {
+        expect(greet("world")).toBe("Hello, world!");
+    });
 });
 ",
+      {
+        "executable": false,
+      },
+    ],
+  },
+  "tsconfig.json": [
+    "{
+    "compilerOptions": {
+        "target": "ESNext",
+        "module": "ESNext",
+        "moduleResolution": "Bundler",
+        "strict": true,
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "isolatedModules": true,
+        "declaration": true,
+        "declarationMap": true,
+        "sourceMap": true,
+        "outDir": "./dist",
+        "rootDir": "./src"
+    },
+    "include": ["src"],
+    "exclude": ["node_modules", "dist"]
+}
+",
+    {
+      "executable": false,
+    },
+  ],
+  "vite.config.ts": [
+    "import { defineConfig } from "vite-plus"; export default defineConfig({ pack: { dts: { tsgo: true,
+}, exports: true, }, run: { tasks: { build: { command: "vp pack" }, dev: { command: "vp pack
+--watch" }, }, }, });",
+    {
+      "executable": false,
+    },
+  ],
+}
+`;
+
+exports[`ts-package feature combinations > cli + generator 1`] = `
+{
+  ".gitignore": [
+    ".DS_Store .env .env.local /node_modules/
+
+    # Build /dist/
+",
+    {
+      "executable": false,
+    },
+  ],
+  "README.md": [
+    "#
+test-repo
+
+
+
+
+A TypeScript package.
+
+## Getting Started \`\`\`bash
+    vp run dev
+\`\`\`",
+    {
+      "executable": false,
+    },
+  ],
+  "bin": {
+    "create.ts": [
+      "#!/usr/bin/env node import { runTemplateCLI } from "bingo"; import template from
+"../src/template.ts"; await runTemplateCLI(template);",
+      {
+        "executable": false,
+      },
+    ],
+    "index.ts": [
+      "#!/usr/bin/env node import { cli } from "../src/cli.ts"; cli();",
+      {
+        "executable": false,
+      },
+    ],
+  },
+  "package.json": [
+    "{ "name": "@test-owner/test-repo", "version": "0.1.0", "description": "", "license": "MIT",
+"type": "module", "types": "./dist/index.d.mts", "exports": { ".": "./dist/index.mjs",
+"./package.json": "./package.json" },
+    "bin": "./bin/index.ts",
+"files": [
+    "bin",
+"dist", "src" ], "scripts": { "prepublishOnly": "vp pack" }, "dependencies": {
+    "@bomb.sh/args": "^0.3.1",
+    "bingo": "^0.9.2", "bingo-fs": "^0.5.6", "bingo-handlebars": "^0.1.0",
+"zod": "^4.3.6" }, "devDependencies": { "@types/node": "^25.3.5", "vite-plus": "latest", "vitest":
+"npm:@voidzero-dev/vite-plus-test@latest" }, "packageManager": "pnpm@10.32.1", "pnpm": {
+"overrides": { "vite": "npm:@voidzero-dev/vite-plus-core@latest", "vitest":
+"npm:@voidzero-dev/vite-plus-test@latest" } } }",
+    {
+      "executable": false,
+    },
+  ],
+  "src": {
+    "cli.ts": [
+      "import { args } from "@bomb.sh/args"; export function cli(): void { const { positionals, values } =
+args({ allowPositionals: true, options: { help: { short: "h", type: "boolean", default: false,
+description: "Show help", }, version: { short: "v", type: "boolean", default: false, description:
+"Show version", }, }, }); if (values.version) { console.log("0.1.0"); return; } if (values.help ||
+positionals.length === 0) { console.log(\`Usage:
+test-repo
+[options]
+<command />\`); console.log(); console.log("Options:"); console.log(" -h, --help Show help");
+console.log(" -v, --version Show version"); return; } console.log(\`Running
+test-repo
+with args:\`, positionals); }",
+      {
+        "executable": false,
+      },
+    ],
+    "index.ts": [
+      "export function greet(name: string): string {
+    return \`Hello, \${name}!\`;
+}
+",
+      {
+        "executable": false,
+      },
+    ],
+    "template.ts": [
+      "import { createTemplate } from "bingo"; import { handlebars } from "bingo-handlebars"; import path
+from "node:path"; import { z } from "zod"; const templatesDir = path.join(import.meta.dirname,
+"../templates"); const options = { name: z.string().describe("Project name"), }; export default
+createTemplate({ about: { description: "Scaffold a new project with
+test-repo.", name: "@test-owner/test-repo", }, options, async produce({ options: opts }) {
+const files = await handlebars(path.join(templatesDir, "default"), opts); return { files }; }, });",
+      {
+        "executable": false,
+      },
+    ],
+  },
+  "tests": {
+    "index.test.ts": [
+      "import { describe, expect, it } from "vite-plus/test";
+
+import { greet } from "../src/index.ts";
+
+describe("greet", () => {
+    it("should return a greeting", () => {
+        expect(greet("world")).toBe("Hello, world!");
+    });
+});
+",
+      {
+        "executable": false,
+      },
+    ],
+  },
+  "tsconfig.json": [
+    "{
+    "compilerOptions": {
+        "target": "ESNext",
+        "module": "ESNext",
+        "moduleResolution": "Bundler",
+        "strict": true,
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "isolatedModules": true,
+        "declaration": true,
+        "declarationMap": true,
+        "sourceMap": true,
+        "outDir": "./dist",
+        "rootDir": "./src"
+    },
+    "include": ["src"],
+    "exclude": ["node_modules", "dist"]
+}
+",
+    {
+      "executable": false,
+    },
+  ],
+  "vite.config.ts": [
+    "import { defineConfig } from "vite-plus"; export default defineConfig({ pack: { dts: { tsgo: true,
+}, exports: true, }, run: { tasks: { build: { command: "vp pack" }, dev: { command: "vp pack
+--watch" }, }, }, });",
+    {
+      "executable": false,
+    },
+  ],
+}
+`;
+
+exports[`ts-package feature combinations > cli + sea 1`] = `
+{
+  ".gitignore": [
+    ".DS_Store .env .env.local /node_modules/
+
+    # Build /dist/
+",
+    {
+      "executable": false,
+    },
+  ],
+  "README.md": [
+    "#
+test-repo
+
+
+
+
+A TypeScript package.
+
+## Getting Started \`\`\`bash
+    vp run dev
+\`\`\`",
+    {
+      "executable": false,
+    },
+  ],
+  "bin": {
+    "index.ts": [
+      "#!/usr/bin/env node import { cli } from "../src/cli.ts"; cli();",
+      {
+        "executable": false,
+      },
+    ],
+  },
+  "package.json": [
+    "{ "name": "@test-owner/test-repo", "version": "0.1.0", "description": "", "license": "MIT",
+"type": "module", "types": "./dist/index.d.mts", "exports": { ".": "./dist/index.mjs",
+"./package.json": "./package.json" },
+    "bin": "./bin/index.ts",
+"files": [
+    "bin",
+"dist", "src" ], "scripts": { "prepublishOnly": "vp pack" }, "dependencies": {
+    "@bomb.sh/args": "^0.3.1",
+"zod": "^4.3.6" }, "devDependencies": { "@types/node": "^25.3.5", "vite-plus": "latest", "vitest":
+"npm:@voidzero-dev/vite-plus-test@latest" }, "packageManager": "pnpm@10.32.1", "pnpm": {
+"overrides": { "vite": "npm:@voidzero-dev/vite-plus-core@latest", "vitest":
+"npm:@voidzero-dev/vite-plus-test@latest" } } }",
+    {
+      "executable": false,
+    },
+  ],
+  "sea-config.json": [
+    "{ "main": "dist/sea-entry.mjs", "output": "sea-prep.blob", "disableExperimentalSEAWarning": true,
+"useSnapshot": false, "useCodeCache": true }",
+    {
+      "executable": false,
+    },
+  ],
+  "src": {
+    "cli.ts": [
+      "import { args } from "@bomb.sh/args"; export function cli(): void { const { positionals, values } =
+args({ allowPositionals: true, options: { help: { short: "h", type: "boolean", default: false,
+description: "Show help", }, version: { short: "v", type: "boolean", default: false, description:
+"Show version", }, }, }); if (values.version) { console.log("0.1.0"); return; } if (values.help ||
+positionals.length === 0) { console.log(\`Usage:
+test-repo
+[options]
+<command />\`); console.log(); console.log("Options:"); console.log(" -h, --help Show help");
+console.log(" -v, --version Show version"); return; } console.log(\`Running
+test-repo
+with args:\`, positionals); }",
+      {
+        "executable": false,
+      },
+    ],
+    "index.ts": [
+      "export function greet(name: string): string {
+    return \`Hello, \${name}!\`;
+}
+",
+      {
+        "executable": false,
+      },
+    ],
+    "sea-entry.ts": [
+      "/** * Single Executable Application entry point. * * This file is the main entry for the SEA build.
+It will be bundled * into a single file and embedded into the Node.js binary. * * @see
+https://nodejs.org/api/single-executable-applications.html */ import { greet } from "./index.ts";
+const name = process.argv[2] ?? "world"; console.log(greet(name));",
+      {
+        "executable": false,
+      },
+    ],
+  },
+  "tests": {
+    "index.test.ts": [
+      "import { describe, expect, it } from "vite-plus/test";
+
+import { greet } from "../src/index.ts";
+
+describe("greet", () => {
+    it("should return a greeting", () => {
+        expect(greet("world")).toBe("Hello, world!");
+    });
+});
+",
+      {
+        "executable": false,
+      },
+    ],
+  },
+  "tsconfig.json": [
+    "{
+    "compilerOptions": {
+        "target": "ESNext",
+        "module": "ESNext",
+        "moduleResolution": "Bundler",
+        "strict": true,
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "isolatedModules": true,
+        "declaration": true,
+        "declarationMap": true,
+        "sourceMap": true,
+        "outDir": "./dist",
+        "rootDir": "./src"
+    },
+    "include": ["src"],
+    "exclude": ["node_modules", "dist"]
+}
+",
+    {
+      "executable": false,
+    },
+  ],
+  "vite.config.ts": [
+    "import { defineConfig } from "vite-plus"; export default defineConfig({ pack: { dts: { tsgo: true,
+}, exports: true, }, run: { tasks: { build: { command: "vp pack" }, dev: { command: "vp pack
+--watch" }, }, }, });",
+    {
+      "executable": false,
+    },
+  ],
+}
+`;
+
+exports[`ts-package feature combinations > cli only 1`] = `
+{
+  ".gitignore": [
+    ".DS_Store .env .env.local /node_modules/
+
+    # Build /dist/
+",
+    {
+      "executable": false,
+    },
+  ],
+  "README.md": [
+    "#
+test-repo
+
+
+
+
+A TypeScript package.
+
+## Getting Started \`\`\`bash
+    vp run dev
+\`\`\`",
+    {
+      "executable": false,
+    },
+  ],
+  "bin": {
+    "index.ts": [
+      "#!/usr/bin/env node import { cli } from "../src/cli.ts"; cli();",
+      {
+        "executable": false,
+      },
+    ],
+  },
+  "package.json": [
+    "{ "name": "@test-owner/test-repo", "version": "0.1.0", "description": "", "license": "MIT",
+"type": "module", "types": "./dist/index.d.mts", "exports": { ".": "./dist/index.mjs",
+"./package.json": "./package.json" },
+    "bin": "./bin/index.ts",
+"files": [
+    "bin",
+"dist", "src" ], "scripts": { "prepublishOnly": "vp pack" }, "dependencies": {
+    "@bomb.sh/args": "^0.3.1",
+"zod": "^4.3.6" }, "devDependencies": { "@types/node": "^25.3.5", "vite-plus": "latest", "vitest":
+"npm:@voidzero-dev/vite-plus-test@latest" }, "packageManager": "pnpm@10.32.1", "pnpm": {
+"overrides": { "vite": "npm:@voidzero-dev/vite-plus-core@latest", "vitest":
+"npm:@voidzero-dev/vite-plus-test@latest" } } }",
+    {
+      "executable": false,
+    },
+  ],
+  "src": {
+    "cli.ts": [
+      "import { args } from "@bomb.sh/args"; export function cli(): void { const { positionals, values } =
+args({ allowPositionals: true, options: { help: { short: "h", type: "boolean", default: false,
+description: "Show help", }, version: { short: "v", type: "boolean", default: false, description:
+"Show version", }, }, }); if (values.version) { console.log("0.1.0"); return; } if (values.help ||
+positionals.length === 0) { console.log(\`Usage:
+test-repo
+[options]
+<command />\`); console.log(); console.log("Options:"); console.log(" -h, --help Show help");
+console.log(" -v, --version Show version"); return; } console.log(\`Running
+test-repo
+with args:\`, positionals); }",
+      {
+        "executable": false,
+      },
+    ],
+    "index.ts": [
+      "export function greet(name: string): string {
+    return \`Hello, \${name}!\`;
+}
+",
+      {
+        "executable": false,
+      },
+    ],
+  },
+  "tests": {
+    "index.test.ts": [
+      "import { describe, expect, it } from "vite-plus/test";
+
+import { greet } from "../src/index.ts";
+
+describe("greet", () => {
+    it("should return a greeting", () => {
+        expect(greet("world")).toBe("Hello, world!");
+    });
+});
+",
+      {
+        "executable": false,
+      },
+    ],
+  },
+  "tsconfig.json": [
+    "{
+    "compilerOptions": {
+        "target": "ESNext",
+        "module": "ESNext",
+        "moduleResolution": "Bundler",
+        "strict": true,
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "isolatedModules": true,
+        "declaration": true,
+        "declarationMap": true,
+        "sourceMap": true,
+        "outDir": "./dist",
+        "rootDir": "./src"
+    },
+    "include": ["src"],
+    "exclude": ["node_modules", "dist"]
+}
+",
+    {
+      "executable": false,
+    },
+  ],
+  "vite.config.ts": [
+    "import { defineConfig } from "vite-plus"; export default defineConfig({ pack: { dts: { tsgo: true,
+}, exports: true, }, run: { tasks: { build: { command: "vp pack" }, dev: { command: "vp pack
+--watch" }, }, }, });",
+    {
+      "executable": false,
+    },
+  ],
+}
+`;
+
+exports[`ts-package feature combinations > generator + sea 1`] = `
+{
+  ".gitignore": [
+    ".DS_Store .env .env.local /node_modules/
+
+    # Build /dist/
+",
+    {
+      "executable": false,
+    },
+  ],
+  "README.md": [
+    "#
+test-repo
+
+
+
+
+A TypeScript package.
+
+## Getting Started \`\`\`bash
+    vp run dev
+\`\`\`",
+    {
+      "executable": false,
+    },
+  ],
+  "bin": {
+    "create.ts": [
+      "#!/usr/bin/env node import { runTemplateCLI } from "bingo"; import template from
+"../src/template.ts"; await runTemplateCLI(template);",
+      {
+        "executable": false,
+      },
+    ],
+  },
+  "package.json": [
+    "{ "name": "@test-owner/test-repo", "version": "0.1.0", "description": "", "license": "MIT",
+"type": "module", "types": "./dist/index.d.mts", "exports": { ".": "./dist/index.mjs",
+"./package.json": "./package.json" },
+"files": [
+"dist", "src" ], "scripts": { "prepublishOnly": "vp pack" }, "dependencies": {
+    "bingo": "^0.9.2", "bingo-fs": "^0.5.6", "bingo-handlebars": "^0.1.0",
+"zod": "^4.3.6" }, "devDependencies": { "@types/node": "^25.3.5", "vite-plus": "latest", "vitest":
+"npm:@voidzero-dev/vite-plus-test@latest" }, "packageManager": "pnpm@10.32.1", "pnpm": {
+"overrides": { "vite": "npm:@voidzero-dev/vite-plus-core@latest", "vitest":
+"npm:@voidzero-dev/vite-plus-test@latest" } } }",
+    {
+      "executable": false,
+    },
+  ],
+  "sea-config.json": [
+    "{ "main": "dist/sea-entry.mjs", "output": "sea-prep.blob", "disableExperimentalSEAWarning": true,
+"useSnapshot": false, "useCodeCache": true }",
+    {
+      "executable": false,
+    },
+  ],
+  "src": {
+    "index.ts": [
+      "export function greet(name: string): string {
+    return \`Hello, \${name}!\`;
+}
+",
+      {
+        "executable": false,
+      },
+    ],
+    "sea-entry.ts": [
+      "/** * Single Executable Application entry point. * * This file is the main entry for the SEA build.
+It will be bundled * into a single file and embedded into the Node.js binary. * * @see
+https://nodejs.org/api/single-executable-applications.html */ import { greet } from "./index.ts";
+const name = process.argv[2] ?? "world"; console.log(greet(name));",
+      {
+        "executable": false,
+      },
+    ],
+    "template.ts": [
+      "import { createTemplate } from "bingo"; import { handlebars } from "bingo-handlebars"; import path
+from "node:path"; import { z } from "zod"; const templatesDir = path.join(import.meta.dirname,
+"../templates"); const options = { name: z.string().describe("Project name"), }; export default
+createTemplate({ about: { description: "Scaffold a new project with
+test-repo.", name: "@test-owner/test-repo", }, options, async produce({ options: opts }) {
+const files = await handlebars(path.join(templatesDir, "default"), opts); return { files }; }, });",
+      {
+        "executable": false,
+      },
+    ],
+  },
+  "tests": {
+    "index.test.ts": [
+      "import { describe, expect, it } from "vite-plus/test";
+
+import { greet } from "../src/index.ts";
+
+describe("greet", () => {
+    it("should return a greeting", () => {
+        expect(greet("world")).toBe("Hello, world!");
+    });
+});
+",
+      {
+        "executable": false,
+      },
+    ],
+  },
+  "tsconfig.json": [
+    "{
+    "compilerOptions": {
+        "target": "ESNext",
+        "module": "ESNext",
+        "moduleResolution": "Bundler",
+        "strict": true,
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "isolatedModules": true,
+        "declaration": true,
+        "declarationMap": true,
+        "sourceMap": true,
+        "outDir": "./dist",
+        "rootDir": "./src"
+    },
+    "include": ["src"],
+    "exclude": ["node_modules", "dist"]
+}
+",
+    {
+      "executable": false,
+    },
+  ],
+  "vite.config.ts": [
+    "import { defineConfig } from "vite-plus"; export default defineConfig({ pack: { dts: { tsgo: true,
+}, exports: true, }, run: { tasks: { build: { command: "vp pack" }, dev: { command: "vp pack
+--watch" }, }, }, });",
+    {
+      "executable": false,
+    },
+  ],
+}
+`;
+
+exports[`ts-package feature combinations > generator only 1`] = `
+{
+  ".gitignore": [
+    ".DS_Store .env .env.local /node_modules/
+
+    # Build /dist/
+",
+    {
+      "executable": false,
+    },
+  ],
+  "README.md": [
+    "#
+test-repo
+
+
+
+
+A TypeScript package.
+
+## Getting Started \`\`\`bash
+    vp run dev
+\`\`\`",
+    {
+      "executable": false,
+    },
+  ],
+  "bin": {
+    "create.ts": [
+      "#!/usr/bin/env node import { runTemplateCLI } from "bingo"; import template from
+"../src/template.ts"; await runTemplateCLI(template);",
+      {
+        "executable": false,
+      },
+    ],
+  },
+  "package.json": [
+    "{ "name": "@test-owner/test-repo", "version": "0.1.0", "description": "", "license": "MIT",
+"type": "module", "types": "./dist/index.d.mts", "exports": { ".": "./dist/index.mjs",
+"./package.json": "./package.json" },
+"files": [
+"dist", "src" ], "scripts": { "prepublishOnly": "vp pack" }, "dependencies": {
+    "bingo": "^0.9.2", "bingo-fs": "^0.5.6", "bingo-handlebars": "^0.1.0",
+"zod": "^4.3.6" }, "devDependencies": { "@types/node": "^25.3.5", "vite-plus": "latest", "vitest":
+"npm:@voidzero-dev/vite-plus-test@latest" }, "packageManager": "pnpm@10.32.1", "pnpm": {
+"overrides": { "vite": "npm:@voidzero-dev/vite-plus-core@latest", "vitest":
+"npm:@voidzero-dev/vite-plus-test@latest" } } }",
+    {
+      "executable": false,
+    },
+  ],
+  "src": {
+    "index.ts": [
+      "export function greet(name: string): string {
+    return \`Hello, \${name}!\`;
+}
+",
+      {
+        "executable": false,
+      },
+    ],
+    "template.ts": [
+      "import { createTemplate } from "bingo"; import { handlebars } from "bingo-handlebars"; import path
+from "node:path"; import { z } from "zod"; const templatesDir = path.join(import.meta.dirname,
+"../templates"); const options = { name: z.string().describe("Project name"), }; export default
+createTemplate({ about: { description: "Scaffold a new project with
+test-repo.", name: "@test-owner/test-repo", }, options, async produce({ options: opts }) {
+const files = await handlebars(path.join(templatesDir, "default"), opts); return { files }; }, });",
+      {
+        "executable": false,
+      },
+    ],
+  },
+  "tests": {
+    "index.test.ts": [
+      "import { describe, expect, it } from "vite-plus/test";
+
+import { greet } from "../src/index.ts";
+
+describe("greet", () => {
+    it("should return a greeting", () => {
+        expect(greet("world")).toBe("Hello, world!");
+    });
+});
+",
+      {
+        "executable": false,
+      },
+    ],
+  },
+  "tsconfig.json": [
+    "{
+    "compilerOptions": {
+        "target": "ESNext",
+        "module": "ESNext",
+        "moduleResolution": "Bundler",
+        "strict": true,
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "isolatedModules": true,
+        "declaration": true,
+        "declarationMap": true,
+        "sourceMap": true,
+        "outDir": "./dist",
+        "rootDir": "./src"
+    },
+    "include": ["src"],
+    "exclude": ["node_modules", "dist"]
+}
+",
+    {
+      "executable": false,
+    },
+  ],
+  "vite.config.ts": [
+    "import { defineConfig } from "vite-plus"; export default defineConfig({ pack: { dts: { tsgo: true,
+}, exports: true, }, run: { tasks: { build: { command: "vp pack" }, dev: { command: "vp pack
+--watch" }, }, }, });",
+    {
+      "executable": false,
+    },
+  ],
+}
+`;
+
+exports[`ts-package feature combinations > sea only 1`] = `
+{
+  ".gitignore": [
+    ".DS_Store .env .env.local /node_modules/
+
+    # Build /dist/
+",
+    {
+      "executable": false,
+    },
+  ],
+  "README.md": [
+    "#
+test-repo
+
+
+
+
+A TypeScript package.
+
+## Getting Started \`\`\`bash
+    vp run dev
+\`\`\`",
+    {
+      "executable": false,
+    },
+  ],
+  "package.json": [
+    "{ "name": "@test-owner/test-repo", "version": "0.1.0", "description": "", "license": "MIT",
+"type": "module", "types": "./dist/index.d.mts", "exports": { ".": "./dist/index.mjs",
+"./package.json": "./package.json" },
+"files": [
+"dist", "src" ], "scripts": { "prepublishOnly": "vp pack" }, "dependencies": {
+"zod": "^4.3.6" }, "devDependencies": { "@types/node": "^25.3.5", "vite-plus": "latest", "vitest":
+"npm:@voidzero-dev/vite-plus-test@latest" }, "packageManager": "pnpm@10.32.1", "pnpm": {
+"overrides": { "vite": "npm:@voidzero-dev/vite-plus-core@latest", "vitest":
+"npm:@voidzero-dev/vite-plus-test@latest" } } }",
+    {
+      "executable": false,
+    },
+  ],
+  "sea-config.json": [
+    "{ "main": "dist/sea-entry.mjs", "output": "sea-prep.blob", "disableExperimentalSEAWarning": true,
+"useSnapshot": false, "useCodeCache": true }",
+    {
+      "executable": false,
+    },
+  ],
+  "src": {
+    "index.ts": [
+      "export function greet(name: string): string {
+    return \`Hello, \${name}!\`;
+}
+",
+      {
+        "executable": false,
+      },
+    ],
+    "sea-entry.ts": [
+      "/** * Single Executable Application entry point. * * This file is the main entry for the SEA build.
+It will be bundled * into a single file and embedded into the Node.js binary. * * @see
+https://nodejs.org/api/single-executable-applications.html */ import { greet } from "./index.ts";
+const name = process.argv[2] ?? "world"; console.log(greet(name));",
+      {
+        "executable": false,
+      },
+    ],
+  },
+  "tests": {
+    "index.test.ts": [
+      "import { describe, expect, it } from "vite-plus/test";
+
+import { greet } from "../src/index.ts";
+
+describe("greet", () => {
+    it("should return a greeting", () => {
+        expect(greet("world")).toBe("Hello, world!");
+    });
+});
+",
+      {
+        "executable": false,
+      },
+    ],
+  },
+  "tsconfig.json": [
+    "{
+    "compilerOptions": {
+        "target": "ESNext",
+        "module": "ESNext",
+        "moduleResolution": "Bundler",
+        "strict": true,
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "isolatedModules": true,
+        "declaration": true,
+        "declarationMap": true,
+        "sourceMap": true,
+        "outDir": "./dist",
+        "rootDir": "./src"
+    },
+    "include": ["src"],
+    "exclude": ["node_modules", "dist"]
+}
+",
+    {
+      "executable": false,
+    },
+  ],
+  "vite.config.ts": [
+    "import { defineConfig } from "vite-plus"; export default defineConfig({ pack: { dts: { tsgo: true,
+}, exports: true, }, run: { tasks: { build: { command: "vp pack" }, dev: { command: "vp pack
+--watch" }, }, }, });",
     {
       "executable": false,
     },
