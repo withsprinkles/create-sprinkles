@@ -1,11 +1,37 @@
-import { args } from "@bomb.sh/args"; export function cli(): void { const { positionals, values } =
-args({ allowPositionals: true, options: { help: { short: "h", type: "boolean", default: false,
-description: "Show help", }, version: { short: "v", type: "boolean", default: false, description:
-"Show version", }, }, }); if (values.version) { console.log("0.1.0"); return; } if (values.help ||
-positionals.length === 0) { console.log(`Usage:
-{{repository}}
-[options]
-<command />`); console.log(); console.log("Options:"); console.log(" -h, --help Show help");
-console.log(" -v, --version Show version"); return; } console.log(`Running
-{{repository}}
-with args:`, positionals); }
+import { args } from "@bomb.sh/args";
+
+export function cli(): void {
+    const { positionals, values } = args({
+        allowPositionals: true,
+        options: {
+            help: {
+                short: "h",
+                type: "boolean",
+                default: false,
+                description: "Show help",
+            },
+            version: {
+                short: "v",
+                type: "boolean",
+                default: false,
+                description: "Show version",
+            },
+        },
+    });
+
+    if (values.version) {
+        console.log("0.1.0");
+        return;
+    }
+
+    if (values.help || positionals.length === 0) {
+        console.log(`Usage: {{repository}} [options] <command>`);
+        console.log();
+        console.log("Options:");
+        console.log("  -h, --help     Show help");
+        console.log("  -v, --version  Show version");
+        return;
+    }
+
+    console.log(`Running {{repository}} with args:`, positionals);
+}

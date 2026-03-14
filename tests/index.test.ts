@@ -291,7 +291,7 @@ describe("buildScripts", () => {
         );
     });
 
-    it("ts-package: only install, check, git init", () => {
+    it("ts-package: deps, install, check, git init", () => {
         const ctx = buildContext({
             cli: false,
             generator: false,
@@ -302,7 +302,12 @@ describe("buildScripts", () => {
         });
         const scripts = buildScripts(ctx);
 
-        expect(scripts).toHaveLength(3);
+        expect(scripts).toContainEqual(
+            expect.objectContaining({
+                commands: expect.arrayContaining(["vp add -D vite-plus @types/node"]),
+                phase: 0,
+            }),
+        );
     });
 });
 

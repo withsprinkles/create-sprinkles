@@ -1,16 +1,21 @@
-import { getCollection } from "sprinkles:content"; export async function ServerComponent() { let
-posts = await getCollection("posts"); return (
-<main>
-    <h1>Welcome to {{repository}}</h1>
-    <section>
-        <h2>Posts</h2>
-        <ul>
-            {posts.map(post => (
-            <li key="{post.id}">
-                <h3>{post.data.title}</h3>
-            </li>
-            ))}
-        </ul>
-    </section>
-</main>
-); }
+import { getCollection } from "sprinkles:content";
+
+export async function ServerComponent() {
+    let posts = await getCollection("posts");
+
+    return (
+        <main>
+            <h1>Welcome to {{repository}}</h1>
+            <section>
+                <h2>Posts</h2>
+                <ul>
+                    {posts.map((post) => (
+                        <li key={post.id}>
+                            <h3>{post.data.title}</h3>
+                        </li>
+                    ))}
+                </ul>
+            </section>
+        </main>
+    );
+}

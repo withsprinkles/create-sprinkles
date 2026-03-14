@@ -1,17 +1,83 @@
-import { cloudflare } from "@cloudflare/vite-plugin"; import mdx from "@mdx-js/rollup"; import {
-unstable_reactRouterRSC as reactRouter } from "@react-router/dev/vite"; import tailwindcss from
-"@tailwindcss/vite"; import rsc from "@vitejs/plugin-rsc"; import { defineConfig } from "vite-plus";
-import { contentLayer } from "./content-layer/plugin.ts"; import { reactCompiler } from
-"./react-compiler.plugin.ts"; let IS_TEST = !!process.env.VITEST; export default defineConfig({
-plugins: [ contentLayer(), mdx(), reactRouter(), rsc(), reactCompiler(), !IS_TEST && cloudflare({
-viteEnvironment: { name: "ssr", }, configPath: "./wrangler.ssr.jsonc", auxiliaryWorkers: [ {
-configPath: "./wrangler.rsc.jsonc", viteEnvironment: { name: "rsc", }, }, ], }), tailwindcss(), ],
-resolve: { tsconfigPaths: true, }, css: { transformer: "lightningcss", }, environments: { client: {
-optimizeDeps: { include: [ "react-router", "react-router/dom",
-"react-router/internal/react-server-client", ], }, }, ssr: { optimizeDeps: { exclude:
-["react-router"], }, }, rsc: { optimizeDeps: { exclude: ["react-router"], }, resolve: { conditions:
-["react-server"], }, }, }, run: { tasks: { "typegen:react-router": { command: "react-router
-typegen", }, "typegen:cloudflare": { command: "wrangler types -c wrangler.rsc.jsonc", }, typecheck:
-{ command: "tsgo --noEmit", dependsOn: ["typegen:react-router", "typegen:cloudflare"], }, deploy: {
-command: "vp build && wrangler deploy", cache: false, }, }, }, test: { include: ["**/*.test.ts"], },
+import { cloudflare } from "@cloudflare/vite-plugin";
+import mdx from "@mdx-js/rollup";
+import { unstable_reactRouterRSC as reactRouter } from "@react-router/dev/vite";
+import tailwindcss from "@tailwindcss/vite";
+import rsc from "@vitejs/plugin-rsc";
+import { defineConfig } from "vite-plus";
+import { contentLayer } from "./content-layer/plugin.ts";
+import { reactCompiler } from "./react-compiler.plugin.ts";
+
+let IS_TEST = !!process.env.VITEST;
+
+export default defineConfig({
+    plugins: [
+        contentLayer(),
+        mdx(),
+        reactRouter(),
+        rsc(),
+        reactCompiler(),
+        !IS_TEST &&
+            cloudflare({
+                viteEnvironment: { name: "ssr" },
+                configPath: "./wrangler.ssr.jsonc",
+                auxiliaryWorkers: [
+                    {
+                        configPath: "./wrangler.rsc.jsonc",
+                        viteEnvironment: { name: "rsc" },
+                    },
+                ],
+            }),
+        tailwindcss(),
+    ],
+    resolve: {
+        tsconfigPaths: true,
+    },
+    css: {
+        transformer: "lightningcss",
+    },
+    environments: {
+        client: {
+            optimizeDeps: {
+                include: [
+                    "react-router",
+                    "react-router/dom",
+                    "react-router/internal/react-server-client",
+                ],
+            },
+        },
+        ssr: {
+            optimizeDeps: {
+                exclude: ["react-router"],
+            },
+        },
+        rsc: {
+            optimizeDeps: {
+                exclude: ["react-router"],
+            },
+            resolve: {
+                conditions: ["react-server"],
+            },
+        },
+    },
+    run: {
+        tasks: {
+            "typegen:react-router": {
+                command: "react-router typegen",
+            },
+            "typegen:cloudflare": {
+                command: "wrangler types -c wrangler.rsc.jsonc",
+            },
+            typecheck: {
+                command: "tsgo --noEmit",
+                dependsOn: ["typegen:react-router", "typegen:cloudflare"],
+            },
+            deploy: {
+                command: "vp build && wrangler deploy",
+                cache: false,
+            },
+        },
+    },
+    test: {
+        include: ["**/*.test.ts"],
+    },
 });
