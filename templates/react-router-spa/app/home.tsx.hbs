@@ -1,0 +1,17 @@
+import type { Route } from "./+types/home.ts";
+
+import { queryClient } from "./root.tsx";
+
+export async function clientLoader(_args: Route.ClientLoaderArgs) {
+    // Pre-populate query cache before render
+    // await queryClient.ensureQueryData(yourQueryOptions);
+    return {};
+}
+
+export default function Home() {
+    return (
+        <main>
+            <h1>Welcome to {{repository}}</h1>
+        </main>
+    );
+}

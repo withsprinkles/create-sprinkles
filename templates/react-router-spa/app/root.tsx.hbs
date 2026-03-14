@@ -1,0 +1,51 @@
+import type { PropsWithChildren } from "react";
+
+import { ConvexQueryClient } from "@convex-dev/react-query";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ConvexProvider, ConvexReactClient } from "convex/react";
+import { Outlet, Scripts } from "react-router";
+
+const convex = new ConvexReactClient(import.meta.env.VITE_CONVEX_URL);
+const convexQueryClient = new ConvexQueryClient(convex);
+export const queryClient = new QueryClient({
+    defaultOptions: {
+        queries: {
+            queryKeyHashFn: convexQueryClient.hashFn(),
+            queryFn: convexQueryClient.queryFn(),
+            experimental_prefetchInRender: true,
+        },
+    },
+});
+
+convexQueryClient.connect(queryClient);
+
+export function Layout({ children }: PropsWithChildren) {
+    return (
+        <html lang="en">
+            <head>
+                <meta charSet="utf-8" />
+                <meta content="width=device-width, initial-scale=1" name="viewport" />
+                <meta content="#000000" name="theme-color" />
+                <title>{{repository}}</title>
+            </head>
+            <body>
+                {children}
+                <Scripts />
+            </body>
+        </html>
+    );
+}
+
+export function HydrateFallback() {
+    return <div>Loading...</div>;
+}
+
+export default function App() {
+    return (
+        <ConvexProvider client={convex}>
+            <QueryClientProvider client={queryClient}>
+                <Outlet />
+            </QueryClientProvider>
+        </ConvexProvider>
+    );
+}

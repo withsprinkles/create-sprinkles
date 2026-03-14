@@ -103,6 +103,9 @@ export default defineConfig({
             },
         },
     },
+    test: {
+        exclude: ["templates/**", ".claude/**", "node_modules/**"],
+    },
     pack: {
         dts: {
             tsgo: true,
