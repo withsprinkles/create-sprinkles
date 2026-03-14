@@ -1,0 +1,158 @@
+---
+description: "Running Bingo on your command line."
+title: CLI
+---
+
+import { PackageManagers } from "starlight-package-managers";
+
+Bingo templates each provide a CLI to set up a new repository or transition an existing one.
+That CLI will interactively prompt you for any required options that can't be inferred from disk.
+
+For example, to run [create-typescript-app](https://github.com/JoshuaKGoldberg/create-typescript-app):
+
+<PackageManagers type="dlx" pkg="create-typescript-app" />
+
+```plaintext
+┌  ✨ create-typescript-app@2.0.0 ✨
+│
+│  Learn more on: https://github.com/JoshuaKGoldberg/create-typescript-app
+│
+│  Running with mode --setup for a new repository.
+```
+
+## Common Flags
+
+All Bingo templates support the following set of CLI flags.
+
+### `--directory`
+
+> Type: `string`
+
+What local directory path to run under.
+
+If not provided:
+
+- If the current directory is empty, defaults to it (`.`)
+- Otherwise, you'll be prompted to input one
+
+For example, creating a new repository in a subdirectory:
+
+<PackageManagers args="--directory my-fancy-project" pkg="create-typescript-app" type="dlx" />
+
+### `--help`
+
+> Type: `boolean`
+
+Prints help text.
+
+<PackageManagers type="dlx" pkg="create-typescript-app" args="--help" />
+
+### `--mode`
+
+> Type: `string`
+
+Which [Execution Mode](/execution) to run in.
+
+If not provided, it will be inferred based on whether Bingo is being run in an existing repository.
+
+For example, specifying creating a new repository with [`create-typescript-app`](https://github.com/JoshuaKGoldberg/create-typescript-app):
+
+<PackageManagers args="--mode setup" pkg="create-typescript-app" type="dlx" />
+
+### `--offline`
+
+> Type: `boolean`
+
+Whether to run in an "offline" mode that skips network requests.
+
+If provided, templates will be hinted to not make any network requests.
+That often means they will install from offline caches, skip creating a repository on GitHub, and skip sending GitHub API requests.
+The repository will roughly be a local-only creation.
+
+For example, specifying creating a new repository offline with [`create-typescript-app`](https://github.com/JoshuaKGoldberg/create-typescript-app):
+
+<PackageManagers type="dlx" pkg="create-typescript-app" args="--offline" />
+
+:::caution
+`--offline` doesn't prevent templates from accidentally running scripts that make network requests.
+If you are finding your template still sends requests with `--offline`, file a bug on the template.
+:::
+
+### `--remote`
+
+> Type: `boolean`
+
+Whether to create a remote repository on GitHub if one does not already exist.
+
+Defaults to whether an `origin` Git remote already exists in the repository.
+
+When enabled, Bingo will:
+
+- Create a remote repository on GitHub if one does not exist, adding it as the `origin` remote
+- Apply any network requests specified by the template to the remote repository
+
+When disabled, Bingo will not create a remote repository and will skip requests ([`--skip-requests`](#--skip-requests) will default to `true`).
+
+### `--skip-files`
+
+> Type: `boolean`
+
+Whether to skip creating files on disk.
+
+This can be useful if you'd like to only run scripts such as linter auto-fixing and update repository settings for a previously created repository.
+
+For example, specifying updating all of repository except its files with [`create-typescript-app`](https://github.com/JoshuaKGoldberg/create-typescript-app):
+
+<PackageManagers type="dlx" pkg="create-typescript-app" args="--skip-files" />
+
+### `--skip-requests`
+
+> Type: `boolean`
+
+Whether to skip sending network requests as specified by templates.
+
+For example, creating a repository using [`create-typescript-app`](https://github.com/JoshuaKGoldberg/create-typescript-app) without populating network requests, but with network installation of packages (`pnpm install` instead of `pnpm install --offline`):
+
+<PackageManagers type="dlx" pkg="create-typescript-app" args="--skip-requests" />
+
+`--skip-requests` effectively defaults to true if [`--offline`](#--offline) is provided.
+However, it does not prevent network requests from being sent by other parts of templates.
+For example, templates may run package installation scripts that don't include their own `--offline` flag when Bingo's [`--offline`](#--offline) is not provided.
+
+:::note
+Requests are only sent if the repository has a remote on GitHub.
+If your repository is local-only, `--skip-requests` defaults to `true` and has no effect.
+:::
+
+### `--skip-scripts`
+
+> Type: `boolean`
+
+Whether to skip running local scripts as specified by templates.
+
+For example, creating a repository using [`create-typescript-app`](https://github.com/JoshuaKGoldberg/create-typescript-app) without running scripts such as `pnpm format --write`:
+
+<PackageManagers type="dlx" pkg="create-typescript-app" args="--skip-scripts" />
+
+### `--version`
+
+> Type: `boolean`
+
+Prints the Bingo and template package versions.
+
+<PackageManagers type="dlx" pkg="create-typescript-app" args="--version" />
+
+## Template Flags
+
+The template being generated from will likely add in additional flags.
+Templates generally add in a CLI flag for each of the options they support.
+
+For example, if a template defines a `title` option, `--title` will be type `string`:
+
+<PackageManagers args="--title 'My New App'" pkg="create-typescript-app" type="dlx" />
+
+Any required options that are not provided will be prompted for by the template's CLI.
+
+:::tip
+See the documentation for your specific template for additional flags.
+:::
