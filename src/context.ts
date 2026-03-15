@@ -21,8 +21,8 @@ export function buildContext(opts: Options): TemplateContext {
 
     return {
         ...opts,
-        hasContentLayer: isRSC && opts.contentLayer,
-        hasConvex: (isSPA || isSSR) && opts.convex,
+        hasContentLayer: isRSC && Boolean(opts.contentLayer),
+        hasConvex: (isSPA || isSSR) && Boolean(opts.convex),
         isPackage: opts.kind === "ts-package",
         isRSC,
         isReactRouter: opts.kind !== "ts-package",
