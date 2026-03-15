@@ -531,6 +531,7 @@ This project uses Vite+, a unified toolchain built on top of Vite, Rolldown, Vit
     "# test-repo
 
 A React Router application with React Server Components.
+
 ## Getting Started
 
 \`\`\`bash
@@ -694,11 +695,11 @@ export function reactCompiler(config: ReactCompilerConfig = {}) {
     "import type { Config } from "@react-router/dev/config";
 
 export default {
-    ssr: true,
     future: {
-        v8_viteEnvironmentApi: true,
         v8_middleware: true,
+        v8_viteEnvironmentApi: true,
     },
+    ssr: true,
 } satisfies Config;
 ",
     {
@@ -1694,6 +1695,7 @@ This project uses Vite+, a unified toolchain built on top of Vite, Rolldown, Vit
     "# test-repo
 
 A React Router application with React Server Components and content-layer.
+
 ## Getting Started
 
 \`\`\`bash
@@ -3101,11 +3103,11 @@ export function reactCompiler(config: ReactCompilerConfig = {}) {
     "import type { Config } from "@react-router/dev/config";
 
 export default {
-    ssr: true,
     future: {
-        v8_viteEnvironmentApi: true,
         v8_middleware: true,
+        v8_viteEnvironmentApi: true,
     },
+    ssr: true,
 } satisfies Config;
 ",
     {
@@ -4009,6 +4011,7 @@ This project uses Vite+, a unified toolchain built on top of Vite, Rolldown, Vit
     "# test-repo
 
 A React Router single-page application.
+
 ## Getting Started
 
 \`\`\`bash
@@ -4132,11 +4135,11 @@ export function reactCompiler(config: ReactCompilerConfig = {}) {
     "import type { Config } from "@react-router/dev/config";
 
 export default {
-    ssr: false,
     future: {
-        v8_viteEnvironmentApi: true,
         v8_middleware: true,
+        v8_viteEnvironmentApi: true,
     },
+    ssr: false,
 } satisfies Config;
 ",
     {
@@ -4864,6 +4867,7 @@ This project uses Vite+, a unified toolchain built on top of Vite, Rolldown, Vit
     "# test-repo
 
 A React Router single-page application with Convex and TanStack Query.
+
 ## Getting Started
 
 \`\`\`bash
@@ -5034,11 +5038,11 @@ export function reactCompiler(config: ReactCompilerConfig = {}) {
     "import type { Config } from "@react-router/dev/config";
 
 export default {
-    ssr: false,
     future: {
-        v8_viteEnvironmentApi: true,
         v8_middleware: true,
+        v8_viteEnvironmentApi: true,
     },
+    ssr: false,
 } satisfies Config;
 ",
     {
@@ -5748,6 +5752,7 @@ This project uses Vite+, a unified toolchain built on top of Vite, Rolldown, Vit
     "# test-repo
 
 A server-rendered React Router application.
+
 ## Getting Started
 
 \`\`\`bash
@@ -5917,11 +5922,11 @@ export function reactCompiler(config: ReactCompilerConfig = {}) {
     "import type { Config } from "@react-router/dev/config";
 
 export default {
-    ssr: true,
     future: {
-        v8_viteEnvironmentApi: true,
         v8_middleware: true,
+        v8_viteEnvironmentApi: true,
     },
+    ssr: true,
 } satisfies Config;
 ",
     {
@@ -6676,6 +6681,7 @@ This project uses Vite+, a unified toolchain built on top of Vite, Rolldown, Vit
     "# test-repo
 
 A server-rendered React Router application with Convex and TanStack Query.
+
 ## Getting Started
 
 \`\`\`bash
@@ -7075,11 +7081,11 @@ export function reactCompiler(config: ReactCompilerConfig = {}) {
     "import type { Config } from "@react-router/dev/config";
 
 export default {
-    ssr: true,
     future: {
-        v8_viteEnvironmentApi: true,
         v8_middleware: true,
+        v8_viteEnvironmentApi: true,
     },
+    ssr: true,
 } satisfies Config;
 ",
     {
@@ -7499,6 +7505,7 @@ This project uses Vite+, a unified toolchain built on top of Vite, Rolldown, Vit
     "# test-repo
 
 A TypeScript package.
+
 ## Getting Started
 
 \`\`\`bash
@@ -7850,6 +7857,7 @@ This project uses Vite+, a unified toolchain built on top of Vite, Rolldown, Vit
     "# test-repo
 
 A TypeScript package.
+
 ## Getting Started
 
 \`\`\`bash
@@ -8303,6 +8311,7 @@ This project uses Vite+, a unified toolchain built on top of Vite, Rolldown, Vit
     "# test-repo
 
 A TypeScript package.
+
 ## Getting Started
 
 \`\`\`bash
@@ -8740,6 +8749,7 @@ This project uses Vite+, a unified toolchain built on top of Vite, Rolldown, Vit
     "# test-repo
 
 A TypeScript package.
+
 ## Getting Started
 
 \`\`\`bash
@@ -9158,6 +9168,7 @@ This project uses Vite+, a unified toolchain built on top of Vite, Rolldown, Vit
     "# test-repo
 
 A TypeScript package.
+
 ## Getting Started
 
 \`\`\`bash
@@ -9560,6 +9571,7 @@ This project uses Vite+, a unified toolchain built on top of Vite, Rolldown, Vit
     "# test-repo
 
 A TypeScript package.
+
 ## Getting Started
 
 \`\`\`bash
@@ -9964,6 +9976,7 @@ This project uses Vite+, a unified toolchain built on top of Vite, Rolldown, Vit
     "# test-repo
 
 A TypeScript package.
+
 ## Getting Started
 
 \`\`\`bash
@@ -10352,6 +10365,7 @@ This project uses Vite+, a unified toolchain built on top of Vite, Rolldown, Vit
     "# test-repo
 
 A TypeScript package.
+
 ## Getting Started
 
 \`\`\`bash

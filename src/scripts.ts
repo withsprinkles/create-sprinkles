@@ -55,13 +55,12 @@ function buildDependencyCommands(context: TemplateContext): string[] {
 export function buildScripts(context: TemplateContext): CreatedScript[] {
     const scripts: CreatedScript[] = [];
 
-    // Phase 0: Install dependencies
-    const depCommands = buildDependencyCommands(context);
-    scripts.push({ commands: depCommands, phase: 0 });
-    scripts.push({ commands: ["vp install"], phase: 0 });
+    // Phase 0: Install all dependencies (single entry = sequential execution)
+    const phase0Commands = [...buildDependencyCommands(context), "vp install"];
+    scripts.push({ commands: phase0Commands, phase: 0 });
 
     // Phase 1: Format and lint fix
-    scripts.push({ commands: ["vp check --fix"], phase: 1, silent: true });
+    scripts.push({ commands: ["vp check --fix"], phase: 1 });
 
     // Phase 2: Kind-specific setup
     if (context.hasConvex) {
