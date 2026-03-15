@@ -131,9 +131,7 @@ export default defineConfig({
 {{/if}}
         rules: {
             "eslint/default-param-last": "error",
-{{#if isPackage}}
             "eslint/func-style": ["error", "declaration"],
-{{/if}}
             "eslint/no-cond-assign": "off",
             "eslint/no-dupe-else-if": "error",
             "eslint/no-else-return": "error",
@@ -335,16 +333,16 @@ export default defineConfig({
                 command: "react-router typegen",
             },
 {{else if isReactRouter}}
-            "typegen:react-router": {
-                command: "react-router typegen",
+            deploy: {
+                cache: false,
+                command: "vp build && wrangler deploy",
             },
             typecheck: {
                 command: "tsgo --noEmit",
                 dependsOn: ["typegen:react-router"],
             },
-            deploy: {
-                command: "vp build && wrangler deploy",
-                cache: false,
+            "typegen:react-router": {
+                command: "react-router typegen",
             },
 {{else}}
             build: { command: "vp pack" },

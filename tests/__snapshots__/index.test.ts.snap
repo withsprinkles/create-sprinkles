@@ -530,11 +530,7 @@ This project uses Vite+, a unified toolchain built on top of Vite, Rolldown, Vit
   "README.md": [
     "# test-repo
 
-
-
-A React Router application with React Server Components and content-layer.
-
-
+A React Router application with React Server Components.
 ## Getting Started
 
 \`\`\`bash
@@ -698,7 +694,7 @@ export function reactCompiler(config: ReactCompilerConfig = {}) {
     "import type { Config } from "@react-router/dev/config";
 
 export default {
-    ssr: ,
+    ssr: true,
     future: {
         v8_viteEnvironmentApi: true,
         v8_middleware: true,
@@ -841,6 +837,7 @@ export default defineConfig({
         plugins: ["react", "jsx-a11y", "jsdoc", "import", "node", "promise", "vitest"],
         rules: {
             "eslint/default-param-last": "error",
+            "eslint/func-style": ["error", "declaration"],
             "eslint/no-cond-assign": "off",
             "eslint/no-dupe-else-if": "error",
             "eslint/no-else-return": "error",
@@ -1696,11 +1693,7 @@ This project uses Vite+, a unified toolchain built on top of Vite, Rolldown, Vit
   "README.md": [
     "# test-repo
 
-
-
 A React Router application with React Server Components and content-layer.
-
-
 ## Getting Started
 
 \`\`\`bash
@@ -3108,7 +3101,7 @@ export function reactCompiler(config: ReactCompilerConfig = {}) {
     "import type { Config } from "@react-router/dev/config";
 
 export default {
-    ssr: ,
+    ssr: true,
     future: {
         v8_viteEnvironmentApi: true,
         v8_middleware: true,
@@ -3254,6 +3247,7 @@ export default defineConfig({
         plugins: ["react", "jsx-a11y", "jsdoc", "import", "node", "promise", "vitest"],
         rules: {
             "eslint/default-param-last": "error",
+            "eslint/func-style": ["error", "declaration"],
             "eslint/no-cond-assign": "off",
             "eslint/no-dupe-else-if": "error",
             "eslint/no-else-return": "error",
@@ -4014,11 +4008,7 @@ This project uses Vite+, a unified toolchain built on top of Vite, Rolldown, Vit
   "README.md": [
     "# test-repo
 
-A React Router single-page application with Convex and TanStack Query.
-
-
-
-
+A React Router single-page application.
 ## Getting Started
 
 \`\`\`bash
@@ -4142,7 +4132,7 @@ export function reactCompiler(config: ReactCompilerConfig = {}) {
     "import type { Config } from "@react-router/dev/config";
 
 export default {
-    ssr: ,
+    ssr: false,
     future: {
         v8_viteEnvironmentApi: true,
         v8_middleware: true,
@@ -4250,6 +4240,7 @@ export default defineConfig({
         plugins: ["react", "jsx-a11y", "jsdoc", "import", "node", "promise", "vitest"],
         rules: {
             "eslint/default-param-last": "error",
+            "eslint/func-style": ["error", "declaration"],
             "eslint/no-cond-assign": "off",
             "eslint/no-dupe-else-if": "error",
             "eslint/no-else-return": "error",
@@ -4378,16 +4369,16 @@ export default defineConfig({
     },
     run: {
         tasks: {
-            "typegen:react-router": {
-                command: "react-router typegen",
+            deploy: {
+                cache: false,
+                command: "vp build && wrangler deploy",
             },
             typecheck: {
                 command: "tsgo --noEmit",
                 dependsOn: ["typegen:react-router"],
             },
-            deploy: {
-                command: "vp build && wrangler deploy",
-                cache: false,
+            "typegen:react-router": {
+                command: "react-router typegen",
             },
         },
     },
@@ -4873,10 +4864,6 @@ This project uses Vite+, a unified toolchain built on top of Vite, Rolldown, Vit
     "# test-repo
 
 A React Router single-page application with Convex and TanStack Query.
-
-
-
-
 ## Getting Started
 
 \`\`\`bash
@@ -5047,7 +5034,7 @@ export function reactCompiler(config: ReactCompilerConfig = {}) {
     "import type { Config } from "@react-router/dev/config";
 
 export default {
-    ssr: ,
+    ssr: false,
     future: {
         v8_viteEnvironmentApi: true,
         v8_middleware: true,
@@ -5155,6 +5142,7 @@ export default defineConfig({
         plugins: ["react", "jsx-a11y", "jsdoc", "import", "node", "promise", "vitest"],
         rules: {
             "eslint/default-param-last": "error",
+            "eslint/func-style": ["error", "declaration"],
             "eslint/no-cond-assign": "off",
             "eslint/no-dupe-else-if": "error",
             "eslint/no-else-return": "error",
@@ -5283,16 +5271,16 @@ export default defineConfig({
     },
     run: {
         tasks: {
-            "typegen:react-router": {
-                command: "react-router typegen",
+            deploy: {
+                cache: false,
+                command: "vp build && wrangler deploy",
             },
             typecheck: {
                 command: "tsgo --noEmit",
                 dependsOn: ["typegen:react-router"],
             },
-            deploy: {
-                command: "vp build && wrangler deploy",
-                cache: false,
+            "typegen:react-router": {
+                command: "react-router typegen",
             },
         },
     },
@@ -5759,11 +5747,7 @@ This project uses Vite+, a unified toolchain built on top of Vite, Rolldown, Vit
   "README.md": [
     "# test-repo
 
-
-A server-rendered React Router application with Convex and TanStack Query.
-
-
-
+A server-rendered React Router application.
 ## Getting Started
 
 \`\`\`bash
@@ -5933,7 +5917,7 @@ export function reactCompiler(config: ReactCompilerConfig = {}) {
     "import type { Config } from "@react-router/dev/config";
 
 export default {
-    ssr: ,
+    ssr: true,
     future: {
         v8_viteEnvironmentApi: true,
         v8_middleware: true,
@@ -6048,6 +6032,7 @@ export default defineConfig({
         plugins: ["react", "jsx-a11y", "jsdoc", "import", "node", "promise", "vitest"],
         rules: {
             "eslint/default-param-last": "error",
+            "eslint/func-style": ["error", "declaration"],
             "eslint/no-cond-assign": "off",
             "eslint/no-dupe-else-if": "error",
             "eslint/no-else-return": "error",
@@ -6182,16 +6167,16 @@ export default defineConfig({
     },
     run: {
         tasks: {
-            "typegen:react-router": {
-                command: "react-router typegen",
+            deploy: {
+                cache: false,
+                command: "vp build && wrangler deploy",
             },
             typecheck: {
                 command: "tsgo --noEmit",
                 dependsOn: ["typegen:react-router"],
             },
-            deploy: {
-                command: "vp build && wrangler deploy",
-                cache: false,
+            "typegen:react-router": {
+                command: "react-router typegen",
             },
         },
     },
@@ -6690,11 +6675,7 @@ This project uses Vite+, a unified toolchain built on top of Vite, Rolldown, Vit
   "README.md": [
     "# test-repo
 
-
 A server-rendered React Router application with Convex and TanStack Query.
-
-
-
 ## Getting Started
 
 \`\`\`bash
@@ -7094,7 +7075,7 @@ export function reactCompiler(config: ReactCompilerConfig = {}) {
     "import type { Config } from "@react-router/dev/config";
 
 export default {
-    ssr: ,
+    ssr: true,
     future: {
         v8_viteEnvironmentApi: true,
         v8_middleware: true,
@@ -7209,6 +7190,7 @@ export default defineConfig({
         plugins: ["react", "jsx-a11y", "jsdoc", "import", "node", "promise", "vitest"],
         rules: {
             "eslint/default-param-last": "error",
+            "eslint/func-style": ["error", "declaration"],
             "eslint/no-cond-assign": "off",
             "eslint/no-dupe-else-if": "error",
             "eslint/no-else-return": "error",
@@ -7343,16 +7325,16 @@ export default defineConfig({
     },
     run: {
         tasks: {
-            "typegen:react-router": {
-                command: "react-router typegen",
+            deploy: {
+                cache: false,
+                command: "vp build && wrangler deploy",
             },
             typecheck: {
                 command: "tsgo --noEmit",
                 dependsOn: ["typegen:react-router"],
             },
-            deploy: {
-                command: "vp build && wrangler deploy",
-                cache: false,
+            "typegen:react-router": {
+                command: "react-router typegen",
             },
         },
     },
@@ -7516,11 +7498,7 @@ This project uses Vite+, a unified toolchain built on top of Vite, Rolldown, Vit
   "README.md": [
     "# test-repo
 
-
-
-
 A TypeScript package.
-
 ## Getting Started
 
 \`\`\`bash
@@ -7871,11 +7849,7 @@ This project uses Vite+, a unified toolchain built on top of Vite, Rolldown, Vit
   "README.md": [
     "# test-repo
 
-
-
-
 A TypeScript package.
-
 ## Getting Started
 
 \`\`\`bash
@@ -8328,11 +8302,7 @@ This project uses Vite+, a unified toolchain built on top of Vite, Rolldown, Vit
   "README.md": [
     "# test-repo
 
-
-
-
 A TypeScript package.
-
 ## Getting Started
 
 \`\`\`bash
@@ -8769,11 +8739,7 @@ This project uses Vite+, a unified toolchain built on top of Vite, Rolldown, Vit
   "README.md": [
     "# test-repo
 
-
-
-
 A TypeScript package.
-
 ## Getting Started
 
 \`\`\`bash
@@ -9191,11 +9157,7 @@ This project uses Vite+, a unified toolchain built on top of Vite, Rolldown, Vit
   "README.md": [
     "# test-repo
 
-
-
-
 A TypeScript package.
-
 ## Getting Started
 
 \`\`\`bash
@@ -9597,11 +9559,7 @@ This project uses Vite+, a unified toolchain built on top of Vite, Rolldown, Vit
   "README.md": [
     "# test-repo
 
-
-
-
 A TypeScript package.
-
 ## Getting Started
 
 \`\`\`bash
@@ -10005,11 +9963,7 @@ This project uses Vite+, a unified toolchain built on top of Vite, Rolldown, Vit
   "README.md": [
     "# test-repo
 
-
-
-
 A TypeScript package.
-
 ## Getting Started
 
 \`\`\`bash
@@ -10397,11 +10351,7 @@ This project uses Vite+, a unified toolchain built on top of Vite, Rolldown, Vit
   "README.md": [
     "# test-repo
 
-
-
-
 A TypeScript package.
-
 ## Getting Started
 
 \`\`\`bash
