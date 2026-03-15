@@ -23,16 +23,13 @@ function buildDependencyCommands(context: TemplateContext): string[] {
     }
 
     if (context.isReactRouter) {
-        // @react-router/node is needed by the vite plugin to resolve server runtime
-        commands.push("vp add @react-router/node");
+        // @react-router/node + isbot required by the vite plugin to resolve server
+        // runtime. Without isbot, the plugin runs `npm install` which fails on pnpm.
+        commands.push("vp add @react-router/node isbot");
     }
 
     if (context.hasConvex) {
         commands.push("vp add convex @convex-dev/react-query @tanstack/react-query");
-    }
-
-    if (context.isSSR) {
-        commands.push("vp add isbot");
     }
 
     if (context.isRSC) {
