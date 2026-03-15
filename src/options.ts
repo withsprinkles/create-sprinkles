@@ -2,29 +2,29 @@ import { z } from "zod";
 
 const kind = z
     .enum(["react-router-spa", "react-router-ssr", "react-router-rsc", "ts-package"])
-    .describe("Project kind");
+    .describe("project kind");
 
 const options = {
-    cli: z.boolean().default(false).describe("Include CLI scaffold (ts-package only)"),
+    cli: z.boolean().describe("Include a CLI scaffold? (ts-package only)").default(false),
     contentLayer: z
         .boolean()
-        .default(false)
-        .describe("Include content-layer plugin (react-router-rsc only)"),
+        .describe("Include the content-layer plugin? (react-router-rsc only)")
+        .default(false),
     convex: z
         .boolean()
-        .default(false)
-        .describe("Include Convex backend (react-router-spa and react-router-ssr only)"),
+        .describe("Include Convex backend? (react-router-spa and react-router-ssr only)")
+        .default(false),
     generator: z
         .boolean()
-        .default(false)
-        .describe("Include Bingo generator scaffold (ts-package only)"),
+        .describe("Include a Bingo generator scaffold? (ts-package only)")
+        .default(false),
     kind,
     owner: z.string().describe("GitHub owner or organization"),
-    repository: z.string().describe("Repository name"),
+    repository: z.string().describe("repository name"),
     sea: z
         .boolean()
-        .default(false)
-        .describe("Include Single Executable Application scaffold (ts-package only)"),
+        .describe("Include a Single Executable Application scaffold? (ts-package only)")
+        .default(false),
 };
 
 export { kind, options };
