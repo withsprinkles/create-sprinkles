@@ -64,6 +64,7 @@ export default defineConfig({
             "eslint/no-template-curly-in-string": "warn",
             "eslint/no-unused-expressions": "error",
             "eslint/no-useless-escape": "warn",
+            "eslint/sort-imports": "off",
 
             "import/extensions": [
                 "error",
@@ -92,7 +93,6 @@ export default defineConfig({
             "typescript/no-non-null-assertion": "warn",
             "typescript/prefer-as-const": "error",
             "typescript/prefer-enum-initializers": "error",
-
             "unicorn/no-lonely-if": "warn",
             "unicorn/prefer-at": "warn",
             "unicorn/prefer-string-slice": "warn",
