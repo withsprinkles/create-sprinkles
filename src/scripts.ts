@@ -73,7 +73,7 @@ export function buildScripts(context: TemplateContext): CreatedScript[] {
             "ln -sf AGENTS.md CLAUDE.md",
             "git init",
             "git add -A",
-            'git commit -m "Initial commit"',
+            "git commit -m initial",
         ],
         phase: 3,
     });
