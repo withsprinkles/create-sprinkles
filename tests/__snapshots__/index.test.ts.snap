@@ -651,6 +651,7 @@ export default [index("home.tsx")] satisfies RouteConfig;
     "scripts": {
         "build": "vp build",
         "dev": "vp dev",
+        "postinstall": "vpx react-router typegen",
         "start": "vp preview",
         "typecheck": "react-router typegen && tsc"
     },
@@ -3066,6 +3067,7 @@ export function createMetaStore(): MetaStore {
     "scripts": {
         "build": "vp build",
         "dev": "vp dev",
+        "postinstall": "vpx react-router typegen",
         "start": "vp preview",
         "typecheck": "react-router typegen && tsc"
     },
@@ -4105,6 +4107,7 @@ export default [index("home.tsx")] satisfies RouteConfig;
     "scripts": {
         "build": "vp build",
         "dev": "vp dev",
+        "postinstall": "vpx react-router typegen",
         "start": "vp preview",
         "typecheck": "react-router typegen && tsc"
     },
@@ -5023,6 +5026,7 @@ export default defineSchema({
     "scripts": {
         "build": "vp build",
         "dev": "vp dev",
+        "postinstall": "vpx react-router typegen",
         "start": "vp preview",
         "typecheck": "react-router typegen && tsc"
     },
@@ -5920,6 +5924,7 @@ export default defineSchema({
     "scripts": {
         "build": "vp build",
         "dev": "vp dev",
+        "postinstall": "vpx react-router typegen",
         "start": "vp preview",
         "typecheck": "react-router typegen && tsc"
     },
@@ -7088,6 +7093,7 @@ export default defineSchema({
     "scripts": {
         "build": "vp build",
         "dev": "vp dev",
+        "postinstall": "vpx react-router typegen",
         "start": "vp preview",
         "typecheck": "react-router typegen && tsc"
     },
