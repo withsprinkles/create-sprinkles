@@ -2,8 +2,12 @@
     "include": [
         "**/*.ts",
         "**/*.tsx",
+{{#if hasContentLayer}}
         "./.react-router/types/**/*",
         "./.sprinkles/content-layer/**/*"
+{{else}}
+        "./.react-router/types/**/*"
+{{/if}}
     ],
     "compilerOptions": {
         "allowImportingTsExtensions": true,

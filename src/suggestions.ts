@@ -8,7 +8,7 @@ export function buildSuggestions(context: TemplateContext): string[] {
     }
 
     if (context.isSSR || context.isRSC) {
-        suggestions.push("Log in to Cloudflare: vp dlx wrangler login");
+        suggestions.push("Log in to Cloudflare: vpx wrangler login");
     }
 
     if (context.isReactRouter) {

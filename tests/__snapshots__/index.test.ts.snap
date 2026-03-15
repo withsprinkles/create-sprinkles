@@ -1,6 +1,661 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`template snapshots > RSC kind 1`] = `
+exports[`template snapshots > RSC kind (no content-layer) 1`] = `
+{
+  ".gitignore": [
+    ".DS_Store
+.env
+.env.local
+/node_modules/
+
+# React Router
+/.react-router/
+/build/
+
+# Content Layer
+/.sprinkles/
+
+# Cloudflare
+.wrangler
+",
+    {
+      "executable": false,
+    },
+  ],
+  ".node-version": [
+    "24
+",
+    {
+      "executable": false,
+    },
+  ],
+  "README.md": [
+    "# test-repo
+
+
+
+A React Router application with React Server Components and content-layer.
+
+
+## Getting Started
+
+\`\`\`bash
+vp dev
+\`\`\`
+",
+    {
+      "executable": false,
+    },
+  ],
+  "app": {
+    "home.tsx": [
+      "import { getCollection } from "sprinkles:content";
+
+export async function ServerComponent() {
+    let posts = await getCollection("posts");
+
+    return (
+        <main>
+            <h1>Welcome to test-repo</h1>
+            <section>
+                <h2>Posts</h2>
+                <ul>
+                    {posts.map((post) => (
+                        <li key={post.id}>
+                            <h3>{post.data.title}</h3>
+                        </li>
+                    ))}
+                </ul>
+            </section>
+        </main>
+    );
+}
+",
+      {
+        "executable": false,
+      },
+    ],
+    "root.tsx": [
+      "import type { PropsWithChildren } from "react";
+import { isRouteErrorResponse, Outlet, Scripts } from "react-router";
+
+import type { Route } from "./+types/root";
+import styles from "./styles/tailwind.css?url";
+
+export function Layout({ children }: PropsWithChildren) {
+    return (
+        <html lang="en">
+            <head>
+                <meta charSet="utf-8" />
+                <meta content="width=device-width, initial-scale=1" name="viewport" />
+                <meta content="#000000" name="theme-color" />
+                <link href={styles} rel="stylesheet" />
+                <title>test-repo</title>
+            </head>
+            <body>
+                {children}
+                <Scripts />
+            </body>
+        </html>
+    );
+}
+
+export function ServerComponent() {
+    return <Outlet />;
+}
+
+export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
+    let message = "Oops!";
+    let details = "An unexpected error occurred.";
+    let stack: string | undefined;
+
+    if (isRouteErrorResponse(error)) {
+        message = error.status === 404 ? "404" : "Error";
+        details =
+            error.status === 404
+                ? "The requested page could not be found."
+                : error.statusText || details;
+    } else if (import.meta.env.DEV && error && error instanceof Error) {
+        details = error.message;
+        stack = error.stack;
+    }
+
+    return (
+        <main>
+            <h1>{message}</h1>
+            <p>{details}</p>
+            {stack && (
+                <pre>
+                    <code>{stack}</code>
+                </pre>
+            )}
+        </main>
+    );
+}
+",
+      {
+        "executable": false,
+      },
+    ],
+    "routes.ts": [
+      "import { index } from "@react-router/dev/routes";
+import type { RouteConfig } from "@react-router/dev/routes";
+
+export default [index("home.tsx")] satisfies RouteConfig;
+",
+      {
+        "executable": false,
+      },
+    ],
+  },
+  "package.json": [
+    "{
+    "name": "test-repo",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "build": "vp build",
+        "dev": "vp dev",
+        "start": "vp preview",
+        "typecheck": "react-router typegen && tsc"
+    }
+}
+",
+    {
+      "executable": false,
+    },
+  ],
+  "react-compiler.plugin.ts": [
+    "import babel from "@rolldown/plugin-babel";
+import { reactCompilerPreset } from "@vitejs/plugin-react";
+
+export interface ReactCompilerConfig {
+    /** Controls the strategy for determining which functions the React Compiler will optimize. */
+    compilationMode?: "infer" | "annotation" | "syntax" | "all";
+    /** Configures the React version compatibility for the compiled output. */
+    target?: "17" | "18" | "19";
+}
+
+export function reactCompiler(config: ReactCompilerConfig = {}) {
+    return babel({ presets: [reactCompilerPreset(config)] } as Parameters<typeof babel>[0]);
+}
+",
+    {
+      "executable": false,
+    },
+  ],
+  "react-router.config.ts": [
+    "import type { Config } from "@react-router/dev/config";
+
+export default {
+    ssr: ,
+    future: {
+        v8_viteEnvironmentApi: true,
+        v8_middleware: true,
+    },
+} satisfies Config;
+",
+    {
+      "executable": false,
+    },
+  ],
+  "tsconfig.json": [
+    "{
+    "include": [
+        "**/*.ts",
+        "**/*.tsx",
+        "./.react-router/types/**/*"
+    ],
+    "compilerOptions": {
+        "allowImportingTsExtensions": true,
+        "strict": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "skipLibCheck": true,
+        "verbatimModuleSyntax": true,
+        "noEmit": true,
+        "moduleResolution": "Bundler",
+        "module": "ESNext",
+        "target": "ESNext",
+        "lib": ["ESNext", "DOM", "DOM.Iterable"],
+        "types": ["vite/client", "@vitejs/plugin-rsc/types", "@types/node"],
+        "jsx": "react-jsx",
+        "rootDirs": [".", "./.react-router/types"],
+        "paths": {
+            "~/*": ["./app/*"]
+        }
+    }
+}
+",
+    {
+      "executable": false,
+    },
+  ],
+  "vite.config.ts": [
+    "import { cloudflare } from "@cloudflare/vite-plugin";
+import { unstable_reactRouterRSC as reactRouter } from "@react-router/dev/vite";
+import tailwindcss from "@tailwindcss/vite";
+import rsc from "@vitejs/plugin-rsc";
+import devtoolsJson from "vite-plugin-devtools-json";
+import { defineConfig } from "vite-plus";
+
+import { reactCompiler } from "./react-compiler.plugin.ts";
+
+const IS_TEST = Boolean(process.env.VITEST);
+
+export default defineConfig({
+    css: {
+        transformer: "lightningcss",
+    },
+    environments: {
+        client: {
+            optimizeDeps: {
+                include: [
+                    "react-router",
+                    "react-router/dom",
+                    "react-router/internal/react-server-client",
+                ],
+            },
+        },
+        rsc: {
+            optimizeDeps: {
+                exclude: ["react-router"],
+            },
+            resolve: {
+                conditions: ["react-server"],
+            },
+        },
+        ssr: {
+            optimizeDeps: {
+                exclude: ["react-router"],
+            },
+        },
+    },
+    fmt: {
+        arrowParens: "avoid",
+        overrides: [
+            {
+                files: ["**/*.jsonc"],
+                options: {
+                    trailingComma: "none",
+                },
+            },
+            {
+                files: ["**/.vscode/**"],
+                options: {
+                    trailingComma: "all",
+                },
+            },
+        ],
+        sortImports: {
+            groups: [
+                "type-import",
+                ["value-builtin", "value-external"],
+                "type-internal",
+                "value-internal",
+                ["type-parent", "type-sibling", "type-index"],
+                ["value-parent", "value-sibling", "value-index"],
+                "unknown",
+            ],
+            partitionByComment: true,
+        },
+        sortTailwindcss: {
+            functions: ["cx", "cva"],
+            stylesheet: "./app/styles/tailwind.css",
+        },
+        tabWidth: 4,
+    },
+    lint: {
+        categories: {
+            correctness: "error",
+            nursery: "warn",
+            pedantic: "warn",
+            perf: "error",
+            restriction: "error",
+            style: "warn",
+            suspicious: "error",
+        },
+        env: {
+            browser: true,
+            node: true,
+        },
+        ignorePatterns: ["**/worker-configuration.d.ts"],
+        jsPlugins: [
+            "eslint-plugin-perfectionist",
+            { name: "react-compiler", specifier: "eslint-plugin-react-hooks" },
+        ],
+        options: {
+            typeAware: true,
+            typeCheck: true,
+        },
+        plugins: ["react", "jsx-a11y", "jsdoc", "import", "node", "promise", "vitest"],
+        rules: {
+            "eslint/default-param-last": "error",
+            "eslint/no-cond-assign": "off",
+            "eslint/no-dupe-else-if": "error",
+            "eslint/no-else-return": "error",
+            "eslint/no-empty-pattern": "warn",
+            "eslint/no-irregular-whitespace": "error",
+            "eslint/no-lonely-if": "warn",
+            "eslint/no-param-reassign": "error",
+            "eslint/no-template-curly-in-string": "warn",
+            "eslint/no-unused-expressions": "error",
+            "eslint/no-useless-escape": "warn",
+            "eslint/sort-imports": "off",
+
+            "import/extensions": [
+                "error",
+                "ignorePackages",
+                {
+                    cjs: "always",
+                    cts: "always",
+                    js: "always",
+                    jsx: "always",
+                    mjs: "always",
+                    mts: "always",
+                    ts: "always",
+                    tsx: "always",
+                },
+            ],
+            "import/no-commonjs": "warn",
+            "import/no-default-export": "off",
+            "import/no-named-export": "off",
+            "import/no-relative-parent-imports": "off",
+            "import/prefer-default-export": "off",
+
+            "jsx-a11y/no-autofocus": "off",
+
+            "node/no-process-env": "off",
+
+            "perfectionist/sort-jsx-props": "warn",
+            "react-compiler/component-hook-factories": "error",
+            "react-compiler/error-boundaries": "error",
+            "react-compiler/globals": "error",
+            "react-compiler/immutability": "error",
+            "react-compiler/incompatible-library": "error",
+            "react-compiler/preserve-manual-memoization": "error",
+            "react-compiler/purity": "error",
+            "react-compiler/refs": "error",
+            "react-compiler/set-state-in-effect": "error",
+            "react-compiler/set-state-in-render": "error",
+            "react-compiler/static-components": "error",
+            "react-compiler/unsupported-syntax": "error",
+            "react-compiler/use-memo": "error",
+            "react/exhaustive-deps": "warn",
+            "react/jsx-boolean-value": "warn",
+            "react/jsx-fragments": "warn",
+            "react/jsx-key": "error",
+            "react/jsx-no-constructed-context-values": "error",
+            "react/jsx-no-duplicate-props": "error",
+            "react/jsx-no-script-url": "error",
+            "react/jsx-no-target-blank": "warn",
+            "react/jsx-no-useless-fragment": "warn",
+            "react/jsx-pascal-case": "error",
+            "react/jsx-props-no-spread-multi": "error",
+            "react/no-array-index-key": "off",
+            "react/only-export-components": [
+                "error",
+                {
+                    allowExportNames: [
+                        "meta",
+                        "links",
+                        "headers",
+                        "loader",
+                        "action",
+                        "clientLoader",
+                        "clientAction",
+                        "middleware",
+                        "shouldRevalidate",
+                        "handle",
+                    ],
+                },
+            ],
+            "react/rules-of-hooks": "error",
+            "react/self-closing-comp": "error",
+
+            "typescript/consistent-type-imports": "error",
+            "typescript/no-empty-interface": "warn",
+            "typescript/no-explicit-any": "warn",
+            "typescript/no-inferrable-types": "error",
+            "typescript/no-non-null-assertion": "warn",
+            "typescript/prefer-as-const": "error",
+            "typescript/prefer-enum-initializers": "error",
+
+            "unicorn/no-lonely-if": "warn",
+            "unicorn/prefer-at": "warn",
+            "unicorn/prefer-string-slice": "warn",
+            "unicorn/prefer-string-trim-start-end": "error",
+        },
+        settings: {
+            "jsx-a11y": {
+                components: {
+                    Link: "a",
+                    NavLink: "a",
+                },
+                polymorphicPropName: "as",
+            },
+            react: {
+                formComponents: ["Form"],
+                linkComponents: [
+                    "DirectoryLink",
+                    { attribute: "to", name: "Link" },
+                    { attribute: "to", name: "NavLink" },
+                ],
+            },
+            vitest: {
+                typecheck: true,
+            },
+        },
+    },
+    plugins: [
+        reactRouter(),
+        rsc(),
+        reactCompiler(),
+        !IS_TEST &&
+            cloudflare({
+                auxiliaryWorkers: [
+                    {
+                        configPath: "./wrangler.rsc.jsonc",
+                        viteEnvironment: {
+                            name: "rsc",
+                        },
+                    },
+                ],
+                configPath: "./wrangler.ssr.jsonc",
+                viteEnvironment: {
+                    name: "ssr",
+                },
+            }),
+        tailwindcss(),
+        devtoolsJson(),
+    ],
+    resolve: {
+        tsconfigPaths: true,
+    },
+    run: {
+        tasks: {
+            deploy: {
+                cache: false,
+                command: "vp build && wrangler deploy",
+            },
+            typecheck: {
+                command: "tsgo --noEmit",
+                dependsOn: ["typegen:react-router", "typegen:cloudflare"],
+            },
+            "typegen:cloudflare": {
+                command: "wrangler types -c wrangler.rsc.jsonc",
+            },
+            "typegen:react-router": {
+                command: "react-router typegen",
+            },
+        },
+    },
+    staged: {
+        "*": "vp check --fix",
+    },
+    test: {
+        include: ["**/*.test.ts"],
+    },
+});
+",
+    {
+      "executable": false,
+    },
+  ],
+  "workers": {
+    "entry.rsc.tsx": [
+      "import {
+    createTemporaryReferenceSet,
+    decodeAction,
+    decodeFormState,
+    decodeReply,
+    loadServerAction,
+    renderToReadableStream,
+} from "@vitejs/plugin-rsc/rsc";
+import { unstable_matchRSCServerRequest as matchRSCServerRequest } from "react-router";
+// @ts-expect-error no types
+import routes from "virtual:react-router/unstable_rsc/routes";
+// @ts-expect-error no types
+import basename from "virtual:react-router/unstable_rsc/basename";
+
+export function fetchServer(request: Request) {
+    return matchRSCServerRequest({
+        basename,
+        createTemporaryReferenceSet,
+        decodeAction,
+        decodeFormState,
+        decodeReply,
+        generateResponse(match, options) {
+            return new Response(renderToReadableStream(match.payload, options), {
+                status: match.statusCode,
+                headers: match.headers,
+            });
+        },
+        loadServerAction,
+        request,
+        routes,
+    });
+}
+
+if (import.meta.hot) {
+    import.meta.hot.accept();
+}
+
+const handler: ExportedHandler<Env> = {
+    fetch(request) {
+        return fetchServer(request);
+    },
+};
+
+export default handler;
+",
+      {
+        "executable": false,
+      },
+    ],
+    "entry.ssr.tsx": [
+      "import { createFromReadableStream } from "@vitejs/plugin-rsc/ssr";
+import { renderToReadableStream as renderHTMLToReadableStream } from "react-dom/server.edge";
+import {
+    unstable_RSCStaticRouter as RSCStaticRouter,
+    unstable_routeRSCServerRequest as routeRSCServerRequest,
+} from "react-router";
+
+export async function generateHTML(request: Request, serverResponse: Response): Promise<Response> {
+    return await routeRSCServerRequest({
+        // The incoming request.
+        request,
+        // The React Server response.
+        serverResponse,
+        // Provide the React Server touchpoints.
+        createFromReadableStream,
+        // Render the router to HTML.
+        async renderHTML(getPayload) {
+            const payload = await getPayload();
+            const formState = payload.type === "render" ? await payload.formState : undefined;
+
+            const bootstrapScriptContent = await import.meta.viteRsc.loadBootstrapScriptContent(
+                "index",
+            );
+
+            return await renderHTMLToReadableStream(<RSCStaticRouter getPayload={getPayload} />, {
+                bootstrapScriptContent,
+                // @ts-expect-error - no types for this yet
+                formState,
+            });
+        },
+    });
+}
+
+const handler: ExportedHandler<Env> = {
+    async fetch(request, env) {
+        let serverResponse = await env.RSC.fetch(request);
+        return generateHTML(request, serverResponse);
+    },
+};
+
+export default handler;
+",
+      {
+        "executable": false,
+      },
+    ],
+  },
+  "wrangler.rsc.jsonc": [
+    "{
+    "$schema": "node_modules/wrangler/config-schema.json",
+    "name": "test-repo",
+    "main": "workers/entry.rsc.tsx",
+    "assets": {
+        "directory": "./build/client"
+    },
+    "services": [
+        {
+            "binding": "RSC",
+            "service": "test-repo"
+        }
+    ],
+    "workers_dev": true,
+    "compatibility_date": "2026-02-28",
+    "compatibility_flags": ["nodejs_als", "nodejs_compat"],
+    "observability": {
+        "logs": {
+            "enabled": true,
+            "head_sampling_rate": 1,
+            "invocation_logs": true,
+            "persist": true
+        }
+    }
+}
+",
+    {
+      "executable": false,
+    },
+  ],
+  "wrangler.ssr.jsonc": [
+    "{
+    "$schema": "node_modules/wrangler/config-schema.json",
+    "name": "test-repo-ssr",
+    "main": "workers/entry.ssr.tsx",
+    "workers_dev": true,
+    "services": [
+        {
+            "binding": "RSC",
+            "service": "test-repo"
+        }
+    ],
+    "compatibility_date": "2026-02-28",
+    "compatibility_flags": ["nodejs_als", "nodejs_compat"]
+}
+",
+    {
+      "executable": false,
+    },
+  ],
+}
+`;
+
+exports[`template snapshots > RSC kind (with content-layer) 1`] = `
 {
   ".gitignore": [
     ".DS_Store
@@ -1904,7 +2559,428 @@ export default handler;
 }
 `;
 
-exports[`template snapshots > SPA kind 1`] = `
+exports[`template snapshots > SPA kind (no Convex) 1`] = `
+{
+  ".gitignore": [
+    ".DS_Store
+.env
+.env.local
+/node_modules/
+
+# React Router
+/.react-router/
+/build/
+",
+    {
+      "executable": false,
+    },
+  ],
+  ".node-version": [
+    "24
+",
+    {
+      "executable": false,
+    },
+  ],
+  "README.md": [
+    "# test-repo
+
+A React Router single-page application with Convex and TanStack Query.
+
+
+
+
+## Getting Started
+
+\`\`\`bash
+vp dev
+\`\`\`
+",
+    {
+      "executable": false,
+    },
+  ],
+  "app": {
+    "home.tsx": [
+      "export default function Home() {
+    return (
+        <main>
+            <h1>Welcome to test-repo</h1>
+        </main>
+    );
+}
+",
+      {
+        "executable": false,
+      },
+    ],
+    "root.tsx": [
+      "import type { PropsWithChildren } from "react";
+
+import { Outlet, Scripts } from "react-router";
+
+export function Layout({ children }: PropsWithChildren) {
+    return (
+        <html lang="en">
+            <head>
+                <meta charSet="utf-8" />
+                <meta content="width=device-width, initial-scale=1" name="viewport" />
+                <meta content="#000000" name="theme-color" />
+                <title>test-repo</title>
+            </head>
+            <body>
+                {children}
+                <Scripts />
+            </body>
+        </html>
+    );
+}
+
+export function HydrateFallback() {
+    return <div>Loading...</div>;
+}
+
+export default function App() {
+    return (
+        <Outlet />
+    );
+}
+",
+      {
+        "executable": false,
+      },
+    ],
+    "routes.ts": [
+      "import { index } from "@react-router/dev/routes";
+import type { RouteConfig } from "@react-router/dev/routes";
+
+export default [index("home.tsx")] satisfies RouteConfig;
+",
+      {
+        "executable": false,
+      },
+    ],
+  },
+  "package.json": [
+    "{
+    "name": "test-repo",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "build": "vp build",
+        "dev": "vp dev",
+        "start": "vp preview",
+        "typecheck": "react-router typegen && tsc"
+    }
+}
+",
+    {
+      "executable": false,
+    },
+  ],
+  "react-compiler.plugin.ts": [
+    "import babel from "@rolldown/plugin-babel";
+import { reactCompilerPreset } from "@vitejs/plugin-react";
+
+export interface ReactCompilerConfig {
+    /** Controls the strategy for determining which functions the React Compiler will optimize. */
+    compilationMode?: "infer" | "annotation" | "syntax" | "all";
+    /** Configures the React version compatibility for the compiled output. */
+    target?: "17" | "18" | "19";
+}
+
+export function reactCompiler(config: ReactCompilerConfig = {}) {
+    return babel({ presets: [reactCompilerPreset(config)] } as Parameters<typeof babel>[0]);
+}
+",
+    {
+      "executable": false,
+    },
+  ],
+  "react-router.config.ts": [
+    "import type { Config } from "@react-router/dev/config";
+
+export default {
+    ssr: ,
+    future: {
+        v8_viteEnvironmentApi: true,
+        v8_middleware: true,
+    },
+} satisfies Config;
+",
+    {
+      "executable": false,
+    },
+  ],
+  "tsconfig.json": [
+    "{
+    "include": ["**/*.ts", "**/*.tsx"],
+    "compilerOptions": {
+        "allowImportingTsExtensions": true,
+        "strict": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "skipLibCheck": true,
+        "verbatimModuleSyntax": true,
+        "noEmit": true,
+        "moduleResolution": "Bundler",
+        "module": "ESNext",
+        "target": "ESNext",
+        "lib": ["ESNext", "DOM", "DOM.Iterable"],
+        "jsx": "react-jsx",
+        "paths": {
+            "~/*": ["./app/*"]
+        }
+    }
+}
+",
+    {
+      "executable": false,
+    },
+  ],
+  "vite.config.ts": [
+    "import { cloudflare } from "@cloudflare/vite-plugin";
+import { reactRouter } from "@react-router/dev/vite";
+import tailwindcss from "@tailwindcss/vite";
+import devtoolsJson from "vite-plugin-devtools-json";
+import { defineConfig } from "vite-plus";
+
+import { reactCompiler } from "./react-compiler.plugin.ts";
+
+const IS_TEST = Boolean(process.env.VITEST);
+
+export default defineConfig({
+    fmt: {
+        arrowParens: "avoid",
+        overrides: [
+            {
+                files: ["**/*.jsonc"],
+                options: {
+                    trailingComma: "none",
+                },
+            },
+            {
+                files: ["**/.vscode/**"],
+                options: {
+                    trailingComma: "all",
+                },
+            },
+        ],
+        sortImports: {
+            groups: [
+                "type-import",
+                ["value-builtin", "value-external"],
+                "type-internal",
+                "value-internal",
+                ["type-parent", "type-sibling", "type-index"],
+                ["value-parent", "value-sibling", "value-index"],
+                "unknown",
+            ],
+            partitionByComment: true,
+        },
+        sortTailwindcss: {
+            functions: ["cx", "cva"],
+            stylesheet: "./app/styles/tailwind.css",
+        },
+        tabWidth: 4,
+    },
+    lint: {
+        categories: {
+            correctness: "error",
+            nursery: "warn",
+            pedantic: "warn",
+            perf: "error",
+            restriction: "error",
+            style: "warn",
+            suspicious: "error",
+        },
+        env: {
+            browser: true,
+            node: true,
+        },
+        jsPlugins: [
+            "eslint-plugin-perfectionist",
+            { name: "react-compiler", specifier: "eslint-plugin-react-hooks" },
+        ],
+        options: {
+            typeAware: true,
+            typeCheck: true,
+        },
+        plugins: ["react", "jsx-a11y", "jsdoc", "import", "node", "promise", "vitest"],
+        rules: {
+            "eslint/default-param-last": "error",
+            "eslint/no-cond-assign": "off",
+            "eslint/no-dupe-else-if": "error",
+            "eslint/no-else-return": "error",
+            "eslint/no-empty-pattern": "warn",
+            "eslint/no-irregular-whitespace": "error",
+            "eslint/no-lonely-if": "warn",
+            "eslint/no-param-reassign": "error",
+            "eslint/no-template-curly-in-string": "warn",
+            "eslint/no-unused-expressions": "error",
+            "eslint/no-useless-escape": "warn",
+            "eslint/sort-imports": "off",
+
+            "import/extensions": [
+                "error",
+                "ignorePackages",
+                {
+                    cjs: "always",
+                    cts: "always",
+                    js: "always",
+                    jsx: "always",
+                    mjs: "always",
+                    mts: "always",
+                    ts: "always",
+                    tsx: "always",
+                },
+            ],
+            "import/no-commonjs": "warn",
+            "import/no-default-export": "off",
+            "import/no-named-export": "off",
+            "import/no-relative-parent-imports": "off",
+            "import/prefer-default-export": "off",
+
+            "jsx-a11y/no-autofocus": "off",
+
+            "node/no-process-env": "off",
+
+            "perfectionist/sort-jsx-props": "warn",
+            "react-compiler/component-hook-factories": "error",
+            "react-compiler/error-boundaries": "error",
+            "react-compiler/globals": "error",
+            "react-compiler/immutability": "error",
+            "react-compiler/incompatible-library": "error",
+            "react-compiler/preserve-manual-memoization": "error",
+            "react-compiler/purity": "error",
+            "react-compiler/refs": "error",
+            "react-compiler/set-state-in-effect": "error",
+            "react-compiler/set-state-in-render": "error",
+            "react-compiler/static-components": "error",
+            "react-compiler/unsupported-syntax": "error",
+            "react-compiler/use-memo": "error",
+            "react/exhaustive-deps": "warn",
+            "react/jsx-boolean-value": "warn",
+            "react/jsx-fragments": "warn",
+            "react/jsx-key": "error",
+            "react/jsx-no-constructed-context-values": "error",
+            "react/jsx-no-duplicate-props": "error",
+            "react/jsx-no-script-url": "error",
+            "react/jsx-no-target-blank": "warn",
+            "react/jsx-no-useless-fragment": "warn",
+            "react/jsx-pascal-case": "error",
+            "react/jsx-props-no-spread-multi": "error",
+            "react/no-array-index-key": "off",
+            "react/only-export-components": [
+                "error",
+                {
+                    allowExportNames: [
+                        "meta",
+                        "links",
+                        "headers",
+                        "loader",
+                        "action",
+                        "clientLoader",
+                        "clientAction",
+                        "middleware",
+                        "shouldRevalidate",
+                        "handle",
+                    ],
+                },
+            ],
+            "react/rules-of-hooks": "error",
+            "react/self-closing-comp": "error",
+
+            "typescript/consistent-type-imports": "error",
+            "typescript/no-empty-interface": "warn",
+            "typescript/no-explicit-any": "warn",
+            "typescript/no-inferrable-types": "error",
+            "typescript/no-non-null-assertion": "warn",
+            "typescript/prefer-as-const": "error",
+            "typescript/prefer-enum-initializers": "error",
+
+            "unicorn/no-lonely-if": "warn",
+            "unicorn/prefer-at": "warn",
+            "unicorn/prefer-string-slice": "warn",
+            "unicorn/prefer-string-trim-start-end": "error",
+        },
+        settings: {
+            "jsx-a11y": {
+                components: {
+                    Link: "a",
+                    NavLink: "a",
+                },
+                polymorphicPropName: "as",
+            },
+            react: {
+                formComponents: ["Form"],
+                linkComponents: [
+                    "DirectoryLink",
+                    { attribute: "to", name: "Link" },
+                    { attribute: "to", name: "NavLink" },
+                ],
+            },
+            vitest: {
+                typecheck: true,
+            },
+        },
+    },
+    plugins: [
+        tailwindcss(),
+        reactRouter(),
+        reactCompiler(),
+        !IS_TEST && cloudflare(),
+        devtoolsJson(),
+    ],
+    resolve: {
+        tsconfigPaths: true,
+    },
+    run: {
+        tasks: {
+            "typegen:react-router": {
+                command: "react-router typegen",
+            },
+            typecheck: {
+                command: "tsgo --noEmit",
+                dependsOn: ["typegen:react-router"],
+            },
+            deploy: {
+                command: "vp build && wrangler deploy",
+                cache: false,
+            },
+        },
+    },
+    staged: {
+        "*": "vp check --fix",
+    },
+    test: {
+        include: ["**/*.test.ts"],
+    },
+});
+",
+    {
+      "executable": false,
+    },
+  ],
+  "wrangler.jsonc": [
+    "{
+    "name": "test-repo",
+    "compatibility_date": "2025-04-01",
+    "assets": {
+        "directory": "./build/client",
+        "not_found_handling": "single-page-application",
+        "binding": "ASSETS"
+    }
+}
+",
+    {
+      "executable": false,
+    },
+  ],
+}
+`;
+
+exports[`template snapshots > SPA kind (with Convex) 1`] = `
 {
   ".env.local": [
     "CONVEX_DEPLOYMENT=# Set by \`npx convex dev\`
@@ -2380,7 +3456,492 @@ export default defineConfig({
 }
 `;
 
-exports[`template snapshots > SSR kind 1`] = `
+exports[`template snapshots > SSR kind (no Convex) 1`] = `
+{
+  ".gitignore": [
+    ".DS_Store
+.env
+.env.local
+/node_modules/
+
+# React Router
+/.react-router/
+/build/
+",
+    {
+      "executable": false,
+    },
+  ],
+  ".node-version": [
+    "24
+",
+    {
+      "executable": false,
+    },
+  ],
+  "README.md": [
+    "# test-repo
+
+
+A server-rendered React Router application with Convex and TanStack Query.
+
+
+
+## Getting Started
+
+\`\`\`bash
+vp dev
+\`\`\`
+",
+    {
+      "executable": false,
+    },
+  ],
+  "app": {
+    "home.tsx": [
+      "export default function Home() {
+    return (
+        <main>
+            <h1>Welcome to test-repo</h1>
+        </main>
+    );
+}
+",
+      {
+        "executable": false,
+      },
+    ],
+    "root.tsx": [
+      "import type { PropsWithChildren } from "react";
+import {
+    isRouteErrorResponse,
+    Outlet,
+    Scripts,
+    ScrollRestoration,
+} from "react-router";
+
+export function Layout({ children }: PropsWithChildren) {
+    return (
+        <html lang="en">
+            <head>
+                <meta charSet="utf-8" />
+                <meta
+                    content="width=device-width, initial-scale=1"
+                    name="viewport"
+                />
+                <meta content="#000000" name="theme-color" />
+                <title>test-repo</title>
+            </head>
+            <body>
+                {children}
+                <ScrollRestoration />
+                <Scripts />
+            </body>
+        </html>
+    );
+}
+
+export default function App() {
+    return <Outlet />;
+}
+
+export function ErrorBoundary({ error }: { error: unknown }) {
+    let message = "Oops!";
+    let details = "An unexpected error occurred.";
+    let stack: string | undefined;
+
+    if (isRouteErrorResponse(error)) {
+        message = error.status === 404 ? "404" : "Error";
+        details =
+            error.status === 404
+                ? "The requested page could not be found."
+                : error.statusText || details;
+    } else if (import.meta.env.DEV && error && error instanceof Error) {
+        details = error.message;
+        stack = error.stack;
+    }
+
+    return (
+        <main className="pt-16 p-4 container mx-auto">
+            <h1>{message}</h1>
+            <p>{details}</p>
+            {stack && (
+                <pre className="w-full p-4 overflow-x-auto">
+                    <code>{stack}</code>
+                </pre>
+            )}
+        </main>
+    );
+}
+",
+      {
+        "executable": false,
+      },
+    ],
+    "routes.ts": [
+      "import { index } from "@react-router/dev/routes";
+import type { RouteConfig } from "@react-router/dev/routes";
+
+export default [index("home.tsx")] satisfies RouteConfig;
+",
+      {
+        "executable": false,
+      },
+    ],
+  },
+  "convex": {
+    "schema.ts": [
+      "import { defineSchema, defineTable } from "convex/server";
+import { v } from "convex/values";
+
+export default defineSchema({
+    // Define your tables here
+    // Example: defineTable({ name: v.string() }),
+});
+",
+      {
+        "executable": false,
+      },
+    ],
+  },
+  "package.json": [
+    "{
+    "name": "test-repo",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "build": "vp build",
+        "dev": "vp dev",
+        "start": "vp preview",
+        "typecheck": "react-router typegen && tsc"
+    }
+}
+",
+    {
+      "executable": false,
+    },
+  ],
+  "react-compiler.plugin.ts": [
+    "import babel from "@rolldown/plugin-babel";
+import { reactCompilerPreset } from "@vitejs/plugin-react";
+
+export interface ReactCompilerConfig {
+    /** Controls the strategy for determining which functions the React Compiler will optimize. */
+    compilationMode?: "infer" | "annotation" | "syntax" | "all";
+    /** Configures the React version compatibility for the compiled output. */
+    target?: "17" | "18" | "19";
+}
+
+export function reactCompiler(config: ReactCompilerConfig = {}) {
+    return babel({ presets: [reactCompilerPreset(config)] } as Parameters<typeof babel>[0]);
+}
+",
+    {
+      "executable": false,
+    },
+  ],
+  "react-router.config.ts": [
+    "import type { Config } from "@react-router/dev/config";
+
+export default {
+    ssr: ,
+    future: {
+        v8_viteEnvironmentApi: true,
+        v8_middleware: true,
+    },
+} satisfies Config;
+",
+    {
+      "executable": false,
+    },
+  ],
+  "tsconfig.json": [
+    "{
+    "include": [
+        "**/*.ts",
+        "**/*.tsx",
+        "**/.server/**/*",
+        "**/.client/**/*",
+        ".react-router/types/**/*"
+    ],
+    "compilerOptions": {
+        "allowImportingTsExtensions": true,
+        "strict": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "skipLibCheck": true,
+        "verbatimModuleSyntax": true,
+        "noEmit": true,
+        "moduleResolution": "Bundler",
+        "module": "ESNext",
+        "target": "ESNext",
+        "lib": ["ESNext", "DOM", "DOM.Iterable"],
+        "jsx": "react-jsx",
+        "rootDirs": [".", "./.react-router/types"],
+        "paths": {
+            "~/*": ["./app/*"]
+        }
+    }
+}
+",
+    {
+      "executable": false,
+    },
+  ],
+  "vite.config.ts": [
+    "import { cloudflare } from "@cloudflare/vite-plugin";
+import { reactRouter } from "@react-router/dev/vite";
+import tailwindcss from "@tailwindcss/vite";
+import devtoolsJson from "vite-plugin-devtools-json";
+import { defineConfig } from "vite-plus";
+
+import { reactCompiler } from "./react-compiler.plugin.ts";
+
+const IS_TEST = Boolean(process.env.VITEST);
+
+export default defineConfig({
+    fmt: {
+        arrowParens: "avoid",
+        overrides: [
+            {
+                files: ["**/*.jsonc"],
+                options: {
+                    trailingComma: "none",
+                },
+            },
+            {
+                files: ["**/.vscode/**"],
+                options: {
+                    trailingComma: "all",
+                },
+            },
+        ],
+        sortImports: {
+            groups: [
+                "type-import",
+                ["value-builtin", "value-external"],
+                "type-internal",
+                "value-internal",
+                ["type-parent", "type-sibling", "type-index"],
+                ["value-parent", "value-sibling", "value-index"],
+                "unknown",
+            ],
+            partitionByComment: true,
+        },
+        sortTailwindcss: {
+            functions: ["cx", "cva"],
+            stylesheet: "./app/styles/tailwind.css",
+        },
+        tabWidth: 4,
+    },
+    lint: {
+        categories: {
+            correctness: "error",
+            nursery: "warn",
+            pedantic: "warn",
+            perf: "error",
+            restriction: "error",
+            style: "warn",
+            suspicious: "error",
+        },
+        env: {
+            browser: true,
+            node: true,
+        },
+        jsPlugins: [
+            "eslint-plugin-perfectionist",
+            { name: "react-compiler", specifier: "eslint-plugin-react-hooks" },
+        ],
+        options: {
+            typeAware: true,
+            typeCheck: true,
+        },
+        plugins: ["react", "jsx-a11y", "jsdoc", "import", "node", "promise", "vitest"],
+        rules: {
+            "eslint/default-param-last": "error",
+            "eslint/no-cond-assign": "off",
+            "eslint/no-dupe-else-if": "error",
+            "eslint/no-else-return": "error",
+            "eslint/no-empty-pattern": "warn",
+            "eslint/no-irregular-whitespace": "error",
+            "eslint/no-lonely-if": "warn",
+            "eslint/no-param-reassign": "error",
+            "eslint/no-template-curly-in-string": "warn",
+            "eslint/no-unused-expressions": "error",
+            "eslint/no-useless-escape": "warn",
+            "eslint/sort-imports": "off",
+
+            "import/extensions": [
+                "error",
+                "ignorePackages",
+                {
+                    cjs: "always",
+                    cts: "always",
+                    js: "always",
+                    jsx: "always",
+                    mjs: "always",
+                    mts: "always",
+                    ts: "always",
+                    tsx: "always",
+                },
+            ],
+            "import/no-commonjs": "warn",
+            "import/no-default-export": "off",
+            "import/no-named-export": "off",
+            "import/no-relative-parent-imports": "off",
+            "import/prefer-default-export": "off",
+
+            "jsx-a11y/no-autofocus": "off",
+
+            "node/no-process-env": "off",
+
+            "perfectionist/sort-jsx-props": "warn",
+            "react-compiler/component-hook-factories": "error",
+            "react-compiler/error-boundaries": "error",
+            "react-compiler/globals": "error",
+            "react-compiler/immutability": "error",
+            "react-compiler/incompatible-library": "error",
+            "react-compiler/preserve-manual-memoization": "error",
+            "react-compiler/purity": "error",
+            "react-compiler/refs": "error",
+            "react-compiler/set-state-in-effect": "error",
+            "react-compiler/set-state-in-render": "error",
+            "react-compiler/static-components": "error",
+            "react-compiler/unsupported-syntax": "error",
+            "react-compiler/use-memo": "error",
+            "react/exhaustive-deps": "warn",
+            "react/jsx-boolean-value": "warn",
+            "react/jsx-fragments": "warn",
+            "react/jsx-key": "error",
+            "react/jsx-no-constructed-context-values": "error",
+            "react/jsx-no-duplicate-props": "error",
+            "react/jsx-no-script-url": "error",
+            "react/jsx-no-target-blank": "warn",
+            "react/jsx-no-useless-fragment": "warn",
+            "react/jsx-pascal-case": "error",
+            "react/jsx-props-no-spread-multi": "error",
+            "react/no-array-index-key": "off",
+            "react/only-export-components": [
+                "error",
+                {
+                    allowExportNames: [
+                        "meta",
+                        "links",
+                        "headers",
+                        "loader",
+                        "action",
+                        "clientLoader",
+                        "clientAction",
+                        "middleware",
+                        "shouldRevalidate",
+                        "handle",
+                    ],
+                },
+            ],
+            "react/rules-of-hooks": "error",
+            "react/self-closing-comp": "error",
+
+            "typescript/consistent-type-imports": "error",
+            "typescript/no-empty-interface": "warn",
+            "typescript/no-explicit-any": "warn",
+            "typescript/no-inferrable-types": "error",
+            "typescript/no-non-null-assertion": "warn",
+            "typescript/prefer-as-const": "error",
+            "typescript/prefer-enum-initializers": "error",
+
+            "unicorn/no-lonely-if": "warn",
+            "unicorn/prefer-at": "warn",
+            "unicorn/prefer-string-slice": "warn",
+            "unicorn/prefer-string-trim-start-end": "error",
+        },
+        settings: {
+            "jsx-a11y": {
+                components: {
+                    Link: "a",
+                    NavLink: "a",
+                },
+                polymorphicPropName: "as",
+            },
+            react: {
+                formComponents: ["Form"],
+                linkComponents: [
+                    "DirectoryLink",
+                    { attribute: "to", name: "Link" },
+                    { attribute: "to", name: "NavLink" },
+                ],
+            },
+            vitest: {
+                typecheck: true,
+            },
+        },
+    },
+    plugins: [
+        tailwindcss(),
+        reactRouter(),
+        reactCompiler(),
+        !IS_TEST &&
+            cloudflare({
+                configPath: "./wrangler.jsonc",
+                viteEnvironment: {
+                    name: "ssr",
+                },
+            }),
+        devtoolsJson(),
+    ],
+    resolve: {
+        tsconfigPaths: true,
+    },
+    run: {
+        tasks: {
+            "typegen:react-router": {
+                command: "react-router typegen",
+            },
+            typecheck: {
+                command: "tsgo --noEmit",
+                dependsOn: ["typegen:react-router"],
+            },
+            deploy: {
+                command: "vp build && wrangler deploy",
+                cache: false,
+            },
+        },
+    },
+    staged: {
+        "*": "vp check --fix",
+    },
+    test: {
+        include: ["**/*.test.ts"],
+    },
+});
+",
+    {
+      "executable": false,
+    },
+  ],
+  "wrangler.jsonc": [
+    "{
+    "$schema": "node_modules/wrangler/config-schema.json",
+    "name": "test-repo",
+    "main": "./build/server/index.js",
+    "compatibility_date": "2025-04-01",
+    "compatibility_flags": ["nodejs_compat"],
+    "assets": {
+        "directory": "./build/client",
+        "binding": "ASSETS"
+    },
+    "observability": {
+        "enabled": true
+    }
+}
+",
+    {
+      "executable": false,
+    },
+  ],
+}
+`;
+
+exports[`template snapshots > SSR kind (with Convex) 1`] = `
 {
   ".env.local": [
     "CONVEX_DEPLOYMENT=# Set by \`npx convex dev\`

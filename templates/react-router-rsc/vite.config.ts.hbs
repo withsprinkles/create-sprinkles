@@ -1,12 +1,16 @@
 import { cloudflare } from "@cloudflare/vite-plugin";
+{{#if hasContentLayer}}
 import mdx from "@mdx-js/rollup";
+{{/if}}
 import { unstable_reactRouterRSC as reactRouter } from "@react-router/dev/vite";
 import tailwindcss from "@tailwindcss/vite";
 import rsc from "@vitejs/plugin-rsc";
 import devtoolsJson from "vite-plugin-devtools-json";
 import { defineConfig } from "vite-plus";
 
+{{#if hasContentLayer}}
 import { contentLayer } from "./content-layer/plugin.ts";
+{{/if}}
 import { reactCompiler } from "./react-compiler.plugin.ts";
 
 const IS_TEST = Boolean(process.env.VITEST);
@@ -216,8 +220,10 @@ export default defineConfig({
         },
     },
     plugins: [
+{{#if hasContentLayer}}
         contentLayer(),
         mdx(),
+{{/if}}
         reactRouter(),
         rsc(),
         reactCompiler(),

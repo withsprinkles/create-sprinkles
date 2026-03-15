@@ -1,3 +1,4 @@
+{{#if hasConvex}}
 import type { Route } from "./+types/home.ts";
 
 import { createPreloader } from "~/tanstack-query-integration/query-preloader.ts";
@@ -7,6 +8,7 @@ export const loader = createPreloader<Route.LoaderArgs, void>(async ({ preload }
     // await preload(yourQueryOptions);
 });
 
+{{/if}}
 export default function Home() {
     return (
         <main>

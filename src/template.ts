@@ -5,7 +5,6 @@ import { handlebars } from "bingo-handlebars";
 import path from "node:path";
 
 import type { TemplateContext } from "./context.ts";
-
 import { buildContext } from "./context.ts";
 import { mergeFiles } from "./merge.ts";
 import { options } from "./options.ts";
@@ -46,6 +45,18 @@ async function collectAddonLayers(context: TemplateContext): Promise<(CreatedDir
 
     if (context.isPackage && context.sea) {
         addons.push(await tryHandlebars("ts-package-sea", context));
+    }
+
+    if (context.hasConvex) {
+        addons.push(await tryHandlebars("react-router-convex", context));
+    }
+
+    if (context.isSSR && context.hasConvex) {
+        addons.push(await tryHandlebars("react-router-ssr-convex", context));
+    }
+
+    if (context.hasContentLayer) {
+        addons.push(await tryHandlebars("react-router-rsc-content-layer", context));
     }
 
     return addons;

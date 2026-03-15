@@ -11,7 +11,7 @@ import template from "../src/template.ts";
 // ── Snapshot tests for all 4 kinds ─────────────────────────────────────────
 
 describe("template snapshots", () => {
-    it("SPA kind", async () => {
+    it("SPA kind (no Convex)", async () => {
         const creation = await testTemplate(template, {
             options: {
                 kind: "react-router-spa",
@@ -23,7 +23,20 @@ describe("template snapshots", () => {
         expect(creation.files).toMatchSnapshot();
     });
 
-    it("SSR kind", async () => {
+    it("SPA kind (with Convex)", async () => {
+        const creation = await testTemplate(template, {
+            options: {
+                convex: true,
+                kind: "react-router-spa",
+                owner: "test-owner",
+                repository: "test-repo",
+            },
+        });
+
+        expect(creation.files).toMatchSnapshot();
+    });
+
+    it("SSR kind (no Convex)", async () => {
         const creation = await testTemplate(template, {
             options: {
                 kind: "react-router-ssr",
@@ -35,9 +48,35 @@ describe("template snapshots", () => {
         expect(creation.files).toMatchSnapshot();
     });
 
-    it("RSC kind", async () => {
+    it("SSR kind (with Convex)", async () => {
         const creation = await testTemplate(template, {
             options: {
+                convex: true,
+                kind: "react-router-ssr",
+                owner: "test-owner",
+                repository: "test-repo",
+            },
+        });
+
+        expect(creation.files).toMatchSnapshot();
+    });
+
+    it("RSC kind (no content-layer)", async () => {
+        const creation = await testTemplate(template, {
+            options: {
+                kind: "react-router-rsc",
+                owner: "test-owner",
+                repository: "test-repo",
+            },
+        });
+
+        expect(creation.files).toMatchSnapshot();
+    });
+
+    it("RSC kind (with content-layer)", async () => {
+        const creation = await testTemplate(template, {
+            options: {
+                contentLayer: true,
                 kind: "react-router-rsc",
                 owner: "test-owner",
                 repository: "test-repo",
@@ -166,6 +205,8 @@ describe("options", () => {
     it("exports all expected option keys", () => {
         expect(Object.keys(options).sort()).toEqual([
             "cli",
+            "contentLayer",
+            "convex",
             "generator",
             "kind",
             "owner",
@@ -178,9 +219,11 @@ describe("options", () => {
 // ── Context builder ─────────────────────────────────────────────────────────
 
 describe("buildContext", () => {
-    it("SPA: isReactRouter, hasConvex, isSPA", () => {
+    it("SPA with Convex: isReactRouter, hasConvex, isSPA", () => {
         const ctx = buildContext({
             cli: false,
+            contentLayer: false,
+            convex: true,
             generator: false,
             kind: "react-router-spa",
             owner: "o",
@@ -194,11 +237,30 @@ describe("buildContext", () => {
         expect(ctx.isPackage).toBe(false);
         expect(ctx.isReactRouter).toBe(true);
         expect(ctx.hasConvex).toBe(true);
+        expect(ctx.hasContentLayer).toBe(false);
     });
 
-    it("SSR: isReactRouter, hasConvex, isSSR", () => {
+    it("SPA without Convex: no hasConvex", () => {
         const ctx = buildContext({
             cli: false,
+            contentLayer: false,
+            convex: false,
+            generator: false,
+            kind: "react-router-spa",
+            owner: "o",
+            repository: "r",
+            sea: false,
+        });
+
+        expect(ctx.isSPA).toBe(true);
+        expect(ctx.hasConvex).toBe(false);
+    });
+
+    it("SSR with Convex: isReactRouter, hasConvex, isSSR", () => {
+        const ctx = buildContext({
+            cli: false,
+            contentLayer: false,
+            convex: true,
             generator: false,
             kind: "react-router-ssr",
             owner: "o",
@@ -211,9 +273,11 @@ describe("buildContext", () => {
         expect(ctx.hasConvex).toBe(true);
     });
 
-    it("RSC: isReactRouter, no Convex, isRSC", () => {
+    it("RSC with content-layer: hasContentLayer", () => {
         const ctx = buildContext({
             cli: false,
+            contentLayer: true,
+            convex: false,
             generator: false,
             kind: "react-router-rsc",
             owner: "o",
@@ -224,11 +288,30 @@ describe("buildContext", () => {
         expect(ctx.isRSC).toBe(true);
         expect(ctx.isReactRouter).toBe(true);
         expect(ctx.hasConvex).toBe(false);
+        expect(ctx.hasContentLayer).toBe(true);
+    });
+
+    it("RSC without content-layer: no hasContentLayer", () => {
+        const ctx = buildContext({
+            cli: false,
+            contentLayer: false,
+            convex: false,
+            generator: false,
+            kind: "react-router-rsc",
+            owner: "o",
+            repository: "r",
+            sea: false,
+        });
+
+        expect(ctx.isRSC).toBe(true);
+        expect(ctx.hasContentLayer).toBe(false);
     });
 
     it("ts-package: isPackage, not isReactRouter, no Convex", () => {
         const ctx = buildContext({
             cli: true,
+            contentLayer: false,
+            convex: false,
             generator: false,
             kind: "ts-package",
             owner: "o",
@@ -239,16 +322,79 @@ describe("buildContext", () => {
         expect(ctx.isPackage).toBe(true);
         expect(ctx.isReactRouter).toBe(false);
         expect(ctx.hasConvex).toBe(false);
+        expect(ctx.hasContentLayer).toBe(false);
         expect(ctx.cli).toBe(true);
+    });
+
+    it("Convex ignored for non-SPA/SSR kinds", () => {
+        const ctx = buildContext({
+            cli: false,
+            contentLayer: false,
+            convex: true,
+            generator: false,
+            kind: "react-router-rsc",
+            owner: "o",
+            repository: "r",
+            sea: false,
+        });
+
+        expect(ctx.hasConvex).toBe(false);
+    });
+
+    it("contentLayer ignored for non-RSC kinds", () => {
+        const ctx = buildContext({
+            cli: false,
+            contentLayer: true,
+            convex: false,
+            generator: false,
+            kind: "react-router-spa",
+            owner: "o",
+            repository: "r",
+            sea: false,
+        });
+
+        expect(ctx.hasContentLayer).toBe(false);
     });
 });
 
 // ── Scripts ─────────────────────────────────────────────────────────────────
 
 describe("buildScripts", () => {
-    it("SPA: includes install, check, convex, git init", () => {
+    it("all templates get vite-plus in deps", () => {
+        for (const kind of [
+            "react-router-spa",
+            "react-router-ssr",
+            "react-router-rsc",
+            "ts-package",
+        ] as const) {
+            const ctx = buildContext({
+                cli: false,
+                contentLayer: false,
+                convex: false,
+                generator: false,
+                kind,
+                owner: "o",
+                repository: "r",
+                sea: false,
+            });
+            const scripts = buildScripts(ctx);
+
+            expect(scripts).toContainEqual(
+                expect.objectContaining({
+                    commands: expect.arrayContaining([
+                        "vp add -D vite-plus @types/node @typescript/native-preview",
+                    ]),
+                    phase: 0,
+                }),
+            );
+        }
+    });
+
+    it("SPA with Convex: includes vpx convex dev", () => {
         const ctx = buildContext({
             cli: false,
+            contentLayer: false,
+            convex: true,
             generator: false,
             kind: "react-router-spa",
             owner: "o",
@@ -257,22 +403,36 @@ describe("buildScripts", () => {
         });
         const scripts = buildScripts(ctx);
 
-        expect(scripts).toContainEqual({ commands: ["vp install"], phase: 0 });
-        expect(scripts).toContainEqual({ commands: ["vp check --fix"], phase: 1, silent: true });
         expect(scripts).toContainEqual({
-            commands: ["vp dlx convex dev --once"],
+            commands: ["vpx convex dev --once"],
             phase: 2,
             silent: true,
         });
-        expect(scripts).toContainEqual({
-            commands: ["git init", "git add -A", 'git commit -m "Initial commit"'],
-            phase: 3,
-        });
     });
 
-    it("RSC: includes wrangler types, no convex", () => {
+    it("SPA without Convex: no convex script", () => {
         const ctx = buildContext({
             cli: false,
+            contentLayer: false,
+            convex: false,
+            generator: false,
+            kind: "react-router-spa",
+            owner: "o",
+            repository: "r",
+            sea: false,
+        });
+        const scripts = buildScripts(ctx);
+
+        expect(scripts).not.toContainEqual(
+            expect.objectContaining({ commands: ["vpx convex dev --once"] }),
+        );
+    });
+
+    it("RSC: uses vp run typegen:cloudflare instead of vpx", () => {
+        const ctx = buildContext({
+            cli: false,
+            contentLayer: false,
+            convex: false,
             generator: false,
             kind: "react-router-rsc",
             owner: "o",
@@ -282,20 +442,19 @@ describe("buildScripts", () => {
         const scripts = buildScripts(ctx);
 
         expect(scripts).toContainEqual({
-            commands: ["vp dlx wrangler types"],
+            commands: ["vp run typegen:cloudflare"],
             phase: 2,
             silent: true,
         });
-        expect(scripts).not.toContainEqual(
-            expect.objectContaining({ commands: ["vp dlx convex dev --once"] }),
-        );
     });
 
-    it("ts-package: deps, install, check, git init", () => {
+    it("RSC with content-layer: includes content-layer deps", () => {
         const ctx = buildContext({
             cli: false,
+            contentLayer: true,
+            convex: false,
             generator: false,
-            kind: "ts-package",
+            kind: "react-router-rsc",
             owner: "o",
             repository: "r",
             sea: false,
@@ -304,19 +463,48 @@ describe("buildScripts", () => {
 
         expect(scripts).toContainEqual(
             expect.objectContaining({
-                commands: expect.arrayContaining(["vp add -D vite-plus @types/node"]),
+                commands: expect.arrayContaining([
+                    "vp add @std/jsonc @std/yaml gray-matter github-slugger",
+                ]),
                 phase: 0,
             }),
         );
+    });
+
+    it("RSC without content-layer: no content-layer deps", () => {
+        const ctx = buildContext({
+            cli: false,
+            contentLayer: false,
+            convex: false,
+            generator: false,
+            kind: "react-router-rsc",
+            owner: "o",
+            repository: "r",
+            sea: false,
+        });
+        const scripts = buildScripts(ctx);
+
+        const depScript = scripts.find(
+            script =>
+                script.phase === 0 &&
+                Array.isArray(script.commands) &&
+                script.commands.length > 1,
+        );
+        const allCommands = depScript?.commands.join(" ") ?? "";
+
+        expect(allCommands).not.toContain("gray-matter");
+        expect(allCommands).not.toContain("@mdx-js/rollup");
     });
 });
 
 // ── Suggestions ─────────────────────────────────────────────────────────────
 
 describe("buildSuggestions", () => {
-    it("SPA: Convex dashboard + vp dev", () => {
+    it("SPA with Convex: Convex dashboard + vp dev", () => {
         const ctx = buildContext({
             cli: false,
+            contentLayer: false,
+            convex: true,
             generator: false,
             kind: "react-router-spa",
             owner: "o",
@@ -330,9 +518,11 @@ describe("buildSuggestions", () => {
         expect(suggestions).toContain("Start the dev server: vp dev");
     });
 
-    it("RSC: wrangler login + vp dev", () => {
+    it("RSC: vpx wrangler login + vp dev", () => {
         const ctx = buildContext({
             cli: false,
+            contentLayer: false,
+            convex: false,
             generator: false,
             kind: "react-router-rsc",
             owner: "o",
@@ -342,13 +532,15 @@ describe("buildSuggestions", () => {
 
         const suggestions = buildSuggestions(ctx);
 
-        expect(suggestions).toContain("Log in to Cloudflare: vp dlx wrangler login");
+        expect(suggestions).toContain("Log in to Cloudflare: vpx wrangler login");
         expect(suggestions).toContain("Start the dev server: vp dev");
     });
 
     it("ts-package: vp run dev", () => {
         const ctx = buildContext({
             cli: false,
+            contentLayer: false,
+            convex: false,
             generator: false,
             kind: "ts-package",
             owner: "o",

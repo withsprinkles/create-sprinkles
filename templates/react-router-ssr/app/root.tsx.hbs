@@ -1,7 +1,11 @@
+{{#if hasConvex}}
 import { useState, type PropsWithChildren } from "react";
 import { ConvexQueryClient } from "@convex-dev/react-query";
 import { HydrationBoundary, QueryClientProvider } from "@tanstack/react-query";
 import { ConvexProvider, ConvexReactClient } from "convex/react";
+{{else}}
+import type { PropsWithChildren } from "react";
+{{/if}}
 import {
     isRouteErrorResponse,
     Outlet,
@@ -9,6 +13,7 @@ import {
     ScrollRestoration,
 } from "react-router";
 
+{{#if hasConvex}}
 import { useDehydratedState } from "./tanstack-query-integration/query-preloader.ts";
 import { setQueryClient } from "~/tanstack-query-integration/middleware.ts";
 import { createQueryClient } from "~/lib/client.ts";
@@ -29,6 +34,7 @@ function createConvexQueryClient() {
 
 export const middleware = [setQueryClient(() => createConvexQueryClient())];
 
+{{/if}}
 export function Layout({ children }: PropsWithChildren) {
     return (
         <html lang="en">
@@ -51,6 +57,7 @@ export function Layout({ children }: PropsWithChildren) {
 }
 
 export default function App() {
+{{#if hasConvex}}
     const [queryClient] = useState(() => createConvexQueryClient());
     const state = useDehydratedState();
 
@@ -63,9 +70,12 @@ export default function App() {
             </QueryClientProvider>
         </ConvexProvider>
     );
+{{else}}
+    return <Outlet />;
+{{/if}}
 }
 
-export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
+export function ErrorBoundary({ error }: {{#if hasConvex}}Route.ErrorBoundaryProps{{else}}{ error: unknown }{{/if}}) {
     let message = "Oops!";
     let details = "An unexpected error occurred.";
     let stack: string | undefined;

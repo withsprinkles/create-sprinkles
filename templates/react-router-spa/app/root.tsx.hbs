@@ -1,10 +1,13 @@
 import type { PropsWithChildren } from "react";
 
+{{#if hasConvex}}
 import { ConvexQueryClient } from "@convex-dev/react-query";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ConvexProvider, ConvexReactClient } from "convex/react";
+{{/if}}
 import { Outlet, Scripts } from "react-router";
 
+{{#if hasConvex}}
 const convex = new ConvexReactClient(import.meta.env.VITE_CONVEX_URL);
 const convexQueryClient = new ConvexQueryClient(convex);
 
@@ -20,6 +23,7 @@ export const queryClient = new QueryClient({
 
 convexQueryClient.connect(queryClient);
 
+{{/if}}
 export function Layout({ children }: PropsWithChildren) {
     return (
         <html lang="en">
@@ -43,10 +47,14 @@ export function HydrateFallback() {
 
 export default function App() {
     return (
+{{#if hasConvex}}
         <ConvexProvider client={convex}>
             <QueryClientProvider client={queryClient}>
                 <Outlet />
             </QueryClientProvider>
         </ConvexProvider>
+{{else}}
+        <Outlet />
+{{/if}}
     );
 }

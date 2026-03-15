@@ -6,6 +6,14 @@ const kind = z
 
 const options = {
     cli: z.boolean().default(false).describe("Include CLI scaffold (ts-package only)"),
+    contentLayer: z
+        .boolean()
+        .default(false)
+        .describe("Include content-layer plugin (react-router-rsc only)"),
+    convex: z
+        .boolean()
+        .default(false)
+        .describe("Include Convex backend (react-router-spa and react-router-ssr only)"),
     generator: z
         .boolean()
         .default(false)

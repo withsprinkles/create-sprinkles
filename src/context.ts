@@ -11,16 +11,22 @@ export interface TemplateContext extends Options {
     isPackage: boolean;
     isReactRouter: boolean;
     hasConvex: boolean;
+    hasContentLayer: boolean;
 }
 
 export function buildContext(opts: Options): TemplateContext {
+    const isSPA = opts.kind === "react-router-spa";
+    const isSSR = opts.kind === "react-router-ssr";
+    const isRSC = opts.kind === "react-router-rsc";
+
     return {
         ...opts,
-        hasConvex: opts.kind === "react-router-spa" || opts.kind === "react-router-ssr",
+        hasContentLayer: isRSC && opts.contentLayer,
+        hasConvex: (isSPA || isSSR) && opts.convex,
         isPackage: opts.kind === "ts-package",
-        isRSC: opts.kind === "react-router-rsc",
+        isRSC,
         isReactRouter: opts.kind !== "ts-package",
-        isSPA: opts.kind === "react-router-spa",
-        isSSR: opts.kind === "react-router-ssr",
+        isSPA,
+        isSSR,
     };
 }
