@@ -61,22 +61,25 @@ export function buildScripts(context: TemplateContext): CreatedScript[] {
     const phase0Commands = [...buildDependencyCommands(context), "vp install"];
     scripts.push({ commands: phase0Commands, phase: 0 });
 
-    // Phase 1: Format and lint fix
-    scripts.push({ commands: ["vp check --fix"], phase: 1 });
-
-    // Phase 2: Kind-specific setup
-    if (context.hasConvex) {
-        scripts.push({ commands: ["vpx convex dev --once"], phase: 2, silent: true });
-    }
-
+    // Phase 1: Generate Cloudflare types that vp check needs
     if (context.isRSC) {
-        scripts.push({ commands: ["vp run typegen:cloudflare"], phase: 2, silent: true });
+        scripts.push({ commands: ["vpx wrangler types -c wrangler.rsc.jsonc"], phase: 1 });
+    } else if (context.isSSR) {
+        scripts.push({ commands: ["vpx wrangler types"], phase: 1 });
     }
 
-    // Phase 3: Symlinks and git init
+    // Phase 2: Format and lint fix
+    scripts.push({ commands: ["vp check --fix"], phase: 2 });
+
+    // Phase 3: Kind-specific setup
+    if (context.hasConvex) {
+        scripts.push({ commands: ["vpx convex dev --once"], phase: 3, silent: true });
+    }
+
+    // Phase 4: Symlinks and git init
     scripts.push({
         commands: ["ln -sf AGENTS.md CLAUDE.md", "git init", "git add -A", "git commit -m initial"],
-        phase: 3,
+        phase: 4,
     });
 
     return scripts;

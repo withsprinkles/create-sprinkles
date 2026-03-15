@@ -405,7 +405,7 @@ describe("buildScripts", () => {
 
         expect(scripts).toContainEqual({
             commands: ["vpx convex dev --once"],
-            phase: 2,
+            phase: 3,
             silent: true,
         });
     });
@@ -428,7 +428,7 @@ describe("buildScripts", () => {
         );
     });
 
-    it("RSC: uses vp run typegen:cloudflare instead of vpx", () => {
+    it("RSC: runs wrangler typegen before check", () => {
         const ctx = buildContext({
             cli: false,
             contentLayer: false,
@@ -442,9 +442,8 @@ describe("buildScripts", () => {
         const scripts = buildScripts(ctx);
 
         expect(scripts).toContainEqual({
-            commands: ["vp run typegen:cloudflare"],
-            phase: 2,
-            silent: true,
+            commands: ["vpx wrangler types -c wrangler.rsc.jsonc"],
+            phase: 1,
         });
     });
 
