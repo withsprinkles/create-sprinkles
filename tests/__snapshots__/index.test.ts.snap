@@ -22,6 +22,13 @@ exports[`template snapshots > RSC kind 1`] = `
       "executable": false,
     },
   ],
+  ".node-version": [
+    "24
+",
+    {
+      "executable": false,
+    },
+  ],
   "README.md": [
     "# test-repo
 
@@ -1475,35 +1482,15 @@ import mdx from "@mdx-js/rollup";
 import { unstable_reactRouterRSC as reactRouter } from "@react-router/dev/vite";
 import tailwindcss from "@tailwindcss/vite";
 import rsc from "@vitejs/plugin-rsc";
+import devtoolsJson from "vite-plugin-devtools-json";
 import { defineConfig } from "vite-plus";
+
 import { contentLayer } from "./content-layer/plugin.ts";
 import { reactCompiler } from "./react-compiler.plugin.ts";
 
-let IS_TEST = !!process.env.VITEST;
+const IS_TEST = Boolean(process.env.VITEST);
 
 export default defineConfig({
-    plugins: [
-        contentLayer(),
-        mdx(),
-        reactRouter(),
-        rsc(),
-        reactCompiler(),
-        !IS_TEST &&
-            cloudflare({
-                viteEnvironment: { name: "ssr" },
-                configPath: "./wrangler.ssr.jsonc",
-                auxiliaryWorkers: [
-                    {
-                        configPath: "./wrangler.rsc.jsonc",
-                        viteEnvironment: { name: "rsc" },
-                    },
-                ],
-            }),
-        tailwindcss(),
-    ],
-    resolve: {
-        tsconfigPaths: true,
-    },
     css: {
         transformer: "lightningcss",
     },
@@ -1517,11 +1504,6 @@ export default defineConfig({
                 ],
             },
         },
-        ssr: {
-            optimizeDeps: {
-                exclude: ["react-router"],
-            },
-        },
         rsc: {
             optimizeDeps: {
                 exclude: ["react-router"],
@@ -1530,24 +1512,235 @@ export default defineConfig({
                 conditions: ["react-server"],
             },
         },
+        ssr: {
+            optimizeDeps: {
+                exclude: ["react-router"],
+            },
+        },
+    },
+    fmt: {
+        arrowParens: "avoid",
+        overrides: [
+            {
+                files: ["**/*.jsonc"],
+                options: {
+                    trailingComma: "none",
+                },
+            },
+            {
+                files: ["**/.vscode/**"],
+                options: {
+                    trailingComma: "all",
+                },
+            },
+        ],
+        sortImports: {
+            groups: [
+                "type-import",
+                ["value-builtin", "value-external"],
+                "type-internal",
+                "value-internal",
+                ["type-parent", "type-sibling", "type-index"],
+                ["value-parent", "value-sibling", "value-index"],
+                "unknown",
+            ],
+            partitionByComment: true,
+        },
+        sortTailwindcss: {
+            functions: ["cx", "cva"],
+            stylesheet: "./app/styles/tailwind.css",
+        },
+        tabWidth: 4,
+    },
+    lint: {
+        categories: {
+            correctness: "error",
+            nursery: "warn",
+            pedantic: "warn",
+            perf: "error",
+            restriction: "error",
+            style: "warn",
+            suspicious: "error",
+        },
+        env: {
+            browser: true,
+            node: true,
+        },
+        ignorePatterns: ["**/worker-configuration.d.ts"],
+        jsPlugins: [
+            "eslint-plugin-perfectionist",
+            { name: "react-compiler", specifier: "eslint-plugin-react-hooks" },
+        ],
+        options: {
+            typeAware: true,
+            typeCheck: true,
+        },
+        plugins: ["react", "jsx-a11y", "jsdoc", "import", "node", "promise", "vitest"],
+        rules: {
+            "eslint/default-param-last": "error",
+            "eslint/no-cond-assign": "off",
+            "eslint/no-dupe-else-if": "error",
+            "eslint/no-else-return": "error",
+            "eslint/no-empty-pattern": "warn",
+            "eslint/no-irregular-whitespace": "error",
+            "eslint/no-lonely-if": "warn",
+            "eslint/no-param-reassign": "error",
+            "eslint/no-template-curly-in-string": "warn",
+            "eslint/no-unused-expressions": "error",
+            "eslint/no-useless-escape": "warn",
+            "eslint/sort-imports": "off",
+
+            "import/extensions": [
+                "error",
+                "ignorePackages",
+                {
+                    cjs: "always",
+                    cts: "always",
+                    js: "always",
+                    jsx: "always",
+                    mjs: "always",
+                    mts: "always",
+                    ts: "always",
+                    tsx: "always",
+                },
+            ],
+            "import/no-commonjs": "warn",
+            "import/no-default-export": "off",
+            "import/no-named-export": "off",
+            "import/no-relative-parent-imports": "off",
+            "import/prefer-default-export": "off",
+
+            "jsx-a11y/no-autofocus": "off",
+
+            "node/no-process-env": "off",
+
+            "perfectionist/sort-jsx-props": "warn",
+            "react-compiler/component-hook-factories": "error",
+            "react-compiler/error-boundaries": "error",
+            "react-compiler/globals": "error",
+            "react-compiler/immutability": "error",
+            "react-compiler/incompatible-library": "error",
+            "react-compiler/preserve-manual-memoization": "error",
+            "react-compiler/purity": "error",
+            "react-compiler/refs": "error",
+            "react-compiler/set-state-in-effect": "error",
+            "react-compiler/set-state-in-render": "error",
+            "react-compiler/static-components": "error",
+            "react-compiler/unsupported-syntax": "error",
+            "react-compiler/use-memo": "error",
+            "react/exhaustive-deps": "warn",
+            "react/jsx-boolean-value": "warn",
+            "react/jsx-fragments": "warn",
+            "react/jsx-key": "error",
+            "react/jsx-no-constructed-context-values": "error",
+            "react/jsx-no-duplicate-props": "error",
+            "react/jsx-no-script-url": "error",
+            "react/jsx-no-target-blank": "warn",
+            "react/jsx-no-useless-fragment": "warn",
+            "react/jsx-pascal-case": "error",
+            "react/jsx-props-no-spread-multi": "error",
+            "react/no-array-index-key": "off",
+            "react/only-export-components": [
+                "error",
+                {
+                    allowExportNames: [
+                        "meta",
+                        "links",
+                        "headers",
+                        "loader",
+                        "action",
+                        "clientLoader",
+                        "clientAction",
+                        "middleware",
+                        "shouldRevalidate",
+                        "handle",
+                    ],
+                },
+            ],
+            "react/rules-of-hooks": "error",
+            "react/self-closing-comp": "error",
+
+            "typescript/consistent-type-imports": "error",
+            "typescript/no-empty-interface": "warn",
+            "typescript/no-explicit-any": "warn",
+            "typescript/no-inferrable-types": "error",
+            "typescript/no-non-null-assertion": "warn",
+            "typescript/prefer-as-const": "error",
+            "typescript/prefer-enum-initializers": "error",
+
+            "unicorn/no-lonely-if": "warn",
+            "unicorn/prefer-at": "warn",
+            "unicorn/prefer-string-slice": "warn",
+            "unicorn/prefer-string-trim-start-end": "error",
+        },
+        settings: {
+            "jsx-a11y": {
+                components: {
+                    Link: "a",
+                    NavLink: "a",
+                },
+                polymorphicPropName: "as",
+            },
+            react: {
+                formComponents: ["Form"],
+                linkComponents: [
+                    "DirectoryLink",
+                    { attribute: "to", name: "Link" },
+                    { attribute: "to", name: "NavLink" },
+                ],
+            },
+            vitest: {
+                typecheck: true,
+            },
+        },
+    },
+    plugins: [
+        contentLayer(),
+        mdx(),
+        reactRouter(),
+        rsc(),
+        reactCompiler(),
+        !IS_TEST &&
+            cloudflare({
+                auxiliaryWorkers: [
+                    {
+                        configPath: "./wrangler.rsc.jsonc",
+                        viteEnvironment: {
+                            name: "rsc",
+                        },
+                    },
+                ],
+                configPath: "./wrangler.ssr.jsonc",
+                viteEnvironment: {
+                    name: "ssr",
+                },
+            }),
+        tailwindcss(),
+        devtoolsJson(),
+    ],
+    resolve: {
+        tsconfigPaths: true,
     },
     run: {
         tasks: {
-            "typegen:react-router": {
-                command: "react-router typegen",
-            },
-            "typegen:cloudflare": {
-                command: "wrangler types -c wrangler.rsc.jsonc",
+            deploy: {
+                cache: false,
+                command: "vp build && wrangler deploy",
             },
             typecheck: {
                 command: "tsgo --noEmit",
                 dependsOn: ["typegen:react-router", "typegen:cloudflare"],
             },
-            deploy: {
-                command: "vp build && wrangler deploy",
-                cache: false,
+            "typegen:cloudflare": {
+                command: "wrangler types -c wrangler.rsc.jsonc",
+            },
+            "typegen:react-router": {
+                command: "react-router typegen",
             },
         },
+    },
+    staged: {
+        "*": "vp check --fix",
     },
     test: {
         include: ["**/*.test.ts"],
@@ -1730,6 +1923,13 @@ VITE_CONVEX_URL=# Set by \`npx convex dev\`
 # React Router
 /.react-router/
 /build/
+",
+    {
+      "executable": false,
+    },
+  ],
+  ".node-version": [
+    "24
 ",
     {
       "executable": false,
@@ -1939,14 +2139,223 @@ export default {
     },
   ],
   "vite.config.ts": [
-    "import { defineConfig } from "vite-plus";
-import tailwindcss from "@tailwindcss/vite";
+    "import { cloudflare } from "@cloudflare/vite-plugin";
 import { reactRouter } from "@react-router/dev/vite";
+import tailwindcss from "@tailwindcss/vite";
+import devtoolsJson from "vite-plugin-devtools-json";
+import { defineConfig } from "vite-plus";
 
 import { reactCompiler } from "./react-compiler.plugin.ts";
 
+const IS_TEST = Boolean(process.env.VITEST);
+
 export default defineConfig({
-    plugins: [tailwindcss(), reactRouter(), reactCompiler()],
+    fmt: {
+        arrowParens: "avoid",
+        overrides: [
+            {
+                files: ["**/*.jsonc"],
+                options: {
+                    trailingComma: "none",
+                },
+            },
+            {
+                files: ["**/.vscode/**"],
+                options: {
+                    trailingComma: "all",
+                },
+            },
+        ],
+        sortImports: {
+            groups: [
+                "type-import",
+                ["value-builtin", "value-external"],
+                "type-internal",
+                "value-internal",
+                ["type-parent", "type-sibling", "type-index"],
+                ["value-parent", "value-sibling", "value-index"],
+                "unknown",
+            ],
+            partitionByComment: true,
+        },
+        sortTailwindcss: {
+            functions: ["cx", "cva"],
+            stylesheet: "./app/styles/tailwind.css",
+        },
+        tabWidth: 4,
+    },
+    lint: {
+        categories: {
+            correctness: "error",
+            nursery: "warn",
+            pedantic: "warn",
+            perf: "error",
+            restriction: "error",
+            style: "warn",
+            suspicious: "error",
+        },
+        env: {
+            browser: true,
+            node: true,
+        },
+        jsPlugins: [
+            "eslint-plugin-perfectionist",
+            { name: "react-compiler", specifier: "eslint-plugin-react-hooks" },
+        ],
+        options: {
+            typeAware: true,
+            typeCheck: true,
+        },
+        plugins: ["react", "jsx-a11y", "jsdoc", "import", "node", "promise", "vitest"],
+        rules: {
+            "eslint/default-param-last": "error",
+            "eslint/no-cond-assign": "off",
+            "eslint/no-dupe-else-if": "error",
+            "eslint/no-else-return": "error",
+            "eslint/no-empty-pattern": "warn",
+            "eslint/no-irregular-whitespace": "error",
+            "eslint/no-lonely-if": "warn",
+            "eslint/no-param-reassign": "error",
+            "eslint/no-template-curly-in-string": "warn",
+            "eslint/no-unused-expressions": "error",
+            "eslint/no-useless-escape": "warn",
+            "eslint/sort-imports": "off",
+
+            "import/extensions": [
+                "error",
+                "ignorePackages",
+                {
+                    cjs: "always",
+                    cts: "always",
+                    js: "always",
+                    jsx: "always",
+                    mjs: "always",
+                    mts: "always",
+                    ts: "always",
+                    tsx: "always",
+                },
+            ],
+            "import/no-commonjs": "warn",
+            "import/no-default-export": "off",
+            "import/no-named-export": "off",
+            "import/no-relative-parent-imports": "off",
+            "import/prefer-default-export": "off",
+
+            "jsx-a11y/no-autofocus": "off",
+
+            "node/no-process-env": "off",
+
+            "perfectionist/sort-jsx-props": "warn",
+            "react-compiler/component-hook-factories": "error",
+            "react-compiler/error-boundaries": "error",
+            "react-compiler/globals": "error",
+            "react-compiler/immutability": "error",
+            "react-compiler/incompatible-library": "error",
+            "react-compiler/preserve-manual-memoization": "error",
+            "react-compiler/purity": "error",
+            "react-compiler/refs": "error",
+            "react-compiler/set-state-in-effect": "error",
+            "react-compiler/set-state-in-render": "error",
+            "react-compiler/static-components": "error",
+            "react-compiler/unsupported-syntax": "error",
+            "react-compiler/use-memo": "error",
+            "react/exhaustive-deps": "warn",
+            "react/jsx-boolean-value": "warn",
+            "react/jsx-fragments": "warn",
+            "react/jsx-key": "error",
+            "react/jsx-no-constructed-context-values": "error",
+            "react/jsx-no-duplicate-props": "error",
+            "react/jsx-no-script-url": "error",
+            "react/jsx-no-target-blank": "warn",
+            "react/jsx-no-useless-fragment": "warn",
+            "react/jsx-pascal-case": "error",
+            "react/jsx-props-no-spread-multi": "error",
+            "react/no-array-index-key": "off",
+            "react/only-export-components": [
+                "error",
+                {
+                    allowExportNames: [
+                        "meta",
+                        "links",
+                        "headers",
+                        "loader",
+                        "action",
+                        "clientLoader",
+                        "clientAction",
+                        "middleware",
+                        "shouldRevalidate",
+                        "handle",
+                    ],
+                },
+            ],
+            "react/rules-of-hooks": "error",
+            "react/self-closing-comp": "error",
+
+            "typescript/consistent-type-imports": "error",
+            "typescript/no-empty-interface": "warn",
+            "typescript/no-explicit-any": "warn",
+            "typescript/no-inferrable-types": "error",
+            "typescript/no-non-null-assertion": "warn",
+            "typescript/prefer-as-const": "error",
+            "typescript/prefer-enum-initializers": "error",
+
+            "unicorn/no-lonely-if": "warn",
+            "unicorn/prefer-at": "warn",
+            "unicorn/prefer-string-slice": "warn",
+            "unicorn/prefer-string-trim-start-end": "error",
+        },
+        settings: {
+            "jsx-a11y": {
+                components: {
+                    Link: "a",
+                    NavLink: "a",
+                },
+                polymorphicPropName: "as",
+            },
+            react: {
+                formComponents: ["Form"],
+                linkComponents: [
+                    "DirectoryLink",
+                    { attribute: "to", name: "Link" },
+                    { attribute: "to", name: "NavLink" },
+                ],
+            },
+            vitest: {
+                typecheck: true,
+            },
+        },
+    },
+    plugins: [
+        tailwindcss(),
+        reactRouter(),
+        reactCompiler(),
+        !IS_TEST && cloudflare(),
+        devtoolsJson(),
+    ],
+    resolve: {
+        tsconfigPaths: true,
+    },
+    run: {
+        tasks: {
+            "typegen:react-router": {
+                command: "react-router typegen",
+            },
+            typecheck: {
+                command: "tsgo --noEmit",
+                dependsOn: ["typegen:react-router"],
+            },
+            deploy: {
+                command: "vp build && wrangler deploy",
+                cache: false,
+            },
+        },
+    },
+    staged: {
+        "*": "vp check --fix",
+    },
+    test: {
+        include: ["**/*.test.ts"],
+    },
 });
 ",
     {
@@ -1990,6 +2399,13 @@ VITE_CONVEX_URL=# Set by \`npx convex dev\`
 # React Router
 /.react-router/
 /build/
+",
+    {
+      "executable": false,
+    },
+  ],
+  ".node-version": [
+    "24
 ",
     {
       "executable": false,
@@ -2435,14 +2851,229 @@ export default {
     },
   ],
   "vite.config.ts": [
-    "import { defineConfig } from "vite-plus";
-import tailwindcss from "@tailwindcss/vite";
+    "import { cloudflare } from "@cloudflare/vite-plugin";
 import { reactRouter } from "@react-router/dev/vite";
+import tailwindcss from "@tailwindcss/vite";
+import devtoolsJson from "vite-plugin-devtools-json";
+import { defineConfig } from "vite-plus";
 
 import { reactCompiler } from "./react-compiler.plugin.ts";
 
+const IS_TEST = Boolean(process.env.VITEST);
+
 export default defineConfig({
-    plugins: [tailwindcss(), reactRouter(), reactCompiler()],
+    fmt: {
+        arrowParens: "avoid",
+        overrides: [
+            {
+                files: ["**/*.jsonc"],
+                options: {
+                    trailingComma: "none",
+                },
+            },
+            {
+                files: ["**/.vscode/**"],
+                options: {
+                    trailingComma: "all",
+                },
+            },
+        ],
+        sortImports: {
+            groups: [
+                "type-import",
+                ["value-builtin", "value-external"],
+                "type-internal",
+                "value-internal",
+                ["type-parent", "type-sibling", "type-index"],
+                ["value-parent", "value-sibling", "value-index"],
+                "unknown",
+            ],
+            partitionByComment: true,
+        },
+        sortTailwindcss: {
+            functions: ["cx", "cva"],
+            stylesheet: "./app/styles/tailwind.css",
+        },
+        tabWidth: 4,
+    },
+    lint: {
+        categories: {
+            correctness: "error",
+            nursery: "warn",
+            pedantic: "warn",
+            perf: "error",
+            restriction: "error",
+            style: "warn",
+            suspicious: "error",
+        },
+        env: {
+            browser: true,
+            node: true,
+        },
+        jsPlugins: [
+            "eslint-plugin-perfectionist",
+            { name: "react-compiler", specifier: "eslint-plugin-react-hooks" },
+        ],
+        options: {
+            typeAware: true,
+            typeCheck: true,
+        },
+        plugins: ["react", "jsx-a11y", "jsdoc", "import", "node", "promise", "vitest"],
+        rules: {
+            "eslint/default-param-last": "error",
+            "eslint/no-cond-assign": "off",
+            "eslint/no-dupe-else-if": "error",
+            "eslint/no-else-return": "error",
+            "eslint/no-empty-pattern": "warn",
+            "eslint/no-irregular-whitespace": "error",
+            "eslint/no-lonely-if": "warn",
+            "eslint/no-param-reassign": "error",
+            "eslint/no-template-curly-in-string": "warn",
+            "eslint/no-unused-expressions": "error",
+            "eslint/no-useless-escape": "warn",
+            "eslint/sort-imports": "off",
+
+            "import/extensions": [
+                "error",
+                "ignorePackages",
+                {
+                    cjs: "always",
+                    cts: "always",
+                    js: "always",
+                    jsx: "always",
+                    mjs: "always",
+                    mts: "always",
+                    ts: "always",
+                    tsx: "always",
+                },
+            ],
+            "import/no-commonjs": "warn",
+            "import/no-default-export": "off",
+            "import/no-named-export": "off",
+            "import/no-relative-parent-imports": "off",
+            "import/prefer-default-export": "off",
+
+            "jsx-a11y/no-autofocus": "off",
+
+            "node/no-process-env": "off",
+
+            "perfectionist/sort-jsx-props": "warn",
+            "react-compiler/component-hook-factories": "error",
+            "react-compiler/error-boundaries": "error",
+            "react-compiler/globals": "error",
+            "react-compiler/immutability": "error",
+            "react-compiler/incompatible-library": "error",
+            "react-compiler/preserve-manual-memoization": "error",
+            "react-compiler/purity": "error",
+            "react-compiler/refs": "error",
+            "react-compiler/set-state-in-effect": "error",
+            "react-compiler/set-state-in-render": "error",
+            "react-compiler/static-components": "error",
+            "react-compiler/unsupported-syntax": "error",
+            "react-compiler/use-memo": "error",
+            "react/exhaustive-deps": "warn",
+            "react/jsx-boolean-value": "warn",
+            "react/jsx-fragments": "warn",
+            "react/jsx-key": "error",
+            "react/jsx-no-constructed-context-values": "error",
+            "react/jsx-no-duplicate-props": "error",
+            "react/jsx-no-script-url": "error",
+            "react/jsx-no-target-blank": "warn",
+            "react/jsx-no-useless-fragment": "warn",
+            "react/jsx-pascal-case": "error",
+            "react/jsx-props-no-spread-multi": "error",
+            "react/no-array-index-key": "off",
+            "react/only-export-components": [
+                "error",
+                {
+                    allowExportNames: [
+                        "meta",
+                        "links",
+                        "headers",
+                        "loader",
+                        "action",
+                        "clientLoader",
+                        "clientAction",
+                        "middleware",
+                        "shouldRevalidate",
+                        "handle",
+                    ],
+                },
+            ],
+            "react/rules-of-hooks": "error",
+            "react/self-closing-comp": "error",
+
+            "typescript/consistent-type-imports": "error",
+            "typescript/no-empty-interface": "warn",
+            "typescript/no-explicit-any": "warn",
+            "typescript/no-inferrable-types": "error",
+            "typescript/no-non-null-assertion": "warn",
+            "typescript/prefer-as-const": "error",
+            "typescript/prefer-enum-initializers": "error",
+
+            "unicorn/no-lonely-if": "warn",
+            "unicorn/prefer-at": "warn",
+            "unicorn/prefer-string-slice": "warn",
+            "unicorn/prefer-string-trim-start-end": "error",
+        },
+        settings: {
+            "jsx-a11y": {
+                components: {
+                    Link: "a",
+                    NavLink: "a",
+                },
+                polymorphicPropName: "as",
+            },
+            react: {
+                formComponents: ["Form"],
+                linkComponents: [
+                    "DirectoryLink",
+                    { attribute: "to", name: "Link" },
+                    { attribute: "to", name: "NavLink" },
+                ],
+            },
+            vitest: {
+                typecheck: true,
+            },
+        },
+    },
+    plugins: [
+        tailwindcss(),
+        reactRouter(),
+        reactCompiler(),
+        !IS_TEST &&
+            cloudflare({
+                configPath: "./wrangler.jsonc",
+                viteEnvironment: {
+                    name: "ssr",
+                },
+            }),
+        devtoolsJson(),
+    ],
+    resolve: {
+        tsconfigPaths: true,
+    },
+    run: {
+        tasks: {
+            "typegen:react-router": {
+                command: "react-router typegen",
+            },
+            typecheck: {
+                command: "tsgo --noEmit",
+                dependsOn: ["typegen:react-router"],
+            },
+            deploy: {
+                command: "vp build && wrangler deploy",
+                cache: false,
+            },
+        },
+    },
+    staged: {
+        "*": "vp check --fix",
+    },
+    test: {
+        include: ["**/*.test.ts"],
+    },
 });
 ",
     {
@@ -2487,6 +3118,13 @@ exports[`template snapshots > ts-package base 1`] = `
       "executable": false,
     },
   ],
+  ".node-version": [
+    "24
+",
+    {
+      "executable": false,
+    },
+  ],
   "README.md": [
     "# test-repo
 
@@ -2583,6 +3221,108 @@ describe("greet", () => {
     "import { defineConfig } from "vite-plus";
 
 export default defineConfig({
+    fmt: {
+        arrowParens: "avoid",
+        overrides: [
+            {
+                files: ["**/*.jsonc"],
+                options: {
+                    trailingComma: "none",
+                },
+            },
+            {
+                files: ["**/.vscode/**"],
+                options: {
+                    trailingComma: "all",
+                },
+            },
+        ],
+        sortImports: {
+            groups: [
+                "type-import",
+                ["value-builtin", "value-external"],
+                "type-internal",
+                "value-internal",
+                ["type-parent", "type-sibling", "type-index"],
+                ["value-parent", "value-sibling", "value-index"],
+                "unknown",
+            ],
+            partitionByComment: true,
+        },
+        tabWidth: 4,
+    },
+    lint: {
+        categories: {
+            correctness: "error",
+            nursery: "warn",
+            pedantic: "warn",
+            perf: "error",
+            restriction: "error",
+            style: "warn",
+            suspicious: "error",
+        },
+        env: {
+            node: true,
+        },
+        options: {
+            typeAware: true,
+            typeCheck: true,
+        },
+        plugins: ["jsdoc", "import", "node", "promise", "vitest"],
+        rules: {
+            "eslint/default-param-last": "error",
+            "eslint/func-style": ["error", "declaration"],
+            "eslint/no-cond-assign": "off",
+            "eslint/no-dupe-else-if": "error",
+            "eslint/no-else-return": "error",
+            "eslint/no-empty-pattern": "warn",
+            "eslint/no-irregular-whitespace": "error",
+            "eslint/no-lonely-if": "warn",
+            "eslint/no-param-reassign": "error",
+            "eslint/no-template-curly-in-string": "warn",
+            "eslint/no-unused-expressions": "error",
+            "eslint/no-useless-escape": "warn",
+            "eslint/sort-imports": "off",
+
+            "import/extensions": [
+                "error",
+                "ignorePackages",
+                {
+                    cjs: "always",
+                    cts: "always",
+                    js: "always",
+                    jsx: "always",
+                    mjs: "always",
+                    mts: "always",
+                    ts: "always",
+                    tsx: "always",
+                },
+            ],
+            "import/no-commonjs": "warn",
+            "import/no-default-export": "off",
+            "import/no-named-export": "off",
+            "import/no-relative-parent-imports": "off",
+            "import/prefer-default-export": "off",
+
+            "typescript/consistent-type-imports": "error",
+            "typescript/no-empty-interface": "warn",
+            "typescript/no-explicit-any": "warn",
+            "typescript/no-inferrable-types": "error",
+            "typescript/no-non-null-assertion": "warn",
+            "typescript/prefer-as-const": "error",
+            "typescript/prefer-enum-initializers": "error",
+
+            "unicorn/no-lonely-if": "warn",
+            "unicorn/prefer-at": "warn",
+            "unicorn/prefer-string-slice": "warn",
+            "unicorn/prefer-string-trim-start-end": "error",
+        },
+        settings: {
+            vitest: {
+                typecheck: true,
+            },
+        },
+    },
     pack: {
         dts: {
             tsgo: true,
@@ -2591,13 +3331,16 @@ export default defineConfig({
     },
     run: {
         tasks: {
-            build: {
-                command: "vp pack",
-            },
-            dev: {
-                command: "vp pack --watch",
-            },
+            build: { command: "vp pack" },
+            dev: { command: "vp pack --watch" },
+            typecheck: { command: "tsgo --noEmit" },
         },
+    },
+    staged: {
+        "*": "vp check --fix",
+    },
+    test: {
+        exclude: [".claude/**", "node_modules/**"],
     },
 });
 ",
@@ -2623,6 +3366,13 @@ exports[`ts-package feature combinations > cli + generator + sea 1`] = `
       "executable": false,
     },
   ],
+  ".node-version": [
+    "24
+",
+    {
+      "executable": false,
+    },
+  ],
   "README.md": [
     "# test-repo
 
@@ -2821,6 +3571,108 @@ describe("greet", () => {
     "import { defineConfig } from "vite-plus";
 
 export default defineConfig({
+    fmt: {
+        arrowParens: "avoid",
+        overrides: [
+            {
+                files: ["**/*.jsonc"],
+                options: {
+                    trailingComma: "none",
+                },
+            },
+            {
+                files: ["**/.vscode/**"],
+                options: {
+                    trailingComma: "all",
+                },
+            },
+        ],
+        sortImports: {
+            groups: [
+                "type-import",
+                ["value-builtin", "value-external"],
+                "type-internal",
+                "value-internal",
+                ["type-parent", "type-sibling", "type-index"],
+                ["value-parent", "value-sibling", "value-index"],
+                "unknown",
+            ],
+            partitionByComment: true,
+        },
+        tabWidth: 4,
+    },
+    lint: {
+        categories: {
+            correctness: "error",
+            nursery: "warn",
+            pedantic: "warn",
+            perf: "error",
+            restriction: "error",
+            style: "warn",
+            suspicious: "error",
+        },
+        env: {
+            node: true,
+        },
+        options: {
+            typeAware: true,
+            typeCheck: true,
+        },
+        plugins: ["jsdoc", "import", "node", "promise", "vitest"],
+        rules: {
+            "eslint/default-param-last": "error",
+            "eslint/func-style": ["error", "declaration"],
+            "eslint/no-cond-assign": "off",
+            "eslint/no-dupe-else-if": "error",
+            "eslint/no-else-return": "error",
+            "eslint/no-empty-pattern": "warn",
+            "eslint/no-irregular-whitespace": "error",
+            "eslint/no-lonely-if": "warn",
+            "eslint/no-param-reassign": "error",
+            "eslint/no-template-curly-in-string": "warn",
+            "eslint/no-unused-expressions": "error",
+            "eslint/no-useless-escape": "warn",
+            "eslint/sort-imports": "off",
+
+            "import/extensions": [
+                "error",
+                "ignorePackages",
+                {
+                    cjs: "always",
+                    cts: "always",
+                    js: "always",
+                    jsx: "always",
+                    mjs: "always",
+                    mts: "always",
+                    ts: "always",
+                    tsx: "always",
+                },
+            ],
+            "import/no-commonjs": "warn",
+            "import/no-default-export": "off",
+            "import/no-named-export": "off",
+            "import/no-relative-parent-imports": "off",
+            "import/prefer-default-export": "off",
+
+            "typescript/consistent-type-imports": "error",
+            "typescript/no-empty-interface": "warn",
+            "typescript/no-explicit-any": "warn",
+            "typescript/no-inferrable-types": "error",
+            "typescript/no-non-null-assertion": "warn",
+            "typescript/prefer-as-const": "error",
+            "typescript/prefer-enum-initializers": "error",
+
+            "unicorn/no-lonely-if": "warn",
+            "unicorn/prefer-at": "warn",
+            "unicorn/prefer-string-slice": "warn",
+            "unicorn/prefer-string-trim-start-end": "error",
+        },
+        settings: {
+            vitest: {
+                typecheck: true,
+            },
+        },
+    },
     pack: {
         dts: {
             tsgo: true,
@@ -2829,13 +3681,16 @@ export default defineConfig({
     },
     run: {
         tasks: {
-            build: {
-                command: "vp pack",
-            },
-            dev: {
-                command: "vp pack --watch",
-            },
+            build: { command: "vp pack" },
+            dev: { command: "vp pack --watch" },
+            typecheck: { command: "tsgo --noEmit" },
         },
+    },
+    staged: {
+        "*": "vp check --fix",
+    },
+    test: {
+        exclude: [".claude/**", "node_modules/**"],
     },
 });
 ",
@@ -2861,6 +3716,13 @@ exports[`ts-package feature combinations > cli + generator 1`] = `
       "executable": false,
     },
   ],
+  ".node-version": [
+    "24
+",
+    {
+      "executable": false,
+    },
+  ],
   "README.md": [
     "# test-repo
 
@@ -3043,6 +3905,108 @@ describe("greet", () => {
     "import { defineConfig } from "vite-plus";
 
 export default defineConfig({
+    fmt: {
+        arrowParens: "avoid",
+        overrides: [
+            {
+                files: ["**/*.jsonc"],
+                options: {
+                    trailingComma: "none",
+                },
+            },
+            {
+                files: ["**/.vscode/**"],
+                options: {
+                    trailingComma: "all",
+                },
+            },
+        ],
+        sortImports: {
+            groups: [
+                "type-import",
+                ["value-builtin", "value-external"],
+                "type-internal",
+                "value-internal",
+                ["type-parent", "type-sibling", "type-index"],
+                ["value-parent", "value-sibling", "value-index"],
+                "unknown",
+            ],
+            partitionByComment: true,
+        },
+        tabWidth: 4,
+    },
+    lint: {
+        categories: {
+            correctness: "error",
+            nursery: "warn",
+            pedantic: "warn",
+            perf: "error",
+            restriction: "error",
+            style: "warn",
+            suspicious: "error",
+        },
+        env: {
+            node: true,
+        },
+        options: {
+            typeAware: true,
+            typeCheck: true,
+        },
+        plugins: ["jsdoc", "import", "node", "promise", "vitest"],
+        rules: {
+            "eslint/default-param-last": "error",
+            "eslint/func-style": ["error", "declaration"],
+            "eslint/no-cond-assign": "off",
+            "eslint/no-dupe-else-if": "error",
+            "eslint/no-else-return": "error",
+            "eslint/no-empty-pattern": "warn",
+            "eslint/no-irregular-whitespace": "error",
+            "eslint/no-lonely-if": "warn",
+            "eslint/no-param-reassign": "error",
+            "eslint/no-template-curly-in-string": "warn",
+            "eslint/no-unused-expressions": "error",
+            "eslint/no-useless-escape": "warn",
+            "eslint/sort-imports": "off",
+
+            "import/extensions": [
+                "error",
+                "ignorePackages",
+                {
+                    cjs: "always",
+                    cts: "always",
+                    js: "always",
+                    jsx: "always",
+                    mjs: "always",
+                    mts: "always",
+                    ts: "always",
+                    tsx: "always",
+                },
+            ],
+            "import/no-commonjs": "warn",
+            "import/no-default-export": "off",
+            "import/no-named-export": "off",
+            "import/no-relative-parent-imports": "off",
+            "import/prefer-default-export": "off",
+
+            "typescript/consistent-type-imports": "error",
+            "typescript/no-empty-interface": "warn",
+            "typescript/no-explicit-any": "warn",
+            "typescript/no-inferrable-types": "error",
+            "typescript/no-non-null-assertion": "warn",
+            "typescript/prefer-as-const": "error",
+            "typescript/prefer-enum-initializers": "error",
+
+            "unicorn/no-lonely-if": "warn",
+            "unicorn/prefer-at": "warn",
+            "unicorn/prefer-string-slice": "warn",
+            "unicorn/prefer-string-trim-start-end": "error",
+        },
+        settings: {
+            vitest: {
+                typecheck: true,
+            },
+        },
+    },
     pack: {
         dts: {
             tsgo: true,
@@ -3051,13 +4015,16 @@ export default defineConfig({
     },
     run: {
         tasks: {
-            build: {
-                command: "vp pack",
-            },
-            dev: {
-                command: "vp pack --watch",
-            },
+            build: { command: "vp pack" },
+            dev: { command: "vp pack --watch" },
+            typecheck: { command: "tsgo --noEmit" },
         },
+    },
+    staged: {
+        "*": "vp check --fix",
+    },
+    test: {
+        exclude: [".claude/**", "node_modules/**"],
     },
 });
 ",
@@ -3083,6 +4050,13 @@ exports[`ts-package feature combinations > cli + sea 1`] = `
       "executable": false,
     },
   ],
+  ".node-version": [
+    "24
+",
+    {
+      "executable": false,
+    },
+  ],
   "README.md": [
     "# test-repo
 
@@ -3246,6 +4220,108 @@ describe("greet", () => {
     "import { defineConfig } from "vite-plus";
 
 export default defineConfig({
+    fmt: {
+        arrowParens: "avoid",
+        overrides: [
+            {
+                files: ["**/*.jsonc"],
+                options: {
+                    trailingComma: "none",
+                },
+            },
+            {
+                files: ["**/.vscode/**"],
+                options: {
+                    trailingComma: "all",
+                },
+            },
+        ],
+        sortImports: {
+            groups: [
+                "type-import",
+                ["value-builtin", "value-external"],
+                "type-internal",
+                "value-internal",
+                ["type-parent", "type-sibling", "type-index"],
+                ["value-parent", "value-sibling", "value-index"],
+                "unknown",
+            ],
+            partitionByComment: true,
+        },
+        tabWidth: 4,
+    },
+    lint: {
+        categories: {
+            correctness: "error",
+            nursery: "warn",
+            pedantic: "warn",
+            perf: "error",
+            restriction: "error",
+            style: "warn",
+            suspicious: "error",
+        },
+        env: {
+            node: true,
+        },
+        options: {
+            typeAware: true,
+            typeCheck: true,
+        },
+        plugins: ["jsdoc", "import", "node", "promise", "vitest"],
+        rules: {
+            "eslint/default-param-last": "error",
+            "eslint/func-style": ["error", "declaration"],
+            "eslint/no-cond-assign": "off",
+            "eslint/no-dupe-else-if": "error",
+            "eslint/no-else-return": "error",
+            "eslint/no-empty-pattern": "warn",
+            "eslint/no-irregular-whitespace": "error",
+            "eslint/no-lonely-if": "warn",
+            "eslint/no-param-reassign": "error",
+            "eslint/no-template-curly-in-string": "warn",
+            "eslint/no-unused-expressions": "error",
+            "eslint/no-useless-escape": "warn",
+            "eslint/sort-imports": "off",
+
+            "import/extensions": [
+                "error",
+                "ignorePackages",
+                {
+                    cjs: "always",
+                    cts: "always",
+                    js: "always",
+                    jsx: "always",
+                    mjs: "always",
+                    mts: "always",
+                    ts: "always",
+                    tsx: "always",
+                },
+            ],
+            "import/no-commonjs": "warn",
+            "import/no-default-export": "off",
+            "import/no-named-export": "off",
+            "import/no-relative-parent-imports": "off",
+            "import/prefer-default-export": "off",
+
+            "typescript/consistent-type-imports": "error",
+            "typescript/no-empty-interface": "warn",
+            "typescript/no-explicit-any": "warn",
+            "typescript/no-inferrable-types": "error",
+            "typescript/no-non-null-assertion": "warn",
+            "typescript/prefer-as-const": "error",
+            "typescript/prefer-enum-initializers": "error",
+
+            "unicorn/no-lonely-if": "warn",
+            "unicorn/prefer-at": "warn",
+            "unicorn/prefer-string-slice": "warn",
+            "unicorn/prefer-string-trim-start-end": "error",
+        },
+        settings: {
+            vitest: {
+                typecheck: true,
+            },
+        },
+    },
     pack: {
         dts: {
             tsgo: true,
@@ -3254,13 +4330,16 @@ export default defineConfig({
     },
     run: {
         tasks: {
-            build: {
-                command: "vp pack",
-            },
-            dev: {
-                command: "vp pack --watch",
-            },
+            build: { command: "vp pack" },
+            dev: { command: "vp pack --watch" },
+            typecheck: { command: "tsgo --noEmit" },
         },
+    },
+    staged: {
+        "*": "vp check --fix",
+    },
+    test: {
+        exclude: [".claude/**", "node_modules/**"],
     },
 });
 ",
@@ -3286,6 +4365,13 @@ exports[`ts-package feature combinations > cli only 1`] = `
       "executable": false,
     },
   ],
+  ".node-version": [
+    "24
+",
+    {
+      "executable": false,
+    },
+  ],
   "README.md": [
     "# test-repo
 
@@ -3433,6 +4519,108 @@ describe("greet", () => {
     "import { defineConfig } from "vite-plus";
 
 export default defineConfig({
+    fmt: {
+        arrowParens: "avoid",
+        overrides: [
+            {
+                files: ["**/*.jsonc"],
+                options: {
+                    trailingComma: "none",
+                },
+            },
+            {
+                files: ["**/.vscode/**"],
+                options: {
+                    trailingComma: "all",
+                },
+            },
+        ],
+        sortImports: {
+            groups: [
+                "type-import",
+                ["value-builtin", "value-external"],
+                "type-internal",
+                "value-internal",
+                ["type-parent", "type-sibling", "type-index"],
+                ["value-parent", "value-sibling", "value-index"],
+                "unknown",
+            ],
+            partitionByComment: true,
+        },
+        tabWidth: 4,
+    },
+    lint: {
+        categories: {
+            correctness: "error",
+            nursery: "warn",
+            pedantic: "warn",
+            perf: "error",
+            restriction: "error",
+            style: "warn",
+            suspicious: "error",
+        },
+        env: {
+            node: true,
+        },
+        options: {
+            typeAware: true,
+            typeCheck: true,
+        },
+        plugins: ["jsdoc", "import", "node", "promise", "vitest"],
+        rules: {
+            "eslint/default-param-last": "error",
+            "eslint/func-style": ["error", "declaration"],
+            "eslint/no-cond-assign": "off",
+            "eslint/no-dupe-else-if": "error",
+            "eslint/no-else-return": "error",
+            "eslint/no-empty-pattern": "warn",
+            "eslint/no-irregular-whitespace": "error",
+            "eslint/no-lonely-if": "warn",
+            "eslint/no-param-reassign": "error",
+            "eslint/no-template-curly-in-string": "warn",
+            "eslint/no-unused-expressions": "error",
+            "eslint/no-useless-escape": "warn",
+            "eslint/sort-imports": "off",
+
+            "import/extensions": [
+                "error",
+                "ignorePackages",
+                {
+                    cjs: "always",
+                    cts: "always",
+                    js: "always",
+                    jsx: "always",
+                    mjs: "always",
+                    mts: "always",
+                    ts: "always",
+                    tsx: "always",
+                },
+            ],
+            "import/no-commonjs": "warn",
+            "import/no-default-export": "off",
+            "import/no-named-export": "off",
+            "import/no-relative-parent-imports": "off",
+            "import/prefer-default-export": "off",
+
+            "typescript/consistent-type-imports": "error",
+            "typescript/no-empty-interface": "warn",
+            "typescript/no-explicit-any": "warn",
+            "typescript/no-inferrable-types": "error",
+            "typescript/no-non-null-assertion": "warn",
+            "typescript/prefer-as-const": "error",
+            "typescript/prefer-enum-initializers": "error",
+
+            "unicorn/no-lonely-if": "warn",
+            "unicorn/prefer-at": "warn",
+            "unicorn/prefer-string-slice": "warn",
+            "unicorn/prefer-string-trim-start-end": "error",
+        },
+        settings: {
+            vitest: {
+                typecheck: true,
+            },
+        },
+    },
     pack: {
         dts: {
             tsgo: true,
@@ -3441,13 +4629,16 @@ export default defineConfig({
     },
     run: {
         tasks: {
-            build: {
-                command: "vp pack",
-            },
-            dev: {
-                command: "vp pack --watch",
-            },
+            build: { command: "vp pack" },
+            dev: { command: "vp pack --watch" },
+            typecheck: { command: "tsgo --noEmit" },
         },
+    },
+    staged: {
+        "*": "vp check --fix",
+    },
+    test: {
+        exclude: [".claude/**", "node_modules/**"],
     },
 });
 ",
@@ -3473,6 +4664,13 @@ exports[`ts-package feature combinations > generator + sea 1`] = `
       "executable": false,
     },
   ],
+  ".node-version": [
+    "24
+",
+    {
+      "executable": false,
+    },
+  ],
   "README.md": [
     "# test-repo
 
@@ -3622,6 +4820,108 @@ describe("greet", () => {
     "import { defineConfig } from "vite-plus";
 
 export default defineConfig({
+    fmt: {
+        arrowParens: "avoid",
+        overrides: [
+            {
+                files: ["**/*.jsonc"],
+                options: {
+                    trailingComma: "none",
+                },
+            },
+            {
+                files: ["**/.vscode/**"],
+                options: {
+                    trailingComma: "all",
+                },
+            },
+        ],
+        sortImports: {
+            groups: [
+                "type-import",
+                ["value-builtin", "value-external"],
+                "type-internal",
+                "value-internal",
+                ["type-parent", "type-sibling", "type-index"],
+                ["value-parent", "value-sibling", "value-index"],
+                "unknown",
+            ],
+            partitionByComment: true,
+        },
+        tabWidth: 4,
+    },
+    lint: {
+        categories: {
+            correctness: "error",
+            nursery: "warn",
+            pedantic: "warn",
+            perf: "error",
+            restriction: "error",
+            style: "warn",
+            suspicious: "error",
+        },
+        env: {
+            node: true,
+        },
+        options: {
+            typeAware: true,
+            typeCheck: true,
+        },
+        plugins: ["jsdoc", "import", "node", "promise", "vitest"],
+        rules: {
+            "eslint/default-param-last": "error",
+            "eslint/func-style": ["error", "declaration"],
+            "eslint/no-cond-assign": "off",
+            "eslint/no-dupe-else-if": "error",
+            "eslint/no-else-return": "error",
+            "eslint/no-empty-pattern": "warn",
+            "eslint/no-irregular-whitespace": "error",
+            "eslint/no-lonely-if": "warn",
+            "eslint/no-param-reassign": "error",
+            "eslint/no-template-curly-in-string": "warn",
+            "eslint/no-unused-expressions": "error",
+            "eslint/no-useless-escape": "warn",
+            "eslint/sort-imports": "off",
+
+            "import/extensions": [
+                "error",
+                "ignorePackages",
+                {
+                    cjs: "always",
+                    cts: "always",
+                    js: "always",
+                    jsx: "always",
+                    mjs: "always",
+                    mts: "always",
+                    ts: "always",
+                    tsx: "always",
+                },
+            ],
+            "import/no-commonjs": "warn",
+            "import/no-default-export": "off",
+            "import/no-named-export": "off",
+            "import/no-relative-parent-imports": "off",
+            "import/prefer-default-export": "off",
+
+            "typescript/consistent-type-imports": "error",
+            "typescript/no-empty-interface": "warn",
+            "typescript/no-explicit-any": "warn",
+            "typescript/no-inferrable-types": "error",
+            "typescript/no-non-null-assertion": "warn",
+            "typescript/prefer-as-const": "error",
+            "typescript/prefer-enum-initializers": "error",
+
+            "unicorn/no-lonely-if": "warn",
+            "unicorn/prefer-at": "warn",
+            "unicorn/prefer-string-slice": "warn",
+            "unicorn/prefer-string-trim-start-end": "error",
+        },
+        settings: {
+            vitest: {
+                typecheck: true,
+            },
+        },
+    },
     pack: {
         dts: {
             tsgo: true,
@@ -3630,13 +4930,16 @@ export default defineConfig({
     },
     run: {
         tasks: {
-            build: {
-                command: "vp pack",
-            },
-            dev: {
-                command: "vp pack --watch",
-            },
+            build: { command: "vp pack" },
+            dev: { command: "vp pack --watch" },
+            typecheck: { command: "tsgo --noEmit" },
         },
+    },
+    staged: {
+        "*": "vp check --fix",
+    },
+    test: {
+        exclude: [".claude/**", "node_modules/**"],
     },
 });
 ",
@@ -3662,6 +4965,13 @@ exports[`ts-package feature combinations > generator only 1`] = `
       "executable": false,
     },
   ],
+  ".node-version": [
+    "24
+",
+    {
+      "executable": false,
+    },
+  ],
   "README.md": [
     "# test-repo
 
@@ -3795,6 +5105,108 @@ describe("greet", () => {
     "import { defineConfig } from "vite-plus";
 
 export default defineConfig({
+    fmt: {
+        arrowParens: "avoid",
+        overrides: [
+            {
+                files: ["**/*.jsonc"],
+                options: {
+                    trailingComma: "none",
+                },
+            },
+            {
+                files: ["**/.vscode/**"],
+                options: {
+                    trailingComma: "all",
+                },
+            },
+        ],
+        sortImports: {
+            groups: [
+                "type-import",
+                ["value-builtin", "value-external"],
+                "type-internal",
+                "value-internal",
+                ["type-parent", "type-sibling", "type-index"],
+                ["value-parent", "value-sibling", "value-index"],
+                "unknown",
+            ],
+            partitionByComment: true,
+        },
+        tabWidth: 4,
+    },
+    lint: {
+        categories: {
+            correctness: "error",
+            nursery: "warn",
+            pedantic: "warn",
+            perf: "error",
+            restriction: "error",
+            style: "warn",
+            suspicious: "error",
+        },
+        env: {
+            node: true,
+        },
+        options: {
+            typeAware: true,
+            typeCheck: true,
+        },
+        plugins: ["jsdoc", "import", "node", "promise", "vitest"],
+        rules: {
+            "eslint/default-param-last": "error",
+            "eslint/func-style": ["error", "declaration"],
+            "eslint/no-cond-assign": "off",
+            "eslint/no-dupe-else-if": "error",
+            "eslint/no-else-return": "error",
+            "eslint/no-empty-pattern": "warn",
+            "eslint/no-irregular-whitespace": "error",
+            "eslint/no-lonely-if": "warn",
+            "eslint/no-param-reassign": "error",
+            "eslint/no-template-curly-in-string": "warn",
+            "eslint/no-unused-expressions": "error",
+            "eslint/no-useless-escape": "warn",
+            "eslint/sort-imports": "off",
+
+            "import/extensions": [
+                "error",
+                "ignorePackages",
+                {
+                    cjs: "always",
+                    cts: "always",
+                    js: "always",
+                    jsx: "always",
+                    mjs: "always",
+                    mts: "always",
+                    ts: "always",
+                    tsx: "always",
+                },
+            ],
+            "import/no-commonjs": "warn",
+            "import/no-default-export": "off",
+            "import/no-named-export": "off",
+            "import/no-relative-parent-imports": "off",
+            "import/prefer-default-export": "off",
+
+            "typescript/consistent-type-imports": "error",
+            "typescript/no-empty-interface": "warn",
+            "typescript/no-explicit-any": "warn",
+            "typescript/no-inferrable-types": "error",
+            "typescript/no-non-null-assertion": "warn",
+            "typescript/prefer-as-const": "error",
+            "typescript/prefer-enum-initializers": "error",
+
+            "unicorn/no-lonely-if": "warn",
+            "unicorn/prefer-at": "warn",
+            "unicorn/prefer-string-slice": "warn",
+            "unicorn/prefer-string-trim-start-end": "error",
+        },
+        settings: {
+            vitest: {
+                typecheck: true,
+            },
+        },
+    },
     pack: {
         dts: {
             tsgo: true,
@@ -3803,13 +5215,16 @@ export default defineConfig({
     },
     run: {
         tasks: {
-            build: {
-                command: "vp pack",
-            },
-            dev: {
-                command: "vp pack --watch",
-            },
+            build: { command: "vp pack" },
+            dev: { command: "vp pack --watch" },
+            typecheck: { command: "tsgo --noEmit" },
         },
+    },
+    staged: {
+        "*": "vp check --fix",
+    },
+    test: {
+        exclude: [".claude/**", "node_modules/**"],
     },
 });
 ",
@@ -3830,6 +5245,13 @@ exports[`ts-package feature combinations > sea only 1`] = `
 
 # Build
 /dist/
+",
+    {
+      "executable": false,
+    },
+  ],
+  ".node-version": [
+    "24
 ",
     {
       "executable": false,
@@ -3947,6 +5369,108 @@ describe("greet", () => {
     "import { defineConfig } from "vite-plus";
 
 export default defineConfig({
+    fmt: {
+        arrowParens: "avoid",
+        overrides: [
+            {
+                files: ["**/*.jsonc"],
+                options: {
+                    trailingComma: "none",
+                },
+            },
+            {
+                files: ["**/.vscode/**"],
+                options: {
+                    trailingComma: "all",
+                },
+            },
+        ],
+        sortImports: {
+            groups: [
+                "type-import",
+                ["value-builtin", "value-external"],
+                "type-internal",
+                "value-internal",
+                ["type-parent", "type-sibling", "type-index"],
+                ["value-parent", "value-sibling", "value-index"],
+                "unknown",
+            ],
+            partitionByComment: true,
+        },
+        tabWidth: 4,
+    },
+    lint: {
+        categories: {
+            correctness: "error",
+            nursery: "warn",
+            pedantic: "warn",
+            perf: "error",
+            restriction: "error",
+            style: "warn",
+            suspicious: "error",
+        },
+        env: {
+            node: true,
+        },
+        options: {
+            typeAware: true,
+            typeCheck: true,
+        },
+        plugins: ["jsdoc", "import", "node", "promise", "vitest"],
+        rules: {
+            "eslint/default-param-last": "error",
+            "eslint/func-style": ["error", "declaration"],
+            "eslint/no-cond-assign": "off",
+            "eslint/no-dupe-else-if": "error",
+            "eslint/no-else-return": "error",
+            "eslint/no-empty-pattern": "warn",
+            "eslint/no-irregular-whitespace": "error",
+            "eslint/no-lonely-if": "warn",
+            "eslint/no-param-reassign": "error",
+            "eslint/no-template-curly-in-string": "warn",
+            "eslint/no-unused-expressions": "error",
+            "eslint/no-useless-escape": "warn",
+            "eslint/sort-imports": "off",
+
+            "import/extensions": [
+                "error",
+                "ignorePackages",
+                {
+                    cjs: "always",
+                    cts: "always",
+                    js: "always",
+                    jsx: "always",
+                    mjs: "always",
+                    mts: "always",
+                    ts: "always",
+                    tsx: "always",
+                },
+            ],
+            "import/no-commonjs": "warn",
+            "import/no-default-export": "off",
+            "import/no-named-export": "off",
+            "import/no-relative-parent-imports": "off",
+            "import/prefer-default-export": "off",
+
+            "typescript/consistent-type-imports": "error",
+            "typescript/no-empty-interface": "warn",
+            "typescript/no-explicit-any": "warn",
+            "typescript/no-inferrable-types": "error",
+            "typescript/no-non-null-assertion": "warn",
+            "typescript/prefer-as-const": "error",
+            "typescript/prefer-enum-initializers": "error",
+
+            "unicorn/no-lonely-if": "warn",
+            "unicorn/prefer-at": "warn",
+            "unicorn/prefer-string-slice": "warn",
+            "unicorn/prefer-string-trim-start-end": "error",
+        },
+        settings: {
+            vitest: {
+                typecheck: true,
+            },
+        },
+    },
     pack: {
         dts: {
             tsgo: true,
@@ -3955,13 +5479,16 @@ export default defineConfig({
     },
     run: {
         tasks: {
-            build: {
-                command: "vp pack",
-            },
-            dev: {
-                command: "vp pack --watch",
-            },
+            build: { command: "vp pack" },
+            dev: { command: "vp pack --watch" },
+            typecheck: { command: "tsgo --noEmit" },
         },
+    },
+    staged: {
+        "*": "vp check --fix",
+    },
+    test: {
+        exclude: [".claude/**", "node_modules/**"],
     },
 });
 ",
