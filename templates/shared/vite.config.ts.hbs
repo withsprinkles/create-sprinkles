@@ -158,6 +158,8 @@ export default defineConfig({
                     tsx: "always",
                 },
             ],
+            "import/exports-last": "off",
+            "import/group-exports": "off",
             "import/no-commonjs": "warn",
             "import/no-default-export": "off",
             "import/no-named-export": "off",
@@ -165,6 +167,8 @@ export default defineConfig({
             "import/prefer-default-export": "off",
 
 {{#if isReactRouter}}
+            "jest/require-hook": "off",
+
             "jsx-a11y/no-autofocus": "off",
 
             "node/no-process-env": "off",
@@ -185,6 +189,7 @@ export default defineConfig({
             "react-compiler/use-memo": "error",
             "react/exhaustive-deps": "warn",
             "react/jsx-boolean-value": "warn",
+            "react/jsx-filename-extension": ["error", { allow: "as-needed" }],
             "react/jsx-fragments": "warn",
             "react/jsx-key": "error",
             "react/jsx-no-constructed-context-values": "error",
@@ -195,6 +200,8 @@ export default defineConfig({
             "react/jsx-pascal-case": "error",
             "react/jsx-props-no-spread-multi": "error",
             "react/no-array-index-key": "off",
+            "react/no-multi-comp": "off",
+            "react/react-in-jsx-scope": "off",
             "react/only-export-components": [
                 "error",
                 {
