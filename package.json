@@ -12,7 +12,9 @@
         "type": "git",
         "url": "git+https://github.com/withsprinkles/workbench.git"
     },
-    "bin": "./bin/index.ts",
+    "bin": {
+        "workbench": "bin/index.ts"
+    },
     "files": [
         "bin",
         "dist",
