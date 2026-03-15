@@ -651,7 +651,7 @@ export default [index("home.tsx")] satisfies RouteConfig;
     "scripts": {
         "build": "vp build",
         "dev": "vp dev",
-        "postinstall": "vpx react-router typegen",
+        "postinstall": "vp dlx react-router typegen",
         "start": "vp preview",
         "typecheck": "react-router typegen && tsc"
     },
@@ -896,7 +896,7 @@ export default defineConfig({
             "react-compiler/use-memo": "error",
             "react/exhaustive-deps": "warn",
             "react/jsx-boolean-value": "warn",
-            "react/jsx-filename-extension": ["error", { allow: "as-needed" }],
+            "react/jsx-filename-extension": "off",
             "react/jsx-fragments": "warn",
             "react/jsx-key": "error",
             "react/jsx-no-constructed-context-values": "error",
@@ -3067,7 +3067,7 @@ export function createMetaStore(): MetaStore {
     "scripts": {
         "build": "vp build",
         "dev": "vp dev",
-        "postinstall": "vpx react-router typegen",
+        "postinstall": "vp dlx react-router typegen",
         "start": "vp preview",
         "typecheck": "react-router typegen && tsc"
     },
@@ -3315,7 +3315,7 @@ export default defineConfig({
             "react-compiler/use-memo": "error",
             "react/exhaustive-deps": "warn",
             "react/jsx-boolean-value": "warn",
-            "react/jsx-filename-extension": ["error", { allow: "as-needed" }],
+            "react/jsx-filename-extension": "off",
             "react/jsx-fragments": "warn",
             "react/jsx-key": "error",
             "react/jsx-no-constructed-context-values": "error",
@@ -4107,7 +4107,7 @@ export default [index("home.tsx")] satisfies RouteConfig;
     "scripts": {
         "build": "vp build",
         "dev": "vp dev",
-        "postinstall": "vpx react-router typegen",
+        "postinstall": "vp dlx react-router typegen",
         "start": "vp preview",
         "typecheck": "react-router typegen && tsc"
     },
@@ -4323,7 +4323,7 @@ export default defineConfig({
             "react-compiler/use-memo": "error",
             "react/exhaustive-deps": "warn",
             "react/jsx-boolean-value": "warn",
-            "react/jsx-filename-extension": ["error", { allow: "as-needed" }],
+            "react/jsx-filename-extension": "off",
             "react/jsx-fragments": "warn",
             "react/jsx-key": "error",
             "react/jsx-no-constructed-context-values": "error",
@@ -5026,7 +5026,7 @@ export default defineSchema({
     "scripts": {
         "build": "vp build",
         "dev": "vp dev",
-        "postinstall": "vpx react-router typegen",
+        "postinstall": "vp dlx react-router typegen",
         "start": "vp preview",
         "typecheck": "react-router typegen && tsc"
     },
@@ -5242,7 +5242,7 @@ export default defineConfig({
             "react-compiler/use-memo": "error",
             "react/exhaustive-deps": "warn",
             "react/jsx-boolean-value": "warn",
-            "react/jsx-filename-extension": ["error", { allow: "as-needed" }],
+            "react/jsx-filename-extension": "off",
             "react/jsx-fragments": "warn",
             "react/jsx-key": "error",
             "react/jsx-no-constructed-context-values": "error",
@@ -5924,7 +5924,7 @@ export default defineSchema({
     "scripts": {
         "build": "vp build",
         "dev": "vp dev",
-        "postinstall": "vpx react-router typegen",
+        "postinstall": "vp dlx react-router typegen",
         "start": "vp preview",
         "typecheck": "react-router typegen && tsc"
     },
@@ -6141,7 +6141,7 @@ export default defineConfig({
             "react-compiler/use-memo": "error",
             "react/exhaustive-deps": "warn",
             "react/jsx-boolean-value": "warn",
-            "react/jsx-filename-extension": ["error", { allow: "as-needed" }],
+            "react/jsx-filename-extension": "off",
             "react/jsx-fragments": "warn",
             "react/jsx-key": "error",
             "react/jsx-no-constructed-context-values": "error",
@@ -7093,7 +7093,7 @@ export default defineSchema({
     "scripts": {
         "build": "vp build",
         "dev": "vp dev",
-        "postinstall": "vpx react-router typegen",
+        "postinstall": "vp dlx react-router typegen",
         "start": "vp preview",
         "typecheck": "react-router typegen && tsc"
     },
@@ -7310,7 +7310,7 @@ export default defineConfig({
             "react-compiler/use-memo": "error",
             "react/exhaustive-deps": "warn",
             "react/jsx-boolean-value": "warn",
-            "react/jsx-filename-extension": ["error", { allow: "as-needed" }],
+            "react/jsx-filename-extension": "off",
             "react/jsx-fragments": "warn",
             "react/jsx-key": "error",
             "react/jsx-no-constructed-context-values": "error",
