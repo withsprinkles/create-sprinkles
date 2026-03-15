@@ -105,12 +105,18 @@ export default defineConfig({
             },
         },
     },
-    pack: {
-        dts: {
-            tsgo: true,
+    pack: [
+        {
+            dts: {
+                tsgo: true,
+            },
+            entry: { index: "src/index.ts" },
         },
-        exports: true,
-    },
+        {
+            dts: false,
+            entry: { bin: "bin/index.ts" },
+        },
+    ],
     run: {
         tasks: {
             build: { command: "vp pack" },

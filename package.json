@@ -1,6 +1,6 @@
 {
     "name": "@withsprinkles/workbench",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "description": "Get started with development by creating projects from templates quickly.",
     "homepage": "https://github.com/withsprinkles/workbench#readme",
     "bugs": {
@@ -13,10 +13,9 @@
         "url": "git+https://github.com/withsprinkles/workbench.git"
     },
     "bin": {
-        "workbench": "bin/index.ts"
+        "workbench": "dist/bin.mjs"
     },
     "files": [
-        "bin",
         "dist",
         "templates"
     ],

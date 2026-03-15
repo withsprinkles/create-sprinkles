@@ -3,7 +3,7 @@ import * as prompts from "@clack/prompts";
 import { runTemplate } from "bingo";
 import path from "node:path";
 
-import template from "../src/template.ts";
+import template from "../src/template.ts"; // resolved to dist/index.mjs at build time
 
 prompts.intro("@withsprinkles/workbench");
 
