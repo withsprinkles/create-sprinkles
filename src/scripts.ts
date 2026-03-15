@@ -67,9 +67,14 @@ export function buildScripts(context: TemplateContext): CreatedScript[] {
         scripts.push({ commands: ["vp run typegen:cloudflare"], phase: 2, silent: true });
     }
 
-    // Phase 3: Initialize git repository
+    // Phase 3: Symlinks and git init
     scripts.push({
-        commands: ["git init", "git add -A", 'git commit -m "Initial commit"'],
+        commands: [
+            "ln -sf AGENTS.md CLAUDE.md",
+            "git init",
+            "git add -A",
+            'git commit -m "Initial commit"',
+        ],
         phase: 3,
     });
 

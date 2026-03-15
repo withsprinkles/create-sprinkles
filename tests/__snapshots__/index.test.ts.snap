@@ -29,6 +29,184 @@ exports[`template snapshots > RSC kind (no content-layer) 1`] = `
       "executable": false,
     },
   ],
+  "AGENTS.md": [
+    "# Contributor Guidelines
+
+## Technology Overview
+
+- **Development runtime**: Node.js (v24)
+- **Package manager**: pnpm
+- **Toolchain**: Vite+ (\`vp\`)
+- **Bundler**: Vite 8 (with Rolldown)
+- **JavaScript framework**: React 19
+- **Meta-framework**: React Router
+- **Rendering**: React Server Components (RSC)
+- **Styling**: Tailwind CSS v4
+- **Formatter**: Oxfmt
+- **Linter**: Oxlint
+- **Deployment runtime**: Cloudflare \`workerd\`
+
+## Common Commands
+
+- Dev server: \`vp dev\` (**NEVER** run this yourself)
+- Build: \`vp build\`
+- Format: \`vp fmt\`
+- Lint: \`vp lint\`
+- Typecheck: \`vp run typecheck\`
+- Project check: \`vp check\`
+- Tests: \`vp test\`
+
+## Debugging Approach
+
+- Use \`console.log\` with clear prefixes during development
+- **NEVER** attempt to run the dev server yourself
+- If you need to debug, add \`console.log\` statements, tell the user where to look for the output (client, server, both, etc.), and they will paste back the results
+
+## Node.js
+
+- Always use the \`node:\` prefix for Node built-in module imports
+- Format code with \`vp fmt\` before committing
+- Run \`vp run typecheck\` and fix all info, warnings, and errors
+- Prefer \`unknown\` over \`any\` unless absolutely necessary
+- Use JSDoc/TSDoc comments for public APIs
+- Prefer \`jsr:@std/*\` for standard library packages
+- Use relative imports for local modules
+- Prefer import aliases (\`~/*\`) over deep relative imports
+
+## React Router
+
+### Critical Package Guidelines
+
+**Use these packages:**
+
+- \`react-router\` - Main package for routing components and hooks
+- \`@react-router/dev\` - Development tools and route configuration
+- \`@cloudflare/vite-plugin\` - Cloudflare server adapter
+
+**NEVER use these packages:**
+
+- \`react-router-dom\` - Legacy package, use \`react-router\` instead
+- \`@remix-run/*\` - Old packages, replaced by \`@react-router/*\`
+
+### Route Configuration (\`app/routes.ts\`)
+
+\`\`\`tsx
+import { type RouteConfig, index, route } from "@react-router/dev/routes";
+
+export default [
+    index("routes/home.tsx"),
+    route("about", "routes/about.tsx"),
+    route("products/:id", "routes/product.tsx"),
+] satisfies RouteConfig;
+\`\`\`
+
+### Route Type Imports
+
+**ALWAYS use \`./+types/[routeName]\` for route type imports.** If you see TypeScript errors about missing types, run \`vp run typecheck\` to generate them. **NEVER** change the import path.
+
+\`\`\`tsx
+// CORRECT:
+import type { Route } from "./+types/home";
+
+// WRONG - never use relative parent paths:
+// import type { Route } from "../+types/home";
+\`\`\`
+
+### Type-Safe URL Generation
+
+\`\`\`tsx
+import { Link, href } from "react-router";
+
+<Link to={href("/products/:id", { id: product.id })}>View</Link>
+return redirect(href("/products/:id", { id: newProduct.id }));
+\`\`\`
+
+### React Server Components
+
+This project uses React Router's RSC Framework Mode with \`unstable_reactRouterRSC\`.
+
+**Routes export \`ServerComponent\` instead of \`default\`:**
+
+\`\`\`tsx
+import type { Route } from "./+types/route";
+
+export async function ServerComponent({ loaderData }: Route.ComponentProps) {
+    return <h1>Server-rendered content</h1>;
+}
+\`\`\`
+
+**For client interactivity, extract to \`"use client"\` modules:**
+
+\`\`\`tsx
+// counter.tsx
+"use client";
+
+export function Counter() {
+    let [count, setCount] = useState(0);
+    return <button onClick={() => setCount(count + 1)}>Count: {count}</button>;
+}
+\`\`\`
+
+**Use \`"server-only"\` and \`"client-only"\` imports instead of \`.server\`/\`.client\` file naming.**
+
+**Server Actions for mutations:**
+
+\`\`\`tsx
+export async function ServerComponent() {
+    async function handleSubmit(formData: FormData) {
+        "use server";
+        await saveData(formData);
+    }
+    return <form action={handleSubmit}>...</form>;
+}
+\`\`\`
+
+## General Rules
+
+### Correctness
+
+- Remove anything that isn't used - unused imports, parameters, and members
+- Exhaust every hook dependency in React hook dependency arrays
+- Call React hooks only at the top level of a component
+
+### Style & Consistency
+
+- Stick to ES modules - no \`require\` or CommonJS patterns
+- Prefer \`import type\` for type-only imports
+- Use \`node:\` protocol for Node.js built-in imports
+- Use \`T[]\` shorthand array syntax
+- Don't reassign function parameters
+- Favor \`let\` over \`const\` for bindings, unless declaring a top-level constant with ALL_CAPS
+- Skip non-null assertions - rewrite code so \`!\` isn't necessary
+- Avoid \`enum\` - choose unions, objects, or literal types
+- Default parameters go last
+- Self-close empty JSX elements
+- Use \`slice\` instead of \`substr\`
+- Flatten simple \`if\`/\`else if\` chains
+- Kill useless \`else\` blocks when the \`if\` branch returns or throws
+
+## Using Vite+
+
+This project uses Vite+, a unified toolchain built on top of Vite, Rolldown, Vitest, tsdown, Oxlint, Oxfmt, and Vite Task. Vite+ wraps runtime management, package management, and frontend tooling in a single global CLI called \`vp\`.
+
+### Common Pitfalls
+
+- **Using the package manager directly:** Do not use pnpm, npm, or Yarn directly. Vite+ handles all package manager operations.
+- **Always use Vite commands to run tools:** Don't attempt to run \`vp vitest\` or \`vp oxlint\`. Use \`vp test\` and \`vp lint\` instead.
+- **Running scripts:** Vite+ commands take precedence over \`package.json\` scripts. If there is a conflict, run scripts using \`vp run <script>\`.
+- **Do not install Vitest, Oxlint, Oxfmt, or tsdown directly:** Vite+ wraps these tools.
+- **Use vpx for one-off binaries:** Use \`vpx\` instead of \`npx\`, \`pnpm dlx\`, or \`vp dlx\`.
+- **Import from \`vite-plus\`:** Instead of importing from \`vite\` or \`vitest\`, import from \`vite-plus\`. For example: \`import { defineConfig } from 'vite-plus'\` or \`import { expect, test } from 'vite-plus/test'\`.
+
+### Review Checklist
+
+- [ ] Run \`vp install\` after pulling remote changes and before getting started
+- [ ] Run \`vp check\` and \`vp test\` to validate changes
+",
+    {
+      "executable": false,
+    },
+  ],
   "README.md": [
     "# test-repo
 
@@ -679,6 +857,185 @@ exports[`template snapshots > RSC kind (with content-layer) 1`] = `
   ],
   ".node-version": [
     "24
+",
+    {
+      "executable": false,
+    },
+  ],
+  "AGENTS.md": [
+    "# Contributor Guidelines
+
+## Technology Overview
+
+- **Development runtime**: Node.js (v24)
+- **Package manager**: pnpm
+- **Toolchain**: Vite+ (\`vp\`)
+- **Bundler**: Vite 8 (with Rolldown)
+- **JavaScript framework**: React 19
+- **Meta-framework**: React Router
+- **Rendering**: React Server Components (RSC)
+- **Content**: Content-layer plugin with MDX
+- **Styling**: Tailwind CSS v4
+- **Formatter**: Oxfmt
+- **Linter**: Oxlint
+- **Deployment runtime**: Cloudflare \`workerd\`
+
+## Common Commands
+
+- Dev server: \`vp dev\` (**NEVER** run this yourself)
+- Build: \`vp build\`
+- Format: \`vp fmt\`
+- Lint: \`vp lint\`
+- Typecheck: \`vp run typecheck\`
+- Project check: \`vp check\`
+- Tests: \`vp test\`
+
+## Debugging Approach
+
+- Use \`console.log\` with clear prefixes during development
+- **NEVER** attempt to run the dev server yourself
+- If you need to debug, add \`console.log\` statements, tell the user where to look for the output (client, server, both, etc.), and they will paste back the results
+
+## Node.js
+
+- Always use the \`node:\` prefix for Node built-in module imports
+- Format code with \`vp fmt\` before committing
+- Run \`vp run typecheck\` and fix all info, warnings, and errors
+- Prefer \`unknown\` over \`any\` unless absolutely necessary
+- Use JSDoc/TSDoc comments for public APIs
+- Prefer \`jsr:@std/*\` for standard library packages
+- Use relative imports for local modules
+- Prefer import aliases (\`~/*\`) over deep relative imports
+
+## React Router
+
+### Critical Package Guidelines
+
+**Use these packages:**
+
+- \`react-router\` - Main package for routing components and hooks
+- \`@react-router/dev\` - Development tools and route configuration
+- \`@cloudflare/vite-plugin\` - Cloudflare server adapter
+
+**NEVER use these packages:**
+
+- \`react-router-dom\` - Legacy package, use \`react-router\` instead
+- \`@remix-run/*\` - Old packages, replaced by \`@react-router/*\`
+
+### Route Configuration (\`app/routes.ts\`)
+
+\`\`\`tsx
+import { type RouteConfig, index, route } from "@react-router/dev/routes";
+
+export default [
+    index("routes/home.tsx"),
+    route("about", "routes/about.tsx"),
+    route("products/:id", "routes/product.tsx"),
+] satisfies RouteConfig;
+\`\`\`
+
+### Route Type Imports
+
+**ALWAYS use \`./+types/[routeName]\` for route type imports.** If you see TypeScript errors about missing types, run \`vp run typecheck\` to generate them. **NEVER** change the import path.
+
+\`\`\`tsx
+// CORRECT:
+import type { Route } from "./+types/home";
+
+// WRONG - never use relative parent paths:
+// import type { Route } from "../+types/home";
+\`\`\`
+
+### Type-Safe URL Generation
+
+\`\`\`tsx
+import { Link, href } from "react-router";
+
+<Link to={href("/products/:id", { id: product.id })}>View</Link>
+return redirect(href("/products/:id", { id: newProduct.id }));
+\`\`\`
+
+### React Server Components
+
+This project uses React Router's RSC Framework Mode with \`unstable_reactRouterRSC\`.
+
+**Routes export \`ServerComponent\` instead of \`default\`:**
+
+\`\`\`tsx
+import type { Route } from "./+types/route";
+
+export async function ServerComponent({ loaderData }: Route.ComponentProps) {
+    return <h1>Server-rendered content</h1>;
+}
+\`\`\`
+
+**For client interactivity, extract to \`"use client"\` modules:**
+
+\`\`\`tsx
+// counter.tsx
+"use client";
+
+export function Counter() {
+    let [count, setCount] = useState(0);
+    return <button onClick={() => setCount(count + 1)}>Count: {count}</button>;
+}
+\`\`\`
+
+**Use \`"server-only"\` and \`"client-only"\` imports instead of \`.server\`/\`.client\` file naming.**
+
+**Server Actions for mutations:**
+
+\`\`\`tsx
+export async function ServerComponent() {
+    async function handleSubmit(formData: FormData) {
+        "use server";
+        await saveData(formData);
+    }
+    return <form action={handleSubmit}>...</form>;
+}
+\`\`\`
+
+## General Rules
+
+### Correctness
+
+- Remove anything that isn't used - unused imports, parameters, and members
+- Exhaust every hook dependency in React hook dependency arrays
+- Call React hooks only at the top level of a component
+
+### Style & Consistency
+
+- Stick to ES modules - no \`require\` or CommonJS patterns
+- Prefer \`import type\` for type-only imports
+- Use \`node:\` protocol for Node.js built-in imports
+- Use \`T[]\` shorthand array syntax
+- Don't reassign function parameters
+- Favor \`let\` over \`const\` for bindings, unless declaring a top-level constant with ALL_CAPS
+- Skip non-null assertions - rewrite code so \`!\` isn't necessary
+- Avoid \`enum\` - choose unions, objects, or literal types
+- Default parameters go last
+- Self-close empty JSX elements
+- Use \`slice\` instead of \`substr\`
+- Flatten simple \`if\`/\`else if\` chains
+- Kill useless \`else\` blocks when the \`if\` branch returns or throws
+
+## Using Vite+
+
+This project uses Vite+, a unified toolchain built on top of Vite, Rolldown, Vitest, tsdown, Oxlint, Oxfmt, and Vite Task. Vite+ wraps runtime management, package management, and frontend tooling in a single global CLI called \`vp\`.
+
+### Common Pitfalls
+
+- **Using the package manager directly:** Do not use pnpm, npm, or Yarn directly. Vite+ handles all package manager operations.
+- **Always use Vite commands to run tools:** Don't attempt to run \`vp vitest\` or \`vp oxlint\`. Use \`vp test\` and \`vp lint\` instead.
+- **Running scripts:** Vite+ commands take precedence over \`package.json\` scripts. If there is a conflict, run scripts using \`vp run <script>\`.
+- **Do not install Vitest, Oxlint, Oxfmt, or tsdown directly:** Vite+ wraps these tools.
+- **Use vpx for one-off binaries:** Use \`vpx\` instead of \`npx\`, \`pnpm dlx\`, or \`vp dlx\`.
+- **Import from \`vite-plus\`:** Instead of importing from \`vite\` or \`vitest\`, import from \`vite-plus\`. For example: \`import { defineConfig } from 'vite-plus'\` or \`import { expect, test } from 'vite-plus/test'\`.
+
+### Review Checklist
+
+- [ ] Run \`vp install\` after pulling remote changes and before getting started
+- [ ] Run \`vp check\` and \`vp test\` to validate changes
 ",
     {
       "executable": false,
@@ -2582,6 +2939,149 @@ exports[`template snapshots > SPA kind (no Convex) 1`] = `
       "executable": false,
     },
   ],
+  "AGENTS.md": [
+    "# Contributor Guidelines
+
+## Technology Overview
+
+- **Development runtime**: Node.js (v24)
+- **Package manager**: pnpm
+- **Toolchain**: Vite+ (\`vp\`)
+- **Bundler**: Vite 8 (with Rolldown)
+- **JavaScript framework**: React 19
+- **Meta-framework**: React Router
+- **Rendering**: Single-Page Application (SPA)
+- **Styling**: Tailwind CSS v4
+- **Formatter**: Oxfmt
+- **Linter**: Oxlint
+- **Deployment runtime**: Cloudflare \`workerd\`
+
+## Common Commands
+
+- Dev server: \`vp dev\` (**NEVER** run this yourself)
+- Build: \`vp build\`
+- Format: \`vp fmt\`
+- Lint: \`vp lint\`
+- Typecheck: \`vp run typecheck\`
+- Project check: \`vp check\`
+- Tests: \`vp test\`
+
+## Debugging Approach
+
+- Use \`console.log\` with clear prefixes during development
+- **NEVER** attempt to run the dev server yourself
+- If you need to debug, add \`console.log\` statements, tell the user where to look for the output (client, server, both, etc.), and they will paste back the results
+
+## Node.js
+
+- Always use the \`node:\` prefix for Node built-in module imports
+- Format code with \`vp fmt\` before committing
+- Run \`vp run typecheck\` and fix all info, warnings, and errors
+- Prefer \`unknown\` over \`any\` unless absolutely necessary
+- Use JSDoc/TSDoc comments for public APIs
+- Prefer \`jsr:@std/*\` for standard library packages
+- Use relative imports for local modules
+- Prefer import aliases (\`~/*\`) over deep relative imports
+
+## React Router
+
+### Critical Package Guidelines
+
+**Use these packages:**
+
+- \`react-router\` - Main package for routing components and hooks
+- \`@react-router/dev\` - Development tools and route configuration
+- \`@cloudflare/vite-plugin\` - Cloudflare server adapter
+
+**NEVER use these packages:**
+
+- \`react-router-dom\` - Legacy package, use \`react-router\` instead
+- \`@remix-run/*\` - Old packages, replaced by \`@react-router/*\`
+
+### Route Configuration (\`app/routes.ts\`)
+
+\`\`\`tsx
+import { type RouteConfig, index, route } from "@react-router/dev/routes";
+
+export default [
+    index("routes/home.tsx"),
+    route("about", "routes/about.tsx"),
+    route("products/:id", "routes/product.tsx"),
+] satisfies RouteConfig;
+\`\`\`
+
+### Route Type Imports
+
+**ALWAYS use \`./+types/[routeName]\` for route type imports.** If you see TypeScript errors about missing types, run \`vp run typecheck\` to generate them. **NEVER** change the import path.
+
+\`\`\`tsx
+// CORRECT:
+import type { Route } from "./+types/home";
+
+// WRONG - never use relative parent paths:
+// import type { Route } from "../+types/home";
+\`\`\`
+
+### Type-Safe URL Generation
+
+\`\`\`tsx
+import { Link, href } from "react-router";
+
+<Link to={href("/products/:id", { id: product.id })}>View</Link>
+return redirect(href("/products/:id", { id: newProduct.id }));
+\`\`\`
+
+### SPA Mode
+
+This project runs as a single-page application with \`ssr: false\` in \`react-router.config.ts\`. All rendering happens on the client. Use \`clientLoader\` for data loading.
+
+
+## General Rules
+
+### Correctness
+
+- Remove anything that isn't used - unused imports, parameters, and members
+- Exhaust every hook dependency in React hook dependency arrays
+- Call React hooks only at the top level of a component
+
+### Style & Consistency
+
+- Stick to ES modules - no \`require\` or CommonJS patterns
+- Prefer \`import type\` for type-only imports
+- Use \`node:\` protocol for Node.js built-in imports
+- Use \`T[]\` shorthand array syntax
+- Don't reassign function parameters
+- Favor \`let\` over \`const\` for bindings, unless declaring a top-level constant with ALL_CAPS
+- Skip non-null assertions - rewrite code so \`!\` isn't necessary
+- Avoid \`enum\` - choose unions, objects, or literal types
+- Default parameters go last
+- Self-close empty JSX elements
+- Use \`slice\` instead of \`substr\`
+- Flatten simple \`if\`/\`else if\` chains
+- Kill useless \`else\` blocks when the \`if\` branch returns or throws
+
+## Using Vite+
+
+This project uses Vite+, a unified toolchain built on top of Vite, Rolldown, Vitest, tsdown, Oxlint, Oxfmt, and Vite Task. Vite+ wraps runtime management, package management, and frontend tooling in a single global CLI called \`vp\`.
+
+### Common Pitfalls
+
+- **Using the package manager directly:** Do not use pnpm, npm, or Yarn directly. Vite+ handles all package manager operations.
+- **Always use Vite commands to run tools:** Don't attempt to run \`vp vitest\` or \`vp oxlint\`. Use \`vp test\` and \`vp lint\` instead.
+- **Running scripts:** Vite+ commands take precedence over \`package.json\` scripts. If there is a conflict, run scripts using \`vp run <script>\`.
+- **Do not install Vitest, Oxlint, Oxfmt, or tsdown directly:** Vite+ wraps these tools.
+- **Use vpx for one-off binaries:** Use \`vpx\` instead of \`npx\`, \`pnpm dlx\`, or \`vp dlx\`.
+- **Import from \`vite-plus\`:** Instead of importing from \`vite\` or \`vitest\`, import from \`vite-plus\`. For example: \`import { defineConfig } from 'vite-plus'\` or \`import { expect, test } from 'vite-plus/test'\`.
+
+### Review Checklist
+
+- [ ] Run \`vp install\` after pulling remote changes and before getting started
+- [ ] Run \`vp check\` and \`vp test\` to validate changes
+",
+    {
+      "executable": false,
+    },
+  ],
   "README.md": [
     "# test-repo
 
@@ -3006,6 +3506,158 @@ VITE_CONVEX_URL=# Set by \`npx convex dev\`
   ],
   ".node-version": [
     "24
+",
+    {
+      "executable": false,
+    },
+  ],
+  "AGENTS.md": [
+    "# Contributor Guidelines
+
+## Technology Overview
+
+- **Development runtime**: Node.js (v24)
+- **Package manager**: pnpm
+- **Toolchain**: Vite+ (\`vp\`)
+- **Bundler**: Vite 8 (with Rolldown)
+- **JavaScript framework**: React 19
+- **Meta-framework**: React Router
+- **Rendering**: Single-Page Application (SPA)
+- **Backend**: Convex
+- **Data fetching**: TanStack Query with @convex-dev/react-query
+- **Styling**: Tailwind CSS v4
+- **Formatter**: Oxfmt
+- **Linter**: Oxlint
+- **Deployment runtime**: Cloudflare \`workerd\`
+
+## Common Commands
+
+- Dev server: \`vp dev\` (**NEVER** run this yourself)
+- Build: \`vp build\`
+- Format: \`vp fmt\`
+- Lint: \`vp lint\`
+- Typecheck: \`vp run typecheck\`
+- Project check: \`vp check\`
+- Tests: \`vp test\`
+
+## Debugging Approach
+
+- Use \`console.log\` with clear prefixes during development
+- **NEVER** attempt to run the dev server yourself
+- If you need to debug, add \`console.log\` statements, tell the user where to look for the output (client, server, both, etc.), and they will paste back the results
+
+## Node.js
+
+- Always use the \`node:\` prefix for Node built-in module imports
+- Format code with \`vp fmt\` before committing
+- Run \`vp run typecheck\` and fix all info, warnings, and errors
+- Prefer \`unknown\` over \`any\` unless absolutely necessary
+- Use JSDoc/TSDoc comments for public APIs
+- Prefer \`jsr:@std/*\` for standard library packages
+- Use relative imports for local modules
+- Prefer import aliases (\`~/*\`) over deep relative imports
+
+## React Router
+
+### Critical Package Guidelines
+
+**Use these packages:**
+
+- \`react-router\` - Main package for routing components and hooks
+- \`@react-router/dev\` - Development tools and route configuration
+- \`@cloudflare/vite-plugin\` - Cloudflare server adapter
+
+**NEVER use these packages:**
+
+- \`react-router-dom\` - Legacy package, use \`react-router\` instead
+- \`@remix-run/*\` - Old packages, replaced by \`@react-router/*\`
+
+### Route Configuration (\`app/routes.ts\`)
+
+\`\`\`tsx
+import { type RouteConfig, index, route } from "@react-router/dev/routes";
+
+export default [
+    index("routes/home.tsx"),
+    route("about", "routes/about.tsx"),
+    route("products/:id", "routes/product.tsx"),
+] satisfies RouteConfig;
+\`\`\`
+
+### Route Type Imports
+
+**ALWAYS use \`./+types/[routeName]\` for route type imports.** If you see TypeScript errors about missing types, run \`vp run typecheck\` to generate them. **NEVER** change the import path.
+
+\`\`\`tsx
+// CORRECT:
+import type { Route } from "./+types/home";
+
+// WRONG - never use relative parent paths:
+// import type { Route } from "../+types/home";
+\`\`\`
+
+### Type-Safe URL Generation
+
+\`\`\`tsx
+import { Link, href } from "react-router";
+
+<Link to={href("/products/:id", { id: product.id })}>View</Link>
+return redirect(href("/products/:id", { id: newProduct.id }));
+\`\`\`
+
+### SPA Mode
+
+This project runs as a single-page application with \`ssr: false\` in \`react-router.config.ts\`. All rendering happens on the client. Use \`clientLoader\` for data loading.
+
+### Convex Integration
+
+The app uses Convex with TanStack Query via \`@convex-dev/react-query\`. The provider stack is in \`root.tsx\`:
+
+- \`ConvexProvider\` wraps the app with \`ConvexReactClient\`
+- \`QueryClientProvider\` wraps with a \`QueryClient\` configured with Convex's hash and query functions
+- Use \`queryClient.ensureQueryData()\` in \`clientLoader\` to pre-populate the cache
+
+## General Rules
+
+### Correctness
+
+- Remove anything that isn't used - unused imports, parameters, and members
+- Exhaust every hook dependency in React hook dependency arrays
+- Call React hooks only at the top level of a component
+
+### Style & Consistency
+
+- Stick to ES modules - no \`require\` or CommonJS patterns
+- Prefer \`import type\` for type-only imports
+- Use \`node:\` protocol for Node.js built-in imports
+- Use \`T[]\` shorthand array syntax
+- Don't reassign function parameters
+- Favor \`let\` over \`const\` for bindings, unless declaring a top-level constant with ALL_CAPS
+- Skip non-null assertions - rewrite code so \`!\` isn't necessary
+- Avoid \`enum\` - choose unions, objects, or literal types
+- Default parameters go last
+- Self-close empty JSX elements
+- Use \`slice\` instead of \`substr\`
+- Flatten simple \`if\`/\`else if\` chains
+- Kill useless \`else\` blocks when the \`if\` branch returns or throws
+
+## Using Vite+
+
+This project uses Vite+, a unified toolchain built on top of Vite, Rolldown, Vitest, tsdown, Oxlint, Oxfmt, and Vite Task. Vite+ wraps runtime management, package management, and frontend tooling in a single global CLI called \`vp\`.
+
+### Common Pitfalls
+
+- **Using the package manager directly:** Do not use pnpm, npm, or Yarn directly. Vite+ handles all package manager operations.
+- **Always use Vite commands to run tools:** Don't attempt to run \`vp vitest\` or \`vp oxlint\`. Use \`vp test\` and \`vp lint\` instead.
+- **Running scripts:** Vite+ commands take precedence over \`package.json\` scripts. If there is a conflict, run scripts using \`vp run <script>\`.
+- **Do not install Vitest, Oxlint, Oxfmt, or tsdown directly:** Vite+ wraps these tools.
+- **Use vpx for one-off binaries:** Use \`vpx\` instead of \`npx\`, \`pnpm dlx\`, or \`vp dlx\`.
+- **Import from \`vite-plus\`:** Instead of importing from \`vite\` or \`vitest\`, import from \`vite-plus\`. For example: \`import { defineConfig } from 'vite-plus'\` or \`import { expect, test } from 'vite-plus/test'\`.
+
+### Review Checklist
+
+- [ ] Run \`vp install\` after pulling remote changes and before getting started
+- [ ] Run \`vp check\` and \`vp test\` to validate changes
 ",
     {
       "executable": false,
@@ -3474,6 +4126,149 @@ exports[`template snapshots > SSR kind (no Convex) 1`] = `
   ],
   ".node-version": [
     "24
+",
+    {
+      "executable": false,
+    },
+  ],
+  "AGENTS.md": [
+    "# Contributor Guidelines
+
+## Technology Overview
+
+- **Development runtime**: Node.js (v24)
+- **Package manager**: pnpm
+- **Toolchain**: Vite+ (\`vp\`)
+- **Bundler**: Vite 8 (with Rolldown)
+- **JavaScript framework**: React 19
+- **Meta-framework**: React Router
+- **Rendering**: Server-Side Rendering (SSR)
+- **Styling**: Tailwind CSS v4
+- **Formatter**: Oxfmt
+- **Linter**: Oxlint
+- **Deployment runtime**: Cloudflare \`workerd\`
+
+## Common Commands
+
+- Dev server: \`vp dev\` (**NEVER** run this yourself)
+- Build: \`vp build\`
+- Format: \`vp fmt\`
+- Lint: \`vp lint\`
+- Typecheck: \`vp run typecheck\`
+- Project check: \`vp check\`
+- Tests: \`vp test\`
+
+## Debugging Approach
+
+- Use \`console.log\` with clear prefixes during development
+- **NEVER** attempt to run the dev server yourself
+- If you need to debug, add \`console.log\` statements, tell the user where to look for the output (client, server, both, etc.), and they will paste back the results
+
+## Node.js
+
+- Always use the \`node:\` prefix for Node built-in module imports
+- Format code with \`vp fmt\` before committing
+- Run \`vp run typecheck\` and fix all info, warnings, and errors
+- Prefer \`unknown\` over \`any\` unless absolutely necessary
+- Use JSDoc/TSDoc comments for public APIs
+- Prefer \`jsr:@std/*\` for standard library packages
+- Use relative imports for local modules
+- Prefer import aliases (\`~/*\`) over deep relative imports
+
+## React Router
+
+### Critical Package Guidelines
+
+**Use these packages:**
+
+- \`react-router\` - Main package for routing components and hooks
+- \`@react-router/dev\` - Development tools and route configuration
+- \`@cloudflare/vite-plugin\` - Cloudflare server adapter
+
+**NEVER use these packages:**
+
+- \`react-router-dom\` - Legacy package, use \`react-router\` instead
+- \`@remix-run/*\` - Old packages, replaced by \`@react-router/*\`
+
+### Route Configuration (\`app/routes.ts\`)
+
+\`\`\`tsx
+import { type RouteConfig, index, route } from "@react-router/dev/routes";
+
+export default [
+    index("routes/home.tsx"),
+    route("about", "routes/about.tsx"),
+    route("products/:id", "routes/product.tsx"),
+] satisfies RouteConfig;
+\`\`\`
+
+### Route Type Imports
+
+**ALWAYS use \`./+types/[routeName]\` for route type imports.** If you see TypeScript errors about missing types, run \`vp run typecheck\` to generate them. **NEVER** change the import path.
+
+\`\`\`tsx
+// CORRECT:
+import type { Route } from "./+types/home";
+
+// WRONG - never use relative parent paths:
+// import type { Route } from "../+types/home";
+\`\`\`
+
+### Type-Safe URL Generation
+
+\`\`\`tsx
+import { Link, href } from "react-router";
+
+<Link to={href("/products/:id", { id: product.id })}>View</Link>
+return redirect(href("/products/:id", { id: newProduct.id }));
+\`\`\`
+
+### SSR Mode
+
+This project uses server-side rendering deployed to Cloudflare Workers.
+
+
+## General Rules
+
+### Correctness
+
+- Remove anything that isn't used - unused imports, parameters, and members
+- Exhaust every hook dependency in React hook dependency arrays
+- Call React hooks only at the top level of a component
+
+### Style & Consistency
+
+- Stick to ES modules - no \`require\` or CommonJS patterns
+- Prefer \`import type\` for type-only imports
+- Use \`node:\` protocol for Node.js built-in imports
+- Use \`T[]\` shorthand array syntax
+- Don't reassign function parameters
+- Favor \`let\` over \`const\` for bindings, unless declaring a top-level constant with ALL_CAPS
+- Skip non-null assertions - rewrite code so \`!\` isn't necessary
+- Avoid \`enum\` - choose unions, objects, or literal types
+- Default parameters go last
+- Self-close empty JSX elements
+- Use \`slice\` instead of \`substr\`
+- Flatten simple \`if\`/\`else if\` chains
+- Kill useless \`else\` blocks when the \`if\` branch returns or throws
+
+## Using Vite+
+
+This project uses Vite+, a unified toolchain built on top of Vite, Rolldown, Vitest, tsdown, Oxlint, Oxfmt, and Vite Task. Vite+ wraps runtime management, package management, and frontend tooling in a single global CLI called \`vp\`.
+
+### Common Pitfalls
+
+- **Using the package manager directly:** Do not use pnpm, npm, or Yarn directly. Vite+ handles all package manager operations.
+- **Always use Vite commands to run tools:** Don't attempt to run \`vp vitest\` or \`vp oxlint\`. Use \`vp test\` and \`vp lint\` instead.
+- **Running scripts:** Vite+ commands take precedence over \`package.json\` scripts. If there is a conflict, run scripts using \`vp run <script>\`.
+- **Do not install Vitest, Oxlint, Oxfmt, or tsdown directly:** Vite+ wraps these tools.
+- **Use vpx for one-off binaries:** Use \`vpx\` instead of \`npx\`, \`pnpm dlx\`, or \`vp dlx\`.
+- **Import from \`vite-plus\`:** Instead of importing from \`vite\` or \`vitest\`, import from \`vite-plus\`. For example: \`import { defineConfig } from 'vite-plus'\` or \`import { expect, test } from 'vite-plus/test'\`.
+
+### Review Checklist
+
+- [ ] Run \`vp install\` after pulling remote changes and before getting started
+- [ ] Run \`vp check\` and \`vp test\` to validate changes
 ",
     {
       "executable": false,
@@ -3967,6 +4762,168 @@ VITE_CONVEX_URL=# Set by \`npx convex dev\`
   ],
   ".node-version": [
     "24
+",
+    {
+      "executable": false,
+    },
+  ],
+  "AGENTS.md": [
+    "# Contributor Guidelines
+
+## Technology Overview
+
+- **Development runtime**: Node.js (v24)
+- **Package manager**: pnpm
+- **Toolchain**: Vite+ (\`vp\`)
+- **Bundler**: Vite 8 (with Rolldown)
+- **JavaScript framework**: React 19
+- **Meta-framework**: React Router
+- **Rendering**: Server-Side Rendering (SSR)
+- **Backend**: Convex
+- **Data fetching**: TanStack Query with @convex-dev/react-query
+- **Styling**: Tailwind CSS v4
+- **Formatter**: Oxfmt
+- **Linter**: Oxlint
+- **Deployment runtime**: Cloudflare \`workerd\`
+
+## Common Commands
+
+- Dev server: \`vp dev\` (**NEVER** run this yourself)
+- Build: \`vp build\`
+- Format: \`vp fmt\`
+- Lint: \`vp lint\`
+- Typecheck: \`vp run typecheck\`
+- Project check: \`vp check\`
+- Tests: \`vp test\`
+
+## Debugging Approach
+
+- Use \`console.log\` with clear prefixes during development
+- **NEVER** attempt to run the dev server yourself
+- If you need to debug, add \`console.log\` statements, tell the user where to look for the output (client, server, both, etc.), and they will paste back the results
+
+## Node.js
+
+- Always use the \`node:\` prefix for Node built-in module imports
+- Format code with \`vp fmt\` before committing
+- Run \`vp run typecheck\` and fix all info, warnings, and errors
+- Prefer \`unknown\` over \`any\` unless absolutely necessary
+- Use JSDoc/TSDoc comments for public APIs
+- Prefer \`jsr:@std/*\` for standard library packages
+- Use relative imports for local modules
+- Prefer import aliases (\`~/*\`) over deep relative imports
+
+## React Router
+
+### Critical Package Guidelines
+
+**Use these packages:**
+
+- \`react-router\` - Main package for routing components and hooks
+- \`@react-router/dev\` - Development tools and route configuration
+- \`@cloudflare/vite-plugin\` - Cloudflare server adapter
+
+**NEVER use these packages:**
+
+- \`react-router-dom\` - Legacy package, use \`react-router\` instead
+- \`@remix-run/*\` - Old packages, replaced by \`@react-router/*\`
+
+### Route Configuration (\`app/routes.ts\`)
+
+\`\`\`tsx
+import { type RouteConfig, index, route } from "@react-router/dev/routes";
+
+export default [
+    index("routes/home.tsx"),
+    route("about", "routes/about.tsx"),
+    route("products/:id", "routes/product.tsx"),
+] satisfies RouteConfig;
+\`\`\`
+
+### Route Type Imports
+
+**ALWAYS use \`./+types/[routeName]\` for route type imports.** If you see TypeScript errors about missing types, run \`vp run typecheck\` to generate them. **NEVER** change the import path.
+
+\`\`\`tsx
+// CORRECT:
+import type { Route } from "./+types/home";
+
+// WRONG - never use relative parent paths:
+// import type { Route } from "../+types/home";
+\`\`\`
+
+### Type-Safe URL Generation
+
+\`\`\`tsx
+import { Link, href } from "react-router";
+
+<Link to={href("/products/:id", { id: product.id })}>View</Link>
+return redirect(href("/products/:id", { id: newProduct.id }));
+\`\`\`
+
+### SSR Mode
+
+This project uses server-side rendering deployed to Cloudflare Workers.
+
+### Convex Integration
+
+The app uses Convex with TanStack Query via middleware-based \`QueryClient\` hydration:
+
+- \`middleware.ts\` - Sets up the query client per request via \`setQueryClient\`
+- \`query-preloader.ts\` - Provides \`createPreloader\` for server-side data loading and \`useDehydratedState\` for client hydration
+- \`lib/client.ts\` - Creates the base \`QueryClient\` with Convex integration
+
+**Route pattern with createPreloader:**
+
+\`\`\`tsx
+import { createPreloader } from "~/tanstack-query-integration/query-preloader.ts";
+
+export const loader = createPreloader<Route.LoaderArgs, void>(async ({ preload }) => {
+    await preload(yourQueryOptions);
+});
+\`\`\`
+
+## General Rules
+
+### Correctness
+
+- Remove anything that isn't used - unused imports, parameters, and members
+- Exhaust every hook dependency in React hook dependency arrays
+- Call React hooks only at the top level of a component
+
+### Style & Consistency
+
+- Stick to ES modules - no \`require\` or CommonJS patterns
+- Prefer \`import type\` for type-only imports
+- Use \`node:\` protocol for Node.js built-in imports
+- Use \`T[]\` shorthand array syntax
+- Don't reassign function parameters
+- Favor \`let\` over \`const\` for bindings, unless declaring a top-level constant with ALL_CAPS
+- Skip non-null assertions - rewrite code so \`!\` isn't necessary
+- Avoid \`enum\` - choose unions, objects, or literal types
+- Default parameters go last
+- Self-close empty JSX elements
+- Use \`slice\` instead of \`substr\`
+- Flatten simple \`if\`/\`else if\` chains
+- Kill useless \`else\` blocks when the \`if\` branch returns or throws
+
+## Using Vite+
+
+This project uses Vite+, a unified toolchain built on top of Vite, Rolldown, Vitest, tsdown, Oxlint, Oxfmt, and Vite Task. Vite+ wraps runtime management, package management, and frontend tooling in a single global CLI called \`vp\`.
+
+### Common Pitfalls
+
+- **Using the package manager directly:** Do not use pnpm, npm, or Yarn directly. Vite+ handles all package manager operations.
+- **Always use Vite commands to run tools:** Don't attempt to run \`vp vitest\` or \`vp oxlint\`. Use \`vp test\` and \`vp lint\` instead.
+- **Running scripts:** Vite+ commands take precedence over \`package.json\` scripts. If there is a conflict, run scripts using \`vp run <script>\`.
+- **Do not install Vitest, Oxlint, Oxfmt, or tsdown directly:** Vite+ wraps these tools.
+- **Use vpx for one-off binaries:** Use \`vpx\` instead of \`npx\`, \`pnpm dlx\`, or \`vp dlx\`.
+- **Import from \`vite-plus\`:** Instead of importing from \`vite\` or \`vitest\`, import from \`vite-plus\`. For example: \`import { defineConfig } from 'vite-plus'\` or \`import { expect, test } from 'vite-plus/test'\`.
+
+### Review Checklist
+
+- [ ] Run \`vp install\` after pulling remote changes and before getting started
+- [ ] Run \`vp check\` and \`vp test\` to validate changes
 ",
     {
       "executable": false,
@@ -4686,6 +5643,93 @@ exports[`template snapshots > ts-package base 1`] = `
       "executable": false,
     },
   ],
+  "AGENTS.md": [
+    "# Contributor Guidelines
+
+## Technology Overview
+
+- **Development runtime**: Node.js (v24)
+- **Package manager**: pnpm
+- **Toolchain**: Vite+ (\`vp\`)
+- **Bundler**: Vite 8 (with Rolldown)
+- **Formatter**: Oxfmt
+- **Linter**: Oxlint
+
+## Common Commands
+
+- Dev server: \`vp dev\` (**NEVER** run this yourself)
+- Build: \`vp build\`
+- Format: \`vp fmt\`
+- Lint: \`vp lint\`
+- Typecheck: \`vp run typecheck\`
+- Project check: \`vp check\`
+- Tests: \`vp test\`
+- Pack library: \`vp pack\`
+- Watch mode: \`vp run dev\`
+
+## Debugging Approach
+
+- Use \`console.log\` with clear prefixes during development
+- **NEVER** attempt to run the dev server yourself
+- If you need to debug, add \`console.log\` statements, tell the user where to look for the output (client, server, both, etc.), and they will paste back the results
+
+## Node.js
+
+- Always use the \`node:\` prefix for Node built-in module imports
+- Format code with \`vp fmt\` before committing
+- Run \`vp run typecheck\` and fix all info, warnings, and errors
+- Prefer \`unknown\` over \`any\` unless absolutely necessary
+- Use JSDoc/TSDoc comments for public APIs
+- Prefer \`jsr:@std/*\` for standard library packages
+- Use relative imports for local modules
+- Prefer import aliases (\`~/*\`) over deep relative imports
+
+## General Rules
+
+### Correctness
+
+- Remove anything that isn't used - unused imports, parameters, and members
+- Exhaust every hook dependency in React hook dependency arrays
+- Call React hooks only at the top level of a component
+
+### Style & Consistency
+
+- Stick to ES modules - no \`require\` or CommonJS patterns
+- Prefer \`import type\` for type-only imports
+- Use \`node:\` protocol for Node.js built-in imports
+- Use \`T[]\` shorthand array syntax
+- Don't reassign function parameters
+- Favor \`let\` over \`const\` for bindings, unless declaring a top-level constant with ALL_CAPS
+- Skip non-null assertions - rewrite code so \`!\` isn't necessary
+- Avoid \`enum\` - choose unions, objects, or literal types
+- Default parameters go last
+- Self-close empty JSX elements
+- Use \`slice\` instead of \`substr\`
+- Flatten simple \`if\`/\`else if\` chains
+- Kill useless \`else\` blocks when the \`if\` branch returns or throws
+
+## Using Vite+
+
+This project uses Vite+, a unified toolchain built on top of Vite, Rolldown, Vitest, tsdown, Oxlint, Oxfmt, and Vite Task. Vite+ wraps runtime management, package management, and frontend tooling in a single global CLI called \`vp\`.
+
+### Common Pitfalls
+
+- **Using the package manager directly:** Do not use pnpm, npm, or Yarn directly. Vite+ handles all package manager operations.
+- **Always use Vite commands to run tools:** Don't attempt to run \`vp vitest\` or \`vp oxlint\`. Use \`vp test\` and \`vp lint\` instead.
+- **Running scripts:** Vite+ commands take precedence over \`package.json\` scripts. If there is a conflict, run scripts using \`vp run <script>\`.
+- **Do not install Vitest, Oxlint, Oxfmt, or tsdown directly:** Vite+ wraps these tools.
+- **Use vpx for one-off binaries:** Use \`vpx\` instead of \`npx\`, \`pnpm dlx\`, or \`vp dlx\`.
+- **Import from \`vite-plus\`:** Instead of importing from \`vite\` or \`vitest\`, import from \`vite-plus\`. For example: \`import { defineConfig } from 'vite-plus'\` or \`import { expect, test } from 'vite-plus/test'\`.
+
+### Review Checklist
+
+- [ ] Run \`vp install\` after pulling remote changes and before getting started
+- [ ] Run \`vp check\` and \`vp test\` to validate changes
+",
+    {
+      "executable": false,
+    },
+  ],
   "README.md": [
     "# test-repo
 
@@ -4929,6 +5973,93 @@ exports[`ts-package feature combinations > cli + generator + sea 1`] = `
   ],
   ".node-version": [
     "24
+",
+    {
+      "executable": false,
+    },
+  ],
+  "AGENTS.md": [
+    "# Contributor Guidelines
+
+## Technology Overview
+
+- **Development runtime**: Node.js (v24)
+- **Package manager**: pnpm
+- **Toolchain**: Vite+ (\`vp\`)
+- **Bundler**: Vite 8 (with Rolldown)
+- **Formatter**: Oxfmt
+- **Linter**: Oxlint
+
+## Common Commands
+
+- Dev server: \`vp dev\` (**NEVER** run this yourself)
+- Build: \`vp build\`
+- Format: \`vp fmt\`
+- Lint: \`vp lint\`
+- Typecheck: \`vp run typecheck\`
+- Project check: \`vp check\`
+- Tests: \`vp test\`
+- Pack library: \`vp pack\`
+- Watch mode: \`vp run dev\`
+
+## Debugging Approach
+
+- Use \`console.log\` with clear prefixes during development
+- **NEVER** attempt to run the dev server yourself
+- If you need to debug, add \`console.log\` statements, tell the user where to look for the output (client, server, both, etc.), and they will paste back the results
+
+## Node.js
+
+- Always use the \`node:\` prefix for Node built-in module imports
+- Format code with \`vp fmt\` before committing
+- Run \`vp run typecheck\` and fix all info, warnings, and errors
+- Prefer \`unknown\` over \`any\` unless absolutely necessary
+- Use JSDoc/TSDoc comments for public APIs
+- Prefer \`jsr:@std/*\` for standard library packages
+- Use relative imports for local modules
+- Prefer import aliases (\`~/*\`) over deep relative imports
+
+## General Rules
+
+### Correctness
+
+- Remove anything that isn't used - unused imports, parameters, and members
+- Exhaust every hook dependency in React hook dependency arrays
+- Call React hooks only at the top level of a component
+
+### Style & Consistency
+
+- Stick to ES modules - no \`require\` or CommonJS patterns
+- Prefer \`import type\` for type-only imports
+- Use \`node:\` protocol for Node.js built-in imports
+- Use \`T[]\` shorthand array syntax
+- Don't reassign function parameters
+- Favor \`let\` over \`const\` for bindings, unless declaring a top-level constant with ALL_CAPS
+- Skip non-null assertions - rewrite code so \`!\` isn't necessary
+- Avoid \`enum\` - choose unions, objects, or literal types
+- Default parameters go last
+- Self-close empty JSX elements
+- Use \`slice\` instead of \`substr\`
+- Flatten simple \`if\`/\`else if\` chains
+- Kill useless \`else\` blocks when the \`if\` branch returns or throws
+
+## Using Vite+
+
+This project uses Vite+, a unified toolchain built on top of Vite, Rolldown, Vitest, tsdown, Oxlint, Oxfmt, and Vite Task. Vite+ wraps runtime management, package management, and frontend tooling in a single global CLI called \`vp\`.
+
+### Common Pitfalls
+
+- **Using the package manager directly:** Do not use pnpm, npm, or Yarn directly. Vite+ handles all package manager operations.
+- **Always use Vite commands to run tools:** Don't attempt to run \`vp vitest\` or \`vp oxlint\`. Use \`vp test\` and \`vp lint\` instead.
+- **Running scripts:** Vite+ commands take precedence over \`package.json\` scripts. If there is a conflict, run scripts using \`vp run <script>\`.
+- **Do not install Vitest, Oxlint, Oxfmt, or tsdown directly:** Vite+ wraps these tools.
+- **Use vpx for one-off binaries:** Use \`vpx\` instead of \`npx\`, \`pnpm dlx\`, or \`vp dlx\`.
+- **Import from \`vite-plus\`:** Instead of importing from \`vite\` or \`vitest\`, import from \`vite-plus\`. For example: \`import { defineConfig } from 'vite-plus'\` or \`import { expect, test } from 'vite-plus/test'\`.
+
+### Review Checklist
+
+- [ ] Run \`vp install\` after pulling remote changes and before getting started
+- [ ] Run \`vp check\` and \`vp test\` to validate changes
 ",
     {
       "executable": false,
@@ -5284,6 +6415,93 @@ exports[`ts-package feature combinations > cli + generator 1`] = `
       "executable": false,
     },
   ],
+  "AGENTS.md": [
+    "# Contributor Guidelines
+
+## Technology Overview
+
+- **Development runtime**: Node.js (v24)
+- **Package manager**: pnpm
+- **Toolchain**: Vite+ (\`vp\`)
+- **Bundler**: Vite 8 (with Rolldown)
+- **Formatter**: Oxfmt
+- **Linter**: Oxlint
+
+## Common Commands
+
+- Dev server: \`vp dev\` (**NEVER** run this yourself)
+- Build: \`vp build\`
+- Format: \`vp fmt\`
+- Lint: \`vp lint\`
+- Typecheck: \`vp run typecheck\`
+- Project check: \`vp check\`
+- Tests: \`vp test\`
+- Pack library: \`vp pack\`
+- Watch mode: \`vp run dev\`
+
+## Debugging Approach
+
+- Use \`console.log\` with clear prefixes during development
+- **NEVER** attempt to run the dev server yourself
+- If you need to debug, add \`console.log\` statements, tell the user where to look for the output (client, server, both, etc.), and they will paste back the results
+
+## Node.js
+
+- Always use the \`node:\` prefix for Node built-in module imports
+- Format code with \`vp fmt\` before committing
+- Run \`vp run typecheck\` and fix all info, warnings, and errors
+- Prefer \`unknown\` over \`any\` unless absolutely necessary
+- Use JSDoc/TSDoc comments for public APIs
+- Prefer \`jsr:@std/*\` for standard library packages
+- Use relative imports for local modules
+- Prefer import aliases (\`~/*\`) over deep relative imports
+
+## General Rules
+
+### Correctness
+
+- Remove anything that isn't used - unused imports, parameters, and members
+- Exhaust every hook dependency in React hook dependency arrays
+- Call React hooks only at the top level of a component
+
+### Style & Consistency
+
+- Stick to ES modules - no \`require\` or CommonJS patterns
+- Prefer \`import type\` for type-only imports
+- Use \`node:\` protocol for Node.js built-in imports
+- Use \`T[]\` shorthand array syntax
+- Don't reassign function parameters
+- Favor \`let\` over \`const\` for bindings, unless declaring a top-level constant with ALL_CAPS
+- Skip non-null assertions - rewrite code so \`!\` isn't necessary
+- Avoid \`enum\` - choose unions, objects, or literal types
+- Default parameters go last
+- Self-close empty JSX elements
+- Use \`slice\` instead of \`substr\`
+- Flatten simple \`if\`/\`else if\` chains
+- Kill useless \`else\` blocks when the \`if\` branch returns or throws
+
+## Using Vite+
+
+This project uses Vite+, a unified toolchain built on top of Vite, Rolldown, Vitest, tsdown, Oxlint, Oxfmt, and Vite Task. Vite+ wraps runtime management, package management, and frontend tooling in a single global CLI called \`vp\`.
+
+### Common Pitfalls
+
+- **Using the package manager directly:** Do not use pnpm, npm, or Yarn directly. Vite+ handles all package manager operations.
+- **Always use Vite commands to run tools:** Don't attempt to run \`vp vitest\` or \`vp oxlint\`. Use \`vp test\` and \`vp lint\` instead.
+- **Running scripts:** Vite+ commands take precedence over \`package.json\` scripts. If there is a conflict, run scripts using \`vp run <script>\`.
+- **Do not install Vitest, Oxlint, Oxfmt, or tsdown directly:** Vite+ wraps these tools.
+- **Use vpx for one-off binaries:** Use \`vpx\` instead of \`npx\`, \`pnpm dlx\`, or \`vp dlx\`.
+- **Import from \`vite-plus\`:** Instead of importing from \`vite\` or \`vitest\`, import from \`vite-plus\`. For example: \`import { defineConfig } from 'vite-plus'\` or \`import { expect, test } from 'vite-plus/test'\`.
+
+### Review Checklist
+
+- [ ] Run \`vp install\` after pulling remote changes and before getting started
+- [ ] Run \`vp check\` and \`vp test\` to validate changes
+",
+    {
+      "executable": false,
+    },
+  ],
   "README.md": [
     "# test-repo
 
@@ -5618,6 +6836,93 @@ exports[`ts-package feature combinations > cli + sea 1`] = `
       "executable": false,
     },
   ],
+  "AGENTS.md": [
+    "# Contributor Guidelines
+
+## Technology Overview
+
+- **Development runtime**: Node.js (v24)
+- **Package manager**: pnpm
+- **Toolchain**: Vite+ (\`vp\`)
+- **Bundler**: Vite 8 (with Rolldown)
+- **Formatter**: Oxfmt
+- **Linter**: Oxlint
+
+## Common Commands
+
+- Dev server: \`vp dev\` (**NEVER** run this yourself)
+- Build: \`vp build\`
+- Format: \`vp fmt\`
+- Lint: \`vp lint\`
+- Typecheck: \`vp run typecheck\`
+- Project check: \`vp check\`
+- Tests: \`vp test\`
+- Pack library: \`vp pack\`
+- Watch mode: \`vp run dev\`
+
+## Debugging Approach
+
+- Use \`console.log\` with clear prefixes during development
+- **NEVER** attempt to run the dev server yourself
+- If you need to debug, add \`console.log\` statements, tell the user where to look for the output (client, server, both, etc.), and they will paste back the results
+
+## Node.js
+
+- Always use the \`node:\` prefix for Node built-in module imports
+- Format code with \`vp fmt\` before committing
+- Run \`vp run typecheck\` and fix all info, warnings, and errors
+- Prefer \`unknown\` over \`any\` unless absolutely necessary
+- Use JSDoc/TSDoc comments for public APIs
+- Prefer \`jsr:@std/*\` for standard library packages
+- Use relative imports for local modules
+- Prefer import aliases (\`~/*\`) over deep relative imports
+
+## General Rules
+
+### Correctness
+
+- Remove anything that isn't used - unused imports, parameters, and members
+- Exhaust every hook dependency in React hook dependency arrays
+- Call React hooks only at the top level of a component
+
+### Style & Consistency
+
+- Stick to ES modules - no \`require\` or CommonJS patterns
+- Prefer \`import type\` for type-only imports
+- Use \`node:\` protocol for Node.js built-in imports
+- Use \`T[]\` shorthand array syntax
+- Don't reassign function parameters
+- Favor \`let\` over \`const\` for bindings, unless declaring a top-level constant with ALL_CAPS
+- Skip non-null assertions - rewrite code so \`!\` isn't necessary
+- Avoid \`enum\` - choose unions, objects, or literal types
+- Default parameters go last
+- Self-close empty JSX elements
+- Use \`slice\` instead of \`substr\`
+- Flatten simple \`if\`/\`else if\` chains
+- Kill useless \`else\` blocks when the \`if\` branch returns or throws
+
+## Using Vite+
+
+This project uses Vite+, a unified toolchain built on top of Vite, Rolldown, Vitest, tsdown, Oxlint, Oxfmt, and Vite Task. Vite+ wraps runtime management, package management, and frontend tooling in a single global CLI called \`vp\`.
+
+### Common Pitfalls
+
+- **Using the package manager directly:** Do not use pnpm, npm, or Yarn directly. Vite+ handles all package manager operations.
+- **Always use Vite commands to run tools:** Don't attempt to run \`vp vitest\` or \`vp oxlint\`. Use \`vp test\` and \`vp lint\` instead.
+- **Running scripts:** Vite+ commands take precedence over \`package.json\` scripts. If there is a conflict, run scripts using \`vp run <script>\`.
+- **Do not install Vitest, Oxlint, Oxfmt, or tsdown directly:** Vite+ wraps these tools.
+- **Use vpx for one-off binaries:** Use \`vpx\` instead of \`npx\`, \`pnpm dlx\`, or \`vp dlx\`.
+- **Import from \`vite-plus\`:** Instead of importing from \`vite\` or \`vitest\`, import from \`vite-plus\`. For example: \`import { defineConfig } from 'vite-plus'\` or \`import { expect, test } from 'vite-plus/test'\`.
+
+### Review Checklist
+
+- [ ] Run \`vp install\` after pulling remote changes and before getting started
+- [ ] Run \`vp check\` and \`vp test\` to validate changes
+",
+    {
+      "executable": false,
+    },
+  ],
   "README.md": [
     "# test-repo
 
@@ -5933,6 +7238,93 @@ exports[`ts-package feature combinations > cli only 1`] = `
       "executable": false,
     },
   ],
+  "AGENTS.md": [
+    "# Contributor Guidelines
+
+## Technology Overview
+
+- **Development runtime**: Node.js (v24)
+- **Package manager**: pnpm
+- **Toolchain**: Vite+ (\`vp\`)
+- **Bundler**: Vite 8 (with Rolldown)
+- **Formatter**: Oxfmt
+- **Linter**: Oxlint
+
+## Common Commands
+
+- Dev server: \`vp dev\` (**NEVER** run this yourself)
+- Build: \`vp build\`
+- Format: \`vp fmt\`
+- Lint: \`vp lint\`
+- Typecheck: \`vp run typecheck\`
+- Project check: \`vp check\`
+- Tests: \`vp test\`
+- Pack library: \`vp pack\`
+- Watch mode: \`vp run dev\`
+
+## Debugging Approach
+
+- Use \`console.log\` with clear prefixes during development
+- **NEVER** attempt to run the dev server yourself
+- If you need to debug, add \`console.log\` statements, tell the user where to look for the output (client, server, both, etc.), and they will paste back the results
+
+## Node.js
+
+- Always use the \`node:\` prefix for Node built-in module imports
+- Format code with \`vp fmt\` before committing
+- Run \`vp run typecheck\` and fix all info, warnings, and errors
+- Prefer \`unknown\` over \`any\` unless absolutely necessary
+- Use JSDoc/TSDoc comments for public APIs
+- Prefer \`jsr:@std/*\` for standard library packages
+- Use relative imports for local modules
+- Prefer import aliases (\`~/*\`) over deep relative imports
+
+## General Rules
+
+### Correctness
+
+- Remove anything that isn't used - unused imports, parameters, and members
+- Exhaust every hook dependency in React hook dependency arrays
+- Call React hooks only at the top level of a component
+
+### Style & Consistency
+
+- Stick to ES modules - no \`require\` or CommonJS patterns
+- Prefer \`import type\` for type-only imports
+- Use \`node:\` protocol for Node.js built-in imports
+- Use \`T[]\` shorthand array syntax
+- Don't reassign function parameters
+- Favor \`let\` over \`const\` for bindings, unless declaring a top-level constant with ALL_CAPS
+- Skip non-null assertions - rewrite code so \`!\` isn't necessary
+- Avoid \`enum\` - choose unions, objects, or literal types
+- Default parameters go last
+- Self-close empty JSX elements
+- Use \`slice\` instead of \`substr\`
+- Flatten simple \`if\`/\`else if\` chains
+- Kill useless \`else\` blocks when the \`if\` branch returns or throws
+
+## Using Vite+
+
+This project uses Vite+, a unified toolchain built on top of Vite, Rolldown, Vitest, tsdown, Oxlint, Oxfmt, and Vite Task. Vite+ wraps runtime management, package management, and frontend tooling in a single global CLI called \`vp\`.
+
+### Common Pitfalls
+
+- **Using the package manager directly:** Do not use pnpm, npm, or Yarn directly. Vite+ handles all package manager operations.
+- **Always use Vite commands to run tools:** Don't attempt to run \`vp vitest\` or \`vp oxlint\`. Use \`vp test\` and \`vp lint\` instead.
+- **Running scripts:** Vite+ commands take precedence over \`package.json\` scripts. If there is a conflict, run scripts using \`vp run <script>\`.
+- **Do not install Vitest, Oxlint, Oxfmt, or tsdown directly:** Vite+ wraps these tools.
+- **Use vpx for one-off binaries:** Use \`vpx\` instead of \`npx\`, \`pnpm dlx\`, or \`vp dlx\`.
+- **Import from \`vite-plus\`:** Instead of importing from \`vite\` or \`vitest\`, import from \`vite-plus\`. For example: \`import { defineConfig } from 'vite-plus'\` or \`import { expect, test } from 'vite-plus/test'\`.
+
+### Review Checklist
+
+- [ ] Run \`vp install\` after pulling remote changes and before getting started
+- [ ] Run \`vp check\` and \`vp test\` to validate changes
+",
+    {
+      "executable": false,
+    },
+  ],
   "README.md": [
     "# test-repo
 
@@ -6227,6 +7619,93 @@ exports[`ts-package feature combinations > generator + sea 1`] = `
   ],
   ".node-version": [
     "24
+",
+    {
+      "executable": false,
+    },
+  ],
+  "AGENTS.md": [
+    "# Contributor Guidelines
+
+## Technology Overview
+
+- **Development runtime**: Node.js (v24)
+- **Package manager**: pnpm
+- **Toolchain**: Vite+ (\`vp\`)
+- **Bundler**: Vite 8 (with Rolldown)
+- **Formatter**: Oxfmt
+- **Linter**: Oxlint
+
+## Common Commands
+
+- Dev server: \`vp dev\` (**NEVER** run this yourself)
+- Build: \`vp build\`
+- Format: \`vp fmt\`
+- Lint: \`vp lint\`
+- Typecheck: \`vp run typecheck\`
+- Project check: \`vp check\`
+- Tests: \`vp test\`
+- Pack library: \`vp pack\`
+- Watch mode: \`vp run dev\`
+
+## Debugging Approach
+
+- Use \`console.log\` with clear prefixes during development
+- **NEVER** attempt to run the dev server yourself
+- If you need to debug, add \`console.log\` statements, tell the user where to look for the output (client, server, both, etc.), and they will paste back the results
+
+## Node.js
+
+- Always use the \`node:\` prefix for Node built-in module imports
+- Format code with \`vp fmt\` before committing
+- Run \`vp run typecheck\` and fix all info, warnings, and errors
+- Prefer \`unknown\` over \`any\` unless absolutely necessary
+- Use JSDoc/TSDoc comments for public APIs
+- Prefer \`jsr:@std/*\` for standard library packages
+- Use relative imports for local modules
+- Prefer import aliases (\`~/*\`) over deep relative imports
+
+## General Rules
+
+### Correctness
+
+- Remove anything that isn't used - unused imports, parameters, and members
+- Exhaust every hook dependency in React hook dependency arrays
+- Call React hooks only at the top level of a component
+
+### Style & Consistency
+
+- Stick to ES modules - no \`require\` or CommonJS patterns
+- Prefer \`import type\` for type-only imports
+- Use \`node:\` protocol for Node.js built-in imports
+- Use \`T[]\` shorthand array syntax
+- Don't reassign function parameters
+- Favor \`let\` over \`const\` for bindings, unless declaring a top-level constant with ALL_CAPS
+- Skip non-null assertions - rewrite code so \`!\` isn't necessary
+- Avoid \`enum\` - choose unions, objects, or literal types
+- Default parameters go last
+- Self-close empty JSX elements
+- Use \`slice\` instead of \`substr\`
+- Flatten simple \`if\`/\`else if\` chains
+- Kill useless \`else\` blocks when the \`if\` branch returns or throws
+
+## Using Vite+
+
+This project uses Vite+, a unified toolchain built on top of Vite, Rolldown, Vitest, tsdown, Oxlint, Oxfmt, and Vite Task. Vite+ wraps runtime management, package management, and frontend tooling in a single global CLI called \`vp\`.
+
+### Common Pitfalls
+
+- **Using the package manager directly:** Do not use pnpm, npm, or Yarn directly. Vite+ handles all package manager operations.
+- **Always use Vite commands to run tools:** Don't attempt to run \`vp vitest\` or \`vp oxlint\`. Use \`vp test\` and \`vp lint\` instead.
+- **Running scripts:** Vite+ commands take precedence over \`package.json\` scripts. If there is a conflict, run scripts using \`vp run <script>\`.
+- **Do not install Vitest, Oxlint, Oxfmt, or tsdown directly:** Vite+ wraps these tools.
+- **Use vpx for one-off binaries:** Use \`vpx\` instead of \`npx\`, \`pnpm dlx\`, or \`vp dlx\`.
+- **Import from \`vite-plus\`:** Instead of importing from \`vite\` or \`vitest\`, import from \`vite-plus\`. For example: \`import { defineConfig } from 'vite-plus'\` or \`import { expect, test } from 'vite-plus/test'\`.
+
+### Review Checklist
+
+- [ ] Run \`vp install\` after pulling remote changes and before getting started
+- [ ] Run \`vp check\` and \`vp test\` to validate changes
 ",
     {
       "executable": false,
@@ -6533,6 +8012,93 @@ exports[`ts-package feature combinations > generator only 1`] = `
       "executable": false,
     },
   ],
+  "AGENTS.md": [
+    "# Contributor Guidelines
+
+## Technology Overview
+
+- **Development runtime**: Node.js (v24)
+- **Package manager**: pnpm
+- **Toolchain**: Vite+ (\`vp\`)
+- **Bundler**: Vite 8 (with Rolldown)
+- **Formatter**: Oxfmt
+- **Linter**: Oxlint
+
+## Common Commands
+
+- Dev server: \`vp dev\` (**NEVER** run this yourself)
+- Build: \`vp build\`
+- Format: \`vp fmt\`
+- Lint: \`vp lint\`
+- Typecheck: \`vp run typecheck\`
+- Project check: \`vp check\`
+- Tests: \`vp test\`
+- Pack library: \`vp pack\`
+- Watch mode: \`vp run dev\`
+
+## Debugging Approach
+
+- Use \`console.log\` with clear prefixes during development
+- **NEVER** attempt to run the dev server yourself
+- If you need to debug, add \`console.log\` statements, tell the user where to look for the output (client, server, both, etc.), and they will paste back the results
+
+## Node.js
+
+- Always use the \`node:\` prefix for Node built-in module imports
+- Format code with \`vp fmt\` before committing
+- Run \`vp run typecheck\` and fix all info, warnings, and errors
+- Prefer \`unknown\` over \`any\` unless absolutely necessary
+- Use JSDoc/TSDoc comments for public APIs
+- Prefer \`jsr:@std/*\` for standard library packages
+- Use relative imports for local modules
+- Prefer import aliases (\`~/*\`) over deep relative imports
+
+## General Rules
+
+### Correctness
+
+- Remove anything that isn't used - unused imports, parameters, and members
+- Exhaust every hook dependency in React hook dependency arrays
+- Call React hooks only at the top level of a component
+
+### Style & Consistency
+
+- Stick to ES modules - no \`require\` or CommonJS patterns
+- Prefer \`import type\` for type-only imports
+- Use \`node:\` protocol for Node.js built-in imports
+- Use \`T[]\` shorthand array syntax
+- Don't reassign function parameters
+- Favor \`let\` over \`const\` for bindings, unless declaring a top-level constant with ALL_CAPS
+- Skip non-null assertions - rewrite code so \`!\` isn't necessary
+- Avoid \`enum\` - choose unions, objects, or literal types
+- Default parameters go last
+- Self-close empty JSX elements
+- Use \`slice\` instead of \`substr\`
+- Flatten simple \`if\`/\`else if\` chains
+- Kill useless \`else\` blocks when the \`if\` branch returns or throws
+
+## Using Vite+
+
+This project uses Vite+, a unified toolchain built on top of Vite, Rolldown, Vitest, tsdown, Oxlint, Oxfmt, and Vite Task. Vite+ wraps runtime management, package management, and frontend tooling in a single global CLI called \`vp\`.
+
+### Common Pitfalls
+
+- **Using the package manager directly:** Do not use pnpm, npm, or Yarn directly. Vite+ handles all package manager operations.
+- **Always use Vite commands to run tools:** Don't attempt to run \`vp vitest\` or \`vp oxlint\`. Use \`vp test\` and \`vp lint\` instead.
+- **Running scripts:** Vite+ commands take precedence over \`package.json\` scripts. If there is a conflict, run scripts using \`vp run <script>\`.
+- **Do not install Vitest, Oxlint, Oxfmt, or tsdown directly:** Vite+ wraps these tools.
+- **Use vpx for one-off binaries:** Use \`vpx\` instead of \`npx\`, \`pnpm dlx\`, or \`vp dlx\`.
+- **Import from \`vite-plus\`:** Instead of importing from \`vite\` or \`vitest\`, import from \`vite-plus\`. For example: \`import { defineConfig } from 'vite-plus'\` or \`import { expect, test } from 'vite-plus/test'\`.
+
+### Review Checklist
+
+- [ ] Run \`vp install\` after pulling remote changes and before getting started
+- [ ] Run \`vp check\` and \`vp test\` to validate changes
+",
+    {
+      "executable": false,
+    },
+  ],
   "README.md": [
     "# test-repo
 
@@ -6813,6 +8379,93 @@ exports[`ts-package feature combinations > sea only 1`] = `
   ],
   ".node-version": [
     "24
+",
+    {
+      "executable": false,
+    },
+  ],
+  "AGENTS.md": [
+    "# Contributor Guidelines
+
+## Technology Overview
+
+- **Development runtime**: Node.js (v24)
+- **Package manager**: pnpm
+- **Toolchain**: Vite+ (\`vp\`)
+- **Bundler**: Vite 8 (with Rolldown)
+- **Formatter**: Oxfmt
+- **Linter**: Oxlint
+
+## Common Commands
+
+- Dev server: \`vp dev\` (**NEVER** run this yourself)
+- Build: \`vp build\`
+- Format: \`vp fmt\`
+- Lint: \`vp lint\`
+- Typecheck: \`vp run typecheck\`
+- Project check: \`vp check\`
+- Tests: \`vp test\`
+- Pack library: \`vp pack\`
+- Watch mode: \`vp run dev\`
+
+## Debugging Approach
+
+- Use \`console.log\` with clear prefixes during development
+- **NEVER** attempt to run the dev server yourself
+- If you need to debug, add \`console.log\` statements, tell the user where to look for the output (client, server, both, etc.), and they will paste back the results
+
+## Node.js
+
+- Always use the \`node:\` prefix for Node built-in module imports
+- Format code with \`vp fmt\` before committing
+- Run \`vp run typecheck\` and fix all info, warnings, and errors
+- Prefer \`unknown\` over \`any\` unless absolutely necessary
+- Use JSDoc/TSDoc comments for public APIs
+- Prefer \`jsr:@std/*\` for standard library packages
+- Use relative imports for local modules
+- Prefer import aliases (\`~/*\`) over deep relative imports
+
+## General Rules
+
+### Correctness
+
+- Remove anything that isn't used - unused imports, parameters, and members
+- Exhaust every hook dependency in React hook dependency arrays
+- Call React hooks only at the top level of a component
+
+### Style & Consistency
+
+- Stick to ES modules - no \`require\` or CommonJS patterns
+- Prefer \`import type\` for type-only imports
+- Use \`node:\` protocol for Node.js built-in imports
+- Use \`T[]\` shorthand array syntax
+- Don't reassign function parameters
+- Favor \`let\` over \`const\` for bindings, unless declaring a top-level constant with ALL_CAPS
+- Skip non-null assertions - rewrite code so \`!\` isn't necessary
+- Avoid \`enum\` - choose unions, objects, or literal types
+- Default parameters go last
+- Self-close empty JSX elements
+- Use \`slice\` instead of \`substr\`
+- Flatten simple \`if\`/\`else if\` chains
+- Kill useless \`else\` blocks when the \`if\` branch returns or throws
+
+## Using Vite+
+
+This project uses Vite+, a unified toolchain built on top of Vite, Rolldown, Vitest, tsdown, Oxlint, Oxfmt, and Vite Task. Vite+ wraps runtime management, package management, and frontend tooling in a single global CLI called \`vp\`.
+
+### Common Pitfalls
+
+- **Using the package manager directly:** Do not use pnpm, npm, or Yarn directly. Vite+ handles all package manager operations.
+- **Always use Vite commands to run tools:** Don't attempt to run \`vp vitest\` or \`vp oxlint\`. Use \`vp test\` and \`vp lint\` instead.
+- **Running scripts:** Vite+ commands take precedence over \`package.json\` scripts. If there is a conflict, run scripts using \`vp run <script>\`.
+- **Do not install Vitest, Oxlint, Oxfmt, or tsdown directly:** Vite+ wraps these tools.
+- **Use vpx for one-off binaries:** Use \`vpx\` instead of \`npx\`, \`pnpm dlx\`, or \`vp dlx\`.
+- **Import from \`vite-plus\`:** Instead of importing from \`vite\` or \`vitest\`, import from \`vite-plus\`. For example: \`import { defineConfig } from 'vite-plus'\` or \`import { expect, test } from 'vite-plus/test'\`.
+
+### Review Checklist
+
+- [ ] Run \`vp install\` after pulling remote changes and before getting started
+- [ ] Run \`vp check\` and \`vp test\` to validate changes
 ",
     {
       "executable": false,
