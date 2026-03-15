@@ -1,3 +1,19 @@
+{{#if isRSC}}
+import { cloudflare } from "@cloudflare/vite-plugin";
+{{#if hasContentLayer}}
+import mdx from "@mdx-js/rollup";
+{{/if}}
+import { unstable_reactRouterRSC as reactRouter } from "@react-router/dev/vite";
+import tailwindcss from "@tailwindcss/vite";
+import rsc from "@vitejs/plugin-rsc";
+import devtoolsJson from "vite-plugin-devtools-json";
+import { defineConfig } from "vite-plus";
+
+{{#if hasContentLayer}}
+import { contentLayer } from "./content-layer/plugin.ts";
+{{/if}}
+import { reactCompiler } from "./react-compiler.plugin.ts";
+{{else if isReactRouter}}
 import { cloudflare } from "@cloudflare/vite-plugin";
 import { reactRouter } from "@react-router/dev/vite";
 import tailwindcss from "@tailwindcss/vite";
@@ -5,10 +21,44 @@ import devtoolsJson from "vite-plugin-devtools-json";
 import { defineConfig } from "vite-plus";
 
 import { reactCompiler } from "./react-compiler.plugin.ts";
+{{else}}
+import { defineConfig } from "vite-plus";
+{{/if}}
 
+{{#if isReactRouter}}
 const IS_TEST = Boolean(process.env.VITEST);
 
+{{/if}}
 export default defineConfig({
+{{#if isRSC}}
+    css: {
+        transformer: "lightningcss",
+    },
+    environments: {
+        client: {
+            optimizeDeps: {
+                include: [
+                    "react-router",
+                    "react-router/dom",
+                    "react-router/internal/react-server-client",
+                ],
+            },
+        },
+        rsc: {
+            optimizeDeps: {
+                exclude: ["react-router"],
+            },
+            resolve: {
+                conditions: ["react-server"],
+            },
+        },
+        ssr: {
+            optimizeDeps: {
+                exclude: ["react-router"],
+            },
+        },
+    },
+{{/if}}
     fmt: {
         arrowParens: "avoid",
         overrides: [
@@ -37,10 +87,12 @@ export default defineConfig({
             ],
             partitionByComment: true,
         },
+{{#if isReactRouter}}
         sortTailwindcss: {
             functions: ["cx", "cva"],
             stylesheet: "./app/styles/tailwind.css",
         },
+{{/if}}
         tabWidth: 4,
     },
     lint: {
@@ -54,20 +106,34 @@ export default defineConfig({
             suspicious: "error",
         },
         env: {
+{{#if isReactRouter}}
             browser: true,
+{{/if}}
             node: true,
         },
+{{#if isRSC}}
+        ignorePatterns: ["**/worker-configuration.d.ts"],
+{{/if}}
+{{#if isReactRouter}}
         jsPlugins: [
             "eslint-plugin-perfectionist",
             { name: "react-compiler", specifier: "eslint-plugin-react-hooks" },
         ],
+{{/if}}
         options: {
             typeAware: true,
             typeCheck: true,
         },
+{{#if isReactRouter}}
         plugins: ["react", "jsx-a11y", "jsdoc", "import", "node", "promise", "vitest"],
+{{else}}
+        plugins: ["jsdoc", "import", "node", "promise", "vitest"],
+{{/if}}
         rules: {
             "eslint/default-param-last": "error",
+{{#if isPackage}}
+            "eslint/func-style": ["error", "declaration"],
+{{/if}}
             "eslint/no-cond-assign": "off",
             "eslint/no-dupe-else-if": "error",
             "eslint/no-else-return": "error",
@@ -100,6 +166,7 @@ export default defineConfig({
             "import/no-relative-parent-imports": "off",
             "import/prefer-default-export": "off",
 
+{{#if isReactRouter}}
             "jsx-a11y/no-autofocus": "off",
 
             "node/no-process-env": "off",
@@ -150,6 +217,7 @@ export default defineConfig({
             "react/rules-of-hooks": "error",
             "react/self-closing-comp": "error",
 
+{{/if}}
             "typescript/consistent-type-imports": "error",
             "typescript/no-empty-interface": "warn",
             "typescript/no-explicit-any": "warn",
@@ -164,6 +232,7 @@ export default defineConfig({
             "unicorn/prefer-string-trim-start-end": "error",
         },
         settings: {
+{{#if isReactRouter}}
             "jsx-a11y": {
                 components: {
                     Link: "a",
@@ -179,11 +248,48 @@ export default defineConfig({
                     { attribute: "to", name: "NavLink" },
                 ],
             },
+{{/if}}
             vitest: {
                 typecheck: true,
             },
         },
     },
+{{#if isPackage}}
+    pack: {
+        dts: {
+            tsgo: true,
+        },
+        exports: true,
+    },
+{{/if}}
+{{#if isRSC}}
+    plugins: [
+{{#if hasContentLayer}}
+        contentLayer(),
+        mdx(),
+{{/if}}
+        reactRouter(),
+        rsc(),
+        reactCompiler(),
+        !IS_TEST &&
+            cloudflare({
+                auxiliaryWorkers: [
+                    {
+                        configPath: "./wrangler.rsc.jsonc",
+                        viteEnvironment: {
+                            name: "rsc",
+                        },
+                    },
+                ],
+                configPath: "./wrangler.ssr.jsonc",
+                viteEnvironment: {
+                    name: "ssr",
+                },
+            }),
+        tailwindcss(),
+        devtoolsJson(),
+    ],
+{{else if isSSR}}
     plugins: [
         tailwindcss(),
         reactRouter(),
@@ -197,11 +303,38 @@ export default defineConfig({
             }),
         devtoolsJson(),
     ],
+{{else if isSPA}}
+    plugins: [
+        tailwindcss(),
+        reactRouter(),
+        reactCompiler(),
+        !IS_TEST && cloudflare(),
+        devtoolsJson(),
+    ],
+{{/if}}
+{{#if isReactRouter}}
     resolve: {
         tsconfigPaths: true,
     },
+{{/if}}
     run: {
         tasks: {
+{{#if isRSC}}
+            deploy: {
+                cache: false,
+                command: "vp build && wrangler deploy",
+            },
+            typecheck: {
+                command: "tsgo --noEmit",
+                dependsOn: ["typegen:react-router", "typegen:cloudflare"],
+            },
+            "typegen:cloudflare": {
+                command: "wrangler types -c wrangler.rsc.jsonc",
+            },
+            "typegen:react-router": {
+                command: "react-router typegen",
+            },
+{{else if isReactRouter}}
             "typegen:react-router": {
                 command: "react-router typegen",
             },
@@ -213,12 +346,21 @@ export default defineConfig({
                 command: "vp build && wrangler deploy",
                 cache: false,
             },
+{{else}}
+            build: { command: "vp pack" },
+            dev: { command: "vp pack --watch" },
+            typecheck: { command: "tsgo --noEmit" },
+{{/if}}
         },
     },
     staged: {
         "*": "vp check --fix",
     },
     test: {
+{{#if isReactRouter}}
         include: ["**/*.test.ts"],
+{{else}}
+        exclude: [".claude/**", "node_modules/**"],
+{{/if}}
     },
 });

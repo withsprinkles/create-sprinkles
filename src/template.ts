@@ -5,6 +5,7 @@ import { handlebars } from "bingo-handlebars";
 import path from "node:path";
 
 import type { TemplateContext } from "./context.ts";
+
 import { buildContext } from "./context.ts";
 import { mergeFiles } from "./merge.ts";
 import { options } from "./options.ts";
