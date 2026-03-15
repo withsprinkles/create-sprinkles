@@ -85,7 +85,7 @@ React 19 supports rendering \`<title>\`, \`<meta>\`, and \`<link>\` tags directl
 export function ProductPage({ product }) {
     return (
         <>
-            <title>{product.name} | Store</title>
+            <title>\`\${product.name} | Store\`</title>
             <meta name="description" content={product.description} />
             <link rel="canonical" href={\`/products/\${product.id}\`} />
             <main>
@@ -109,11 +109,13 @@ function ProductDetails({ productPromise }) {
     return <h1>{product.name}</h1>;
 }
 
-// With TanStack Query, use useSuspenseQuery instead of use() for query promises:
-import { useSuspenseQuery } from "@tanstack/react-query";
+// With TanStack Query, use useQuery alongside use() for query promises:
+import { useQuery } from "@tanstack/react-query";
 
 function ProductDetails({ queryOptions }) {
-    let { data: product } = useSuspenseQuery(queryOptions);
+    let { promise } = useQuery(queryOptions);
+    let product = use(promise);
+
     return <h1>{product.name}</h1>;
 }
 
@@ -208,6 +210,8 @@ React 19 allows passing a function directly to a form's \`action\` prop. This wo
 \`\`\`tsx
 // Client-side action
 function SearchForm() {
+    let navigate = useNavigate();
+
     async function handleSearch(formData: FormData) {
         let query = formData.get("q") as string;
         navigate(\`/search?q=\${query}\`);
@@ -1235,7 +1239,7 @@ React 19 supports rendering \`<title>\`, \`<meta>\`, and \`<link>\` tags directl
 export function ProductPage({ product }) {
     return (
         <>
-            <title>{product.name} | Store</title>
+            <title>\`\${product.name} | Store\`</title>
             <meta name="description" content={product.description} />
             <link rel="canonical" href={\`/products/\${product.id}\`} />
             <main>
@@ -1259,11 +1263,13 @@ function ProductDetails({ productPromise }) {
     return <h1>{product.name}</h1>;
 }
 
-// With TanStack Query, use useSuspenseQuery instead of use() for query promises:
-import { useSuspenseQuery } from "@tanstack/react-query";
+// With TanStack Query, use useQuery alongside use() for query promises:
+import { useQuery } from "@tanstack/react-query";
 
 function ProductDetails({ queryOptions }) {
-    let { data: product } = useSuspenseQuery(queryOptions);
+    let { promise } = useQuery(queryOptions);
+    let product = use(promise);
+
     return <h1>{product.name}</h1>;
 }
 
@@ -1358,6 +1364,8 @@ React 19 allows passing a function directly to a form's \`action\` prop. This wo
 \`\`\`tsx
 // Client-side action
 function SearchForm() {
+    let navigate = useNavigate();
+
     async function handleSearch(formData: FormData) {
         let query = formData.get("q") as string;
         navigate(\`/search?q=\${query}\`);
@@ -3627,7 +3635,7 @@ React 19 supports rendering \`<title>\`, \`<meta>\`, and \`<link>\` tags directl
 export function ProductPage({ product }) {
     return (
         <>
-            <title>{product.name} | Store</title>
+            <title>\`\${product.name} | Store\`</title>
             <meta name="description" content={product.description} />
             <link rel="canonical" href={\`/products/\${product.id}\`} />
             <main>
@@ -3651,11 +3659,13 @@ function ProductDetails({ productPromise }) {
     return <h1>{product.name}</h1>;
 }
 
-// With TanStack Query, use useSuspenseQuery instead of use() for query promises:
-import { useSuspenseQuery } from "@tanstack/react-query";
+// With TanStack Query, use useQuery alongside use() for query promises:
+import { useQuery } from "@tanstack/react-query";
 
 function ProductDetails({ queryOptions }) {
-    let { data: product } = useSuspenseQuery(queryOptions);
+    let { promise } = useQuery(queryOptions);
+    let product = use(promise);
+
     return <h1>{product.name}</h1>;
 }
 \`\`\`
@@ -3736,6 +3746,8 @@ React 19 allows passing a function directly to a form's \`action\` prop. This wo
 \`\`\`tsx
 // Client-side action
 function SearchForm() {
+    let navigate = useNavigate();
+
     async function handleSearch(formData: FormData) {
         let query = formData.get("q") as string;
         navigate(\`/search?q=\${query}\`);
@@ -4462,7 +4474,7 @@ React 19 supports rendering \`<title>\`, \`<meta>\`, and \`<link>\` tags directl
 export function ProductPage({ product }) {
     return (
         <>
-            <title>{product.name} | Store</title>
+            <title>\`\${product.name} | Store\`</title>
             <meta name="description" content={product.description} />
             <link rel="canonical" href={\`/products/\${product.id}\`} />
             <main>
@@ -4486,11 +4498,13 @@ function ProductDetails({ productPromise }) {
     return <h1>{product.name}</h1>;
 }
 
-// With TanStack Query, use useSuspenseQuery instead of use() for query promises:
-import { useSuspenseQuery } from "@tanstack/react-query";
+// With TanStack Query, use useQuery alongside use() for query promises:
+import { useQuery } from "@tanstack/react-query";
 
 function ProductDetails({ queryOptions }) {
-    let { data: product } = useSuspenseQuery(queryOptions);
+    let { promise } = useQuery(queryOptions);
+    let product = use(promise);
+
     return <h1>{product.name}</h1>;
 }
 \`\`\`
@@ -4571,6 +4585,8 @@ React 19 allows passing a function directly to a form's \`action\` prop. This wo
 \`\`\`tsx
 // Client-side action
 function SearchForm() {
+    let navigate = useNavigate();
+
     async function handleSearch(formData: FormData) {
         let query = formData.get("q") as string;
         navigate(\`/search?q=\${query}\`);
@@ -5341,7 +5357,7 @@ React 19 supports rendering \`<title>\`, \`<meta>\`, and \`<link>\` tags directl
 export function ProductPage({ product }) {
     return (
         <>
-            <title>{product.name} | Store</title>
+            <title>\`\${product.name} | Store\`</title>
             <meta name="description" content={product.description} />
             <link rel="canonical" href={\`/products/\${product.id}\`} />
             <main>
@@ -5365,11 +5381,13 @@ function ProductDetails({ productPromise }) {
     return <h1>{product.name}</h1>;
 }
 
-// With TanStack Query, use useSuspenseQuery instead of use() for query promises:
-import { useSuspenseQuery } from "@tanstack/react-query";
+// With TanStack Query, use useQuery alongside use() for query promises:
+import { useQuery } from "@tanstack/react-query";
 
 function ProductDetails({ queryOptions }) {
-    let { data: product } = useSuspenseQuery(queryOptions);
+    let { promise } = useQuery(queryOptions);
+    let product = use(promise);
+
     return <h1>{product.name}</h1>;
 }
 \`\`\`
@@ -5450,6 +5468,8 @@ React 19 allows passing a function directly to a form's \`action\` prop. This wo
 \`\`\`tsx
 // Client-side action
 function SearchForm() {
+    let navigate = useNavigate();
+
     async function handleSearch(formData: FormData) {
         let query = formData.get("q") as string;
         navigate(\`/search?q=\${query}\`);
@@ -6239,7 +6259,7 @@ React 19 supports rendering \`<title>\`, \`<meta>\`, and \`<link>\` tags directl
 export function ProductPage({ product }) {
     return (
         <>
-            <title>{product.name} | Store</title>
+            <title>\`\${product.name} | Store\`</title>
             <meta name="description" content={product.description} />
             <link rel="canonical" href={\`/products/\${product.id}\`} />
             <main>
@@ -6263,11 +6283,13 @@ function ProductDetails({ productPromise }) {
     return <h1>{product.name}</h1>;
 }
 
-// With TanStack Query, use useSuspenseQuery instead of use() for query promises:
-import { useSuspenseQuery } from "@tanstack/react-query";
+// With TanStack Query, use useQuery alongside use() for query promises:
+import { useQuery } from "@tanstack/react-query";
 
 function ProductDetails({ queryOptions }) {
-    let { data: product } = useSuspenseQuery(queryOptions);
+    let { promise } = useQuery(queryOptions);
+    let product = use(promise);
+
     return <h1>{product.name}</h1>;
 }
 \`\`\`
@@ -6348,6 +6370,8 @@ React 19 allows passing a function directly to a form's \`action\` prop. This wo
 \`\`\`tsx
 // Client-side action
 function SearchForm() {
+    let navigate = useNavigate();
+
     async function handleSearch(formData: FormData) {
         let query = formData.get("q") as string;
         navigate(\`/search?q=\${query}\`);
