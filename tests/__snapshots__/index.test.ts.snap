@@ -656,6 +656,18 @@ export default [index("home.tsx")] satisfies RouteConfig;
         "dev": "vp dev",
         "start": "vp preview",
         "typecheck": "react-router typegen && tsc"
+    },
+    "packageManager": "pnpm@10.32.1",
+    "pnpm": {
+        "onlyBuiltDependencies": [
+            "esbuild",
+            "sharp",
+            "workerd"
+        ],
+        "overrides": {
+            "vite": "npm:@voidzero-dev/vite-plus-core@latest",
+            "vitest": "npm:@voidzero-dev/vite-plus-test@latest"
+        }
     }
 }
 ",
@@ -3054,6 +3066,18 @@ export function createMetaStore(): MetaStore {
         "dev": "vp dev",
         "start": "vp preview",
         "typecheck": "react-router typegen && tsc"
+    },
+    "packageManager": "pnpm@10.32.1",
+    "pnpm": {
+        "onlyBuiltDependencies": [
+            "esbuild",
+            "sharp",
+            "workerd"
+        ],
+        "overrides": {
+            "vite": "npm:@voidzero-dev/vite-plus-core@latest",
+            "vitest": "npm:@voidzero-dev/vite-plus-test@latest"
+        }
     }
 }
 ",
@@ -4076,6 +4100,18 @@ export default [index("home.tsx")] satisfies RouteConfig;
         "dev": "vp dev",
         "start": "vp preview",
         "typecheck": "react-router typegen && tsc"
+    },
+    "packageManager": "pnpm@10.32.1",
+    "pnpm": {
+        "onlyBuiltDependencies": [
+            "esbuild",
+            "sharp",
+            "workerd"
+        ],
+        "overrides": {
+            "vite": "npm:@voidzero-dev/vite-plus-core@latest",
+            "vitest": "npm:@voidzero-dev/vite-plus-test@latest"
+        }
     }
 }
 ",
@@ -4969,6 +5005,18 @@ export default defineSchema({
         "dev": "vp dev",
         "start": "vp preview",
         "typecheck": "react-router typegen && tsc"
+    },
+    "packageManager": "pnpm@10.32.1",
+    "pnpm": {
+        "onlyBuiltDependencies": [
+            "esbuild",
+            "sharp",
+            "workerd"
+        ],
+        "overrides": {
+            "vite": "npm:@voidzero-dev/vite-plus-core@latest",
+            "vitest": "npm:@voidzero-dev/vite-plus-test@latest"
+        }
     }
 }
 ",
@@ -5843,6 +5891,18 @@ export default defineSchema({
         "dev": "vp dev",
         "start": "vp preview",
         "typecheck": "react-router typegen && tsc"
+    },
+    "packageManager": "pnpm@10.32.1",
+    "pnpm": {
+        "onlyBuiltDependencies": [
+            "esbuild",
+            "sharp",
+            "workerd"
+        ],
+        "overrides": {
+            "vite": "npm:@voidzero-dev/vite-plus-core@latest",
+            "vitest": "npm:@voidzero-dev/vite-plus-test@latest"
+        }
     }
 }
 ",
@@ -6992,6 +7052,18 @@ export default defineSchema({
         "dev": "vp dev",
         "start": "vp preview",
         "typecheck": "react-router typegen && tsc"
+    },
+    "packageManager": "pnpm@10.32.1",
+    "pnpm": {
+        "onlyBuiltDependencies": [
+            "esbuild",
+            "sharp",
+            "workerd"
+        ],
+        "overrides": {
+            "vite": "npm:@voidzero-dev/vite-plus-core@latest",
+            "vitest": "npm:@voidzero-dev/vite-plus-test@latest"
+        }
     }
 }
 ",
@@ -7474,6 +7546,13 @@ vp run dev
     ],
     "scripts": {
         "prepublishOnly": "vp run build"
+    },
+    "packageManager": "pnpm@10.32.1",
+    "pnpm": {
+        "overrides": {
+            "vite": "npm:@voidzero-dev/vite-plus-core@latest",
+            "vitest": "npm:@voidzero-dev/vite-plus-test@latest"
+        }
     }
 }
 ",
@@ -7837,6 +7916,13 @@ vp run dev
     ],
     "scripts": {
         "prepublishOnly": "vp run build"
+    },
+    "packageManager": "pnpm@10.32.1",
+    "pnpm": {
+        "overrides": {
+            "vite": "npm:@voidzero-dev/vite-plus-core@latest",
+            "vitest": "npm:@voidzero-dev/vite-plus-test@latest"
+        }
     }
 }
 ",
@@ -8287,6 +8373,13 @@ vp run dev
     ],
     "scripts": {
         "prepublishOnly": "vp run build"
+    },
+    "packageManager": "pnpm@10.32.1",
+    "pnpm": {
+        "overrides": {
+            "vite": "npm:@voidzero-dev/vite-plus-core@latest",
+            "vitest": "npm:@voidzero-dev/vite-plus-test@latest"
+        }
     }
 }
 ",
@@ -8714,6 +8807,13 @@ vp run dev
     ],
     "scripts": {
         "prepublishOnly": "vp run build"
+    },
+    "packageManager": "pnpm@10.32.1",
+    "pnpm": {
+        "overrides": {
+            "vite": "npm:@voidzero-dev/vite-plus-core@latest",
+            "vitest": "npm:@voidzero-dev/vite-plus-test@latest"
+        }
     }
 }
 ",
@@ -9129,6 +9229,13 @@ vp run dev
     ],
     "scripts": {
         "prepublishOnly": "vp run build"
+    },
+    "packageManager": "pnpm@10.32.1",
+    "pnpm": {
+        "overrides": {
+            "vite": "npm:@voidzero-dev/vite-plus-core@latest",
+            "vitest": "npm:@voidzero-dev/vite-plus-test@latest"
+        }
     }
 }
 ",
@@ -9529,6 +9636,13 @@ vp run dev
     ],
     "scripts": {
         "prepublishOnly": "vp run build"
+    },
+    "packageManager": "pnpm@10.32.1",
+    "pnpm": {
+        "overrides": {
+            "vite": "npm:@voidzero-dev/vite-plus-core@latest",
+            "vitest": "npm:@voidzero-dev/vite-plus-test@latest"
+        }
     }
 }
 ",
@@ -9930,6 +10044,13 @@ vp run dev
     ],
     "scripts": {
         "prepublishOnly": "vp run build"
+    },
+    "packageManager": "pnpm@10.32.1",
+    "pnpm": {
+        "overrides": {
+            "vite": "npm:@voidzero-dev/vite-plus-core@latest",
+            "vitest": "npm:@voidzero-dev/vite-plus-test@latest"
+        }
     }
 }
 ",
@@ -10306,6 +10427,13 @@ vp run dev
     ],
     "scripts": {
         "prepublishOnly": "vp run build"
+    },
+    "packageManager": "pnpm@10.32.1",
+    "pnpm": {
+        "overrides": {
+            "vite": "npm:@voidzero-dev/vite-plus-core@latest",
+            "vitest": "npm:@voidzero-dev/vite-plus-test@latest"
+        }
     }
 }
 ",

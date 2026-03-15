@@ -1,0 +1,44 @@
+{
+{{#if isPackage}}
+    "name": "@{{owner}}/{{repository}}",
+    "version": "0.0.0",
+{{else}}
+    "name": "{{repository}}",
+    "private": true,
+{{/if}}
+    "type": "module",
+{{#if isPackage}}
+    "exports": {
+        ".": "./dist/index.mjs",
+        "./package.json": "./package.json"
+    },
+    "types": "./dist/index.d.mts",
+    "files": [
+        "dist"
+    ],
+    "scripts": {
+        "prepublishOnly": "vp run build"
+    },
+{{else}}
+    "scripts": {
+        "build": "vp build",
+        "dev": "vp dev",
+        "start": "vp preview",
+        "typecheck": "react-router typegen && tsc"
+    },
+{{/if}}
+    "packageManager": "pnpm@10.32.1",
+    "pnpm": {
+{{#if isReactRouter}}
+        "onlyBuiltDependencies": [
+            "esbuild",
+            "sharp",
+            "workerd"
+        ],
+{{/if}}
+        "overrides": {
+            "vite": "npm:@voidzero-dev/vite-plus-core@latest",
+            "vitest": "npm:@voidzero-dev/vite-plus-test@latest"
+        }
+    }
+}

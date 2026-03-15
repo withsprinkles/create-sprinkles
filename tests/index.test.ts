@@ -382,7 +382,7 @@ describe("buildScripts", () => {
             expect(scripts).toContainEqual(
                 expect.objectContaining({
                     commands: expect.arrayContaining([
-                        "vp add -D vite-plus @types/node @typescript/native-preview",
+                        expect.stringContaining("vp add -D vite-plus"),
                     ]),
                     phase: 0,
                 }),

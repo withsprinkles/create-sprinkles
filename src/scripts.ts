@@ -6,15 +6,20 @@ function buildDependencyCommands(context: TemplateContext): string[] {
     const commands: string[] = [];
 
     // Common dev dependencies for all templates
-    commands.push("vp add -D vite-plus @types/node @typescript/native-preview");
+    // vite must be added as a devDep so the pnpm override maps it to vite-plus-core
+    commands.push(
+        "vp add -D vite-plus @types/node @typescript/native-preview vite@npm:@voidzero-dev/vite-plus-core@latest vitest@npm:@voidzero-dev/vite-plus-test@latest",
+    );
 
     if (context.isReactRouter) {
         commands.push("vp add react react-dom react-router");
         commands.push(
-            "vp add -D @react-router/dev @tailwindcss/vite tailwindcss vite-plugin-devtools-json",
+            "vp add -D @types/react @types/react-dom @react-router/dev @tailwindcss/vite tailwindcss vite-plugin-devtools-json",
         );
         commands.push("vp add -D @rolldown/plugin-babel @vitejs/plugin-react");
         commands.push("vp add -D @cloudflare/vite-plugin wrangler");
+        // Lint plugins referenced in vite.config.ts jsPlugins
+        commands.push("vp add -D eslint-plugin-perfectionist eslint-plugin-react-hooks");
     }
 
     if (context.hasConvex) {
