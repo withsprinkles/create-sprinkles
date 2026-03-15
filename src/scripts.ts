@@ -22,12 +22,17 @@ function buildDependencyCommands(context: TemplateContext): string[] {
         commands.push("vp add -D eslint-plugin-perfectionist eslint-plugin-react-hooks");
     }
 
+    if (context.isReactRouter) {
+        // @react-router/node is needed by the vite plugin to resolve server runtime
+        commands.push("vp add @react-router/node");
+    }
+
     if (context.hasConvex) {
         commands.push("vp add convex @convex-dev/react-query @tanstack/react-query");
     }
 
     if (context.isSSR) {
-        commands.push("vp add @react-router/node isbot");
+        commands.push("vp add isbot");
     }
 
     if (context.isRSC) {
