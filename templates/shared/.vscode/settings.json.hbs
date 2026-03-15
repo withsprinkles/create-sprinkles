@@ -1,0 +1,72 @@
+{
+    "js/ts.preferences.importModuleSpecifierEnding": "js",
+    "js/ts.experimental.useTsgo": true,
+
+    "oxc.enable.oxlint": true,
+    "oxc.enable.oxfmt": true,
+
+    "editor.codeActionsOnSave": {
+        "source.fixAll.oxc": "always",
+        "source.addMissingImports.ts": "explicit",
+        "source.removeUnused.ts": "never"
+    },
+    "editor.defaultFormatter": "oxc.oxc-vscode",
+    "editor.formatOnSave": true,
+    "editor.formatOnSaveMode": "file",
+
+    "[typescript]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[tsx]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[javascript]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[jsx]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[css]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[json]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[jsonc]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[markdown]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+{{#if hasContentLayer}}
+    "[mdx]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "mdx.server.enable": true,
+
+{{/if}}
+    "explorer.fileNesting.enabled": true,
+    "explorer.fileNesting.expand": false,
+    "explorer.fileNesting.patterns": {
+        "package.json": ".github*, .npmrc, .prettierignore, .vscode*, biome.json*, bun.lock*, components.json, eslint.config.*, .node-version,.oxfmtrc.jsonc, .oxlintrc.jsonc, pnpm-*.yaml, prettier.config.*, tsconfig.*, wrangler.toml, wrangler.*.toml, wrangler.json*, wrangler.*.json, wrangler.*.jsonc, workspace.json",
+        "readme*": "agent*, authors, backers*, changelog*, citation*, claude*, code_of_conduct*, codeowners, contributing*, contributors, copying, credits, governance.md, history.md, license*, maintainers, readme*, security.md, sponsors*"{{#if isReactRouter}},
+        "vite.config.*": "react-router.config.*, vitest.config.*, *.plugin.ts"{{/if}}
+    },
+{{#if isReactRouter}}
+    "files.exclude": {
+        "**/.react-router": true,
+        "**/.wrangler": true{{#if hasContentLayer}},
+        "**/.sprinkles": true{{/if}}
+    },
+
+    "tailwindCSS.classFunctions": ["cva", "cx"],
+
+{{/if}}
+    "biome.enabled": false,
+    "prettier.enable": false,
+    "eslint.enable": false,
+    "dprint.experimentalLsp": false,
+    "deno.enable": false,
+    "unocss.disable": true,
+    "vitest.ignoreWorkspace": true
+}

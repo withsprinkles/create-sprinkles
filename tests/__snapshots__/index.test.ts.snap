@@ -29,6 +29,89 @@ exports[`template snapshots > RSC kind (no content-layer) 1`] = `
       "executable": false,
     },
   ],
+  ".vscode": {
+    "extensions.json": [
+      "{
+    "recommendations": [
+        "VoidZero.vite-plus-extension-pack",
+        "TypeScriptTeam.native-preview",
+        "bradlc.vscode-tailwindcss"
+    ]
+}
+",
+      {
+        "executable": false,
+      },
+    ],
+    "settings.json": [
+      "{
+    "js/ts.preferences.importModuleSpecifierEnding": "js",
+    "js/ts.experimental.useTsgo": true,
+
+    "oxc.enable.oxlint": true,
+    "oxc.enable.oxfmt": true,
+
+    "editor.codeActionsOnSave": {
+        "source.fixAll.oxc": "always",
+        "source.addMissingImports.ts": "explicit",
+        "source.removeUnused.ts": "never"
+    },
+    "editor.defaultFormatter": "oxc.oxc-vscode",
+    "editor.formatOnSave": true,
+    "editor.formatOnSaveMode": "file",
+
+    "[typescript]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[tsx]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[javascript]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[jsx]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[css]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[json]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[jsonc]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[markdown]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "explorer.fileNesting.enabled": true,
+    "explorer.fileNesting.expand": false,
+    "explorer.fileNesting.patterns": {
+        "package.json": ".github*, .npmrc, .prettierignore, .vscode*, biome.json*, bun.lock*, components.json, eslint.config.*, .node-version,.oxfmtrc.jsonc, .oxlintrc.jsonc, pnpm-*.yaml, prettier.config.*, tsconfig.*, wrangler.toml, wrangler.*.toml, wrangler.json*, wrangler.*.json, wrangler.*.jsonc, workspace.json",
+        "readme*": "agent*, authors, backers*, changelog*, citation*, claude*, code_of_conduct*, codeowners, contributing*, contributors, copying, credits, governance.md, history.md, license*, maintainers, readme*, security.md, sponsors*",
+        "vite.config.*": "react-router.config.*, vitest.config.*, *.plugin.ts"
+    },
+    "files.exclude": {
+        "**/.react-router": true,
+        "**/.wrangler": true
+    },
+
+    "tailwindCSS.classFunctions": ["cva", "cx"],
+
+    "biome.enabled": false,
+    "prettier.enable": false,
+    "eslint.enable": false,
+    "dprint.experimentalLsp": false,
+    "deno.enable": false,
+    "unocss.disable": true,
+    "vitest.ignoreWorkspace": true
+}
+",
+      {
+        "executable": false,
+      },
+    ],
+  },
   "AGENTS.md": [
     "# Contributor Guidelines
 
@@ -1196,6 +1279,96 @@ exports[`template snapshots > RSC kind (with content-layer) 1`] = `
       "executable": false,
     },
   ],
+  ".vscode": {
+    "extensions.json": [
+      "{
+    "recommendations": [
+        "VoidZero.vite-plus-extension-pack",
+        "TypeScriptTeam.native-preview",
+        "bradlc.vscode-tailwindcss",
+        "unifiedjs.vscode-mdx"
+    ]
+}
+",
+      {
+        "executable": false,
+      },
+    ],
+    "settings.json": [
+      "{
+    "js/ts.preferences.importModuleSpecifierEnding": "js",
+    "js/ts.experimental.useTsgo": true,
+
+    "oxc.enable.oxlint": true,
+    "oxc.enable.oxfmt": true,
+
+    "editor.codeActionsOnSave": {
+        "source.fixAll.oxc": "always",
+        "source.addMissingImports.ts": "explicit",
+        "source.removeUnused.ts": "never"
+    },
+    "editor.defaultFormatter": "oxc.oxc-vscode",
+    "editor.formatOnSave": true,
+    "editor.formatOnSaveMode": "file",
+
+    "[typescript]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[tsx]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[javascript]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[jsx]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[css]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[json]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[jsonc]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[markdown]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[mdx]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "mdx.server.enable": true,
+
+    "explorer.fileNesting.enabled": true,
+    "explorer.fileNesting.expand": false,
+    "explorer.fileNesting.patterns": {
+        "package.json": ".github*, .npmrc, .prettierignore, .vscode*, biome.json*, bun.lock*, components.json, eslint.config.*, .node-version,.oxfmtrc.jsonc, .oxlintrc.jsonc, pnpm-*.yaml, prettier.config.*, tsconfig.*, wrangler.toml, wrangler.*.toml, wrangler.json*, wrangler.*.json, wrangler.*.jsonc, workspace.json",
+        "readme*": "agent*, authors, backers*, changelog*, citation*, claude*, code_of_conduct*, codeowners, contributing*, contributors, copying, credits, governance.md, history.md, license*, maintainers, readme*, security.md, sponsors*",
+        "vite.config.*": "react-router.config.*, vitest.config.*, *.plugin.ts"
+    },
+    "files.exclude": {
+        "**/.react-router": true,
+        "**/.wrangler": true,
+        "**/.sprinkles": true
+    },
+
+    "tailwindCSS.classFunctions": ["cva", "cx"],
+
+    "biome.enabled": false,
+    "prettier.enable": false,
+    "eslint.enable": false,
+    "dprint.experimentalLsp": false,
+    "deno.enable": false,
+    "unocss.disable": true,
+    "vitest.ignoreWorkspace": true
+}
+",
+      {
+        "executable": false,
+      },
+    ],
+  },
   "AGENTS.md": [
     "# Contributor Guidelines
 
@@ -3621,6 +3794,89 @@ exports[`template snapshots > SPA kind (no Convex) 1`] = `
       "executable": false,
     },
   ],
+  ".vscode": {
+    "extensions.json": [
+      "{
+    "recommendations": [
+        "VoidZero.vite-plus-extension-pack",
+        "TypeScriptTeam.native-preview",
+        "bradlc.vscode-tailwindcss"
+    ]
+}
+",
+      {
+        "executable": false,
+      },
+    ],
+    "settings.json": [
+      "{
+    "js/ts.preferences.importModuleSpecifierEnding": "js",
+    "js/ts.experimental.useTsgo": true,
+
+    "oxc.enable.oxlint": true,
+    "oxc.enable.oxfmt": true,
+
+    "editor.codeActionsOnSave": {
+        "source.fixAll.oxc": "always",
+        "source.addMissingImports.ts": "explicit",
+        "source.removeUnused.ts": "never"
+    },
+    "editor.defaultFormatter": "oxc.oxc-vscode",
+    "editor.formatOnSave": true,
+    "editor.formatOnSaveMode": "file",
+
+    "[typescript]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[tsx]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[javascript]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[jsx]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[css]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[json]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[jsonc]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[markdown]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "explorer.fileNesting.enabled": true,
+    "explorer.fileNesting.expand": false,
+    "explorer.fileNesting.patterns": {
+        "package.json": ".github*, .npmrc, .prettierignore, .vscode*, biome.json*, bun.lock*, components.json, eslint.config.*, .node-version,.oxfmtrc.jsonc, .oxlintrc.jsonc, pnpm-*.yaml, prettier.config.*, tsconfig.*, wrangler.toml, wrangler.*.toml, wrangler.json*, wrangler.*.json, wrangler.*.jsonc, workspace.json",
+        "readme*": "agent*, authors, backers*, changelog*, citation*, claude*, code_of_conduct*, codeowners, contributing*, contributors, copying, credits, governance.md, history.md, license*, maintainers, readme*, security.md, sponsors*",
+        "vite.config.*": "react-router.config.*, vitest.config.*, *.plugin.ts"
+    },
+    "files.exclude": {
+        "**/.react-router": true,
+        "**/.wrangler": true
+    },
+
+    "tailwindCSS.classFunctions": ["cva", "cx"],
+
+    "biome.enabled": false,
+    "prettier.enable": false,
+    "eslint.enable": false,
+    "dprint.experimentalLsp": false,
+    "deno.enable": false,
+    "unocss.disable": true,
+    "vitest.ignoreWorkspace": true
+}
+",
+      {
+        "executable": false,
+      },
+    ],
+  },
   "AGENTS.md": [
     "# Contributor Guidelines
 
@@ -4492,6 +4748,89 @@ VITE_CONVEX_URL=# Set by \`npx convex dev\`
       "executable": false,
     },
   ],
+  ".vscode": {
+    "extensions.json": [
+      "{
+    "recommendations": [
+        "VoidZero.vite-plus-extension-pack",
+        "TypeScriptTeam.native-preview",
+        "bradlc.vscode-tailwindcss"
+    ]
+}
+",
+      {
+        "executable": false,
+      },
+    ],
+    "settings.json": [
+      "{
+    "js/ts.preferences.importModuleSpecifierEnding": "js",
+    "js/ts.experimental.useTsgo": true,
+
+    "oxc.enable.oxlint": true,
+    "oxc.enable.oxfmt": true,
+
+    "editor.codeActionsOnSave": {
+        "source.fixAll.oxc": "always",
+        "source.addMissingImports.ts": "explicit",
+        "source.removeUnused.ts": "never"
+    },
+    "editor.defaultFormatter": "oxc.oxc-vscode",
+    "editor.formatOnSave": true,
+    "editor.formatOnSaveMode": "file",
+
+    "[typescript]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[tsx]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[javascript]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[jsx]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[css]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[json]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[jsonc]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[markdown]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "explorer.fileNesting.enabled": true,
+    "explorer.fileNesting.expand": false,
+    "explorer.fileNesting.patterns": {
+        "package.json": ".github*, .npmrc, .prettierignore, .vscode*, biome.json*, bun.lock*, components.json, eslint.config.*, .node-version,.oxfmtrc.jsonc, .oxlintrc.jsonc, pnpm-*.yaml, prettier.config.*, tsconfig.*, wrangler.toml, wrangler.*.toml, wrangler.json*, wrangler.*.json, wrangler.*.jsonc, workspace.json",
+        "readme*": "agent*, authors, backers*, changelog*, citation*, claude*, code_of_conduct*, codeowners, contributing*, contributors, copying, credits, governance.md, history.md, license*, maintainers, readme*, security.md, sponsors*",
+        "vite.config.*": "react-router.config.*, vitest.config.*, *.plugin.ts"
+    },
+    "files.exclude": {
+        "**/.react-router": true,
+        "**/.wrangler": true
+    },
+
+    "tailwindCSS.classFunctions": ["cva", "cx"],
+
+    "biome.enabled": false,
+    "prettier.enable": false,
+    "eslint.enable": false,
+    "dprint.experimentalLsp": false,
+    "deno.enable": false,
+    "unocss.disable": true,
+    "vitest.ignoreWorkspace": true
+}
+",
+      {
+        "executable": false,
+      },
+    ],
+  },
   "AGENTS.md": [
     "# Contributor Guidelines
 
@@ -5403,6 +5742,89 @@ exports[`template snapshots > SSR kind (no Convex) 1`] = `
       "executable": false,
     },
   ],
+  ".vscode": {
+    "extensions.json": [
+      "{
+    "recommendations": [
+        "VoidZero.vite-plus-extension-pack",
+        "TypeScriptTeam.native-preview",
+        "bradlc.vscode-tailwindcss"
+    ]
+}
+",
+      {
+        "executable": false,
+      },
+    ],
+    "settings.json": [
+      "{
+    "js/ts.preferences.importModuleSpecifierEnding": "js",
+    "js/ts.experimental.useTsgo": true,
+
+    "oxc.enable.oxlint": true,
+    "oxc.enable.oxfmt": true,
+
+    "editor.codeActionsOnSave": {
+        "source.fixAll.oxc": "always",
+        "source.addMissingImports.ts": "explicit",
+        "source.removeUnused.ts": "never"
+    },
+    "editor.defaultFormatter": "oxc.oxc-vscode",
+    "editor.formatOnSave": true,
+    "editor.formatOnSaveMode": "file",
+
+    "[typescript]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[tsx]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[javascript]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[jsx]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[css]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[json]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[jsonc]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[markdown]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "explorer.fileNesting.enabled": true,
+    "explorer.fileNesting.expand": false,
+    "explorer.fileNesting.patterns": {
+        "package.json": ".github*, .npmrc, .prettierignore, .vscode*, biome.json*, bun.lock*, components.json, eslint.config.*, .node-version,.oxfmtrc.jsonc, .oxlintrc.jsonc, pnpm-*.yaml, prettier.config.*, tsconfig.*, wrangler.toml, wrangler.*.toml, wrangler.json*, wrangler.*.json, wrangler.*.jsonc, workspace.json",
+        "readme*": "agent*, authors, backers*, changelog*, citation*, claude*, code_of_conduct*, codeowners, contributing*, contributors, copying, credits, governance.md, history.md, license*, maintainers, readme*, security.md, sponsors*",
+        "vite.config.*": "react-router.config.*, vitest.config.*, *.plugin.ts"
+    },
+    "files.exclude": {
+        "**/.react-router": true,
+        "**/.wrangler": true
+    },
+
+    "tailwindCSS.classFunctions": ["cva", "cx"],
+
+    "biome.enabled": false,
+    "prettier.enable": false,
+    "eslint.enable": false,
+    "dprint.experimentalLsp": false,
+    "deno.enable": false,
+    "unocss.disable": true,
+    "vitest.ignoreWorkspace": true
+}
+",
+      {
+        "executable": false,
+      },
+    ],
+  },
   "AGENTS.md": [
     "# Contributor Guidelines
 
@@ -6331,6 +6753,89 @@ VITE_CONVEX_URL=# Set by \`npx convex dev\`
       "executable": false,
     },
   ],
+  ".vscode": {
+    "extensions.json": [
+      "{
+    "recommendations": [
+        "VoidZero.vite-plus-extension-pack",
+        "TypeScriptTeam.native-preview",
+        "bradlc.vscode-tailwindcss"
+    ]
+}
+",
+      {
+        "executable": false,
+      },
+    ],
+    "settings.json": [
+      "{
+    "js/ts.preferences.importModuleSpecifierEnding": "js",
+    "js/ts.experimental.useTsgo": true,
+
+    "oxc.enable.oxlint": true,
+    "oxc.enable.oxfmt": true,
+
+    "editor.codeActionsOnSave": {
+        "source.fixAll.oxc": "always",
+        "source.addMissingImports.ts": "explicit",
+        "source.removeUnused.ts": "never"
+    },
+    "editor.defaultFormatter": "oxc.oxc-vscode",
+    "editor.formatOnSave": true,
+    "editor.formatOnSaveMode": "file",
+
+    "[typescript]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[tsx]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[javascript]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[jsx]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[css]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[json]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[jsonc]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[markdown]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "explorer.fileNesting.enabled": true,
+    "explorer.fileNesting.expand": false,
+    "explorer.fileNesting.patterns": {
+        "package.json": ".github*, .npmrc, .prettierignore, .vscode*, biome.json*, bun.lock*, components.json, eslint.config.*, .node-version,.oxfmtrc.jsonc, .oxlintrc.jsonc, pnpm-*.yaml, prettier.config.*, tsconfig.*, wrangler.toml, wrangler.*.toml, wrangler.json*, wrangler.*.json, wrangler.*.jsonc, workspace.json",
+        "readme*": "agent*, authors, backers*, changelog*, citation*, claude*, code_of_conduct*, codeowners, contributing*, contributors, copying, credits, governance.md, history.md, license*, maintainers, readme*, security.md, sponsors*",
+        "vite.config.*": "react-router.config.*, vitest.config.*, *.plugin.ts"
+    },
+    "files.exclude": {
+        "**/.react-router": true,
+        "**/.wrangler": true
+    },
+
+    "tailwindCSS.classFunctions": ["cva", "cx"],
+
+    "biome.enabled": false,
+    "prettier.enable": false,
+    "eslint.enable": false,
+    "dprint.experimentalLsp": false,
+    "deno.enable": false,
+    "unocss.disable": true,
+    "vitest.ignoreWorkspace": true
+}
+",
+      {
+        "executable": false,
+      },
+    ],
+  },
   "AGENTS.md": [
     "# Contributor Guidelines
 
@@ -7501,6 +8006,80 @@ exports[`template snapshots > ts-package base 1`] = `
       "executable": false,
     },
   ],
+  ".vscode": {
+    "extensions.json": [
+      "{
+    "recommendations": [
+        "VoidZero.vite-plus-extension-pack",
+        "TypeScriptTeam.native-preview"
+    ]
+}
+",
+      {
+        "executable": false,
+      },
+    ],
+    "settings.json": [
+      "{
+    "js/ts.preferences.importModuleSpecifierEnding": "js",
+    "js/ts.experimental.useTsgo": true,
+
+    "oxc.enable.oxlint": true,
+    "oxc.enable.oxfmt": true,
+
+    "editor.codeActionsOnSave": {
+        "source.fixAll.oxc": "always",
+        "source.addMissingImports.ts": "explicit",
+        "source.removeUnused.ts": "never"
+    },
+    "editor.defaultFormatter": "oxc.oxc-vscode",
+    "editor.formatOnSave": true,
+    "editor.formatOnSaveMode": "file",
+
+    "[typescript]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[tsx]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[javascript]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[jsx]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[css]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[json]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[jsonc]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[markdown]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "explorer.fileNesting.enabled": true,
+    "explorer.fileNesting.expand": false,
+    "explorer.fileNesting.patterns": {
+        "package.json": ".github*, .npmrc, .prettierignore, .vscode*, biome.json*, bun.lock*, components.json, eslint.config.*, .node-version,.oxfmtrc.jsonc, .oxlintrc.jsonc, pnpm-*.yaml, prettier.config.*, tsconfig.*, wrangler.toml, wrangler.*.toml, wrangler.json*, wrangler.*.json, wrangler.*.jsonc, workspace.json",
+        "readme*": "agent*, authors, backers*, changelog*, citation*, claude*, code_of_conduct*, codeowners, contributing*, contributors, copying, credits, governance.md, history.md, license*, maintainers, readme*, security.md, sponsors*"
+    },
+    "biome.enabled": false,
+    "prettier.enable": false,
+    "eslint.enable": false,
+    "dprint.experimentalLsp": false,
+    "deno.enable": false,
+    "unocss.disable": true,
+    "vitest.ignoreWorkspace": true
+}
+",
+      {
+        "executable": false,
+      },
+    ],
+  },
   "AGENTS.md": [
     "# Contributor Guidelines
 
@@ -7872,6 +8451,80 @@ exports[`ts-package feature combinations > cli + generator + sea 1`] = `
       "executable": false,
     },
   ],
+  ".vscode": {
+    "extensions.json": [
+      "{
+    "recommendations": [
+        "VoidZero.vite-plus-extension-pack",
+        "TypeScriptTeam.native-preview"
+    ]
+}
+",
+      {
+        "executable": false,
+      },
+    ],
+    "settings.json": [
+      "{
+    "js/ts.preferences.importModuleSpecifierEnding": "js",
+    "js/ts.experimental.useTsgo": true,
+
+    "oxc.enable.oxlint": true,
+    "oxc.enable.oxfmt": true,
+
+    "editor.codeActionsOnSave": {
+        "source.fixAll.oxc": "always",
+        "source.addMissingImports.ts": "explicit",
+        "source.removeUnused.ts": "never"
+    },
+    "editor.defaultFormatter": "oxc.oxc-vscode",
+    "editor.formatOnSave": true,
+    "editor.formatOnSaveMode": "file",
+
+    "[typescript]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[tsx]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[javascript]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[jsx]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[css]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[json]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[jsonc]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[markdown]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "explorer.fileNesting.enabled": true,
+    "explorer.fileNesting.expand": false,
+    "explorer.fileNesting.patterns": {
+        "package.json": ".github*, .npmrc, .prettierignore, .vscode*, biome.json*, bun.lock*, components.json, eslint.config.*, .node-version,.oxfmtrc.jsonc, .oxlintrc.jsonc, pnpm-*.yaml, prettier.config.*, tsconfig.*, wrangler.toml, wrangler.*.toml, wrangler.json*, wrangler.*.json, wrangler.*.jsonc, workspace.json",
+        "readme*": "agent*, authors, backers*, changelog*, citation*, claude*, code_of_conduct*, codeowners, contributing*, contributors, copying, credits, governance.md, history.md, license*, maintainers, readme*, security.md, sponsors*"
+    },
+    "biome.enabled": false,
+    "prettier.enable": false,
+    "eslint.enable": false,
+    "dprint.experimentalLsp": false,
+    "deno.enable": false,
+    "unocss.disable": true,
+    "vitest.ignoreWorkspace": true
+}
+",
+      {
+        "executable": false,
+      },
+    ],
+  },
   "AGENTS.md": [
     "# Contributor Guidelines
 
@@ -8345,6 +8998,80 @@ exports[`ts-package feature combinations > cli + generator 1`] = `
       "executable": false,
     },
   ],
+  ".vscode": {
+    "extensions.json": [
+      "{
+    "recommendations": [
+        "VoidZero.vite-plus-extension-pack",
+        "TypeScriptTeam.native-preview"
+    ]
+}
+",
+      {
+        "executable": false,
+      },
+    ],
+    "settings.json": [
+      "{
+    "js/ts.preferences.importModuleSpecifierEnding": "js",
+    "js/ts.experimental.useTsgo": true,
+
+    "oxc.enable.oxlint": true,
+    "oxc.enable.oxfmt": true,
+
+    "editor.codeActionsOnSave": {
+        "source.fixAll.oxc": "always",
+        "source.addMissingImports.ts": "explicit",
+        "source.removeUnused.ts": "never"
+    },
+    "editor.defaultFormatter": "oxc.oxc-vscode",
+    "editor.formatOnSave": true,
+    "editor.formatOnSaveMode": "file",
+
+    "[typescript]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[tsx]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[javascript]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[jsx]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[css]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[json]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[jsonc]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[markdown]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "explorer.fileNesting.enabled": true,
+    "explorer.fileNesting.expand": false,
+    "explorer.fileNesting.patterns": {
+        "package.json": ".github*, .npmrc, .prettierignore, .vscode*, biome.json*, bun.lock*, components.json, eslint.config.*, .node-version,.oxfmtrc.jsonc, .oxlintrc.jsonc, pnpm-*.yaml, prettier.config.*, tsconfig.*, wrangler.toml, wrangler.*.toml, wrangler.json*, wrangler.*.json, wrangler.*.jsonc, workspace.json",
+        "readme*": "agent*, authors, backers*, changelog*, citation*, claude*, code_of_conduct*, codeowners, contributing*, contributors, copying, credits, governance.md, history.md, license*, maintainers, readme*, security.md, sponsors*"
+    },
+    "biome.enabled": false,
+    "prettier.enable": false,
+    "eslint.enable": false,
+    "dprint.experimentalLsp": false,
+    "deno.enable": false,
+    "unocss.disable": true,
+    "vitest.ignoreWorkspace": true
+}
+",
+      {
+        "executable": false,
+      },
+    ],
+  },
   "AGENTS.md": [
     "# Contributor Guidelines
 
@@ -8802,6 +9529,80 @@ exports[`ts-package feature combinations > cli + sea 1`] = `
       "executable": false,
     },
   ],
+  ".vscode": {
+    "extensions.json": [
+      "{
+    "recommendations": [
+        "VoidZero.vite-plus-extension-pack",
+        "TypeScriptTeam.native-preview"
+    ]
+}
+",
+      {
+        "executable": false,
+      },
+    ],
+    "settings.json": [
+      "{
+    "js/ts.preferences.importModuleSpecifierEnding": "js",
+    "js/ts.experimental.useTsgo": true,
+
+    "oxc.enable.oxlint": true,
+    "oxc.enable.oxfmt": true,
+
+    "editor.codeActionsOnSave": {
+        "source.fixAll.oxc": "always",
+        "source.addMissingImports.ts": "explicit",
+        "source.removeUnused.ts": "never"
+    },
+    "editor.defaultFormatter": "oxc.oxc-vscode",
+    "editor.formatOnSave": true,
+    "editor.formatOnSaveMode": "file",
+
+    "[typescript]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[tsx]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[javascript]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[jsx]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[css]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[json]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[jsonc]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[markdown]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "explorer.fileNesting.enabled": true,
+    "explorer.fileNesting.expand": false,
+    "explorer.fileNesting.patterns": {
+        "package.json": ".github*, .npmrc, .prettierignore, .vscode*, biome.json*, bun.lock*, components.json, eslint.config.*, .node-version,.oxfmtrc.jsonc, .oxlintrc.jsonc, pnpm-*.yaml, prettier.config.*, tsconfig.*, wrangler.toml, wrangler.*.toml, wrangler.json*, wrangler.*.json, wrangler.*.jsonc, workspace.json",
+        "readme*": "agent*, authors, backers*, changelog*, citation*, claude*, code_of_conduct*, codeowners, contributing*, contributors, copying, credits, governance.md, history.md, license*, maintainers, readme*, security.md, sponsors*"
+    },
+    "biome.enabled": false,
+    "prettier.enable": false,
+    "eslint.enable": false,
+    "dprint.experimentalLsp": false,
+    "deno.enable": false,
+    "unocss.disable": true,
+    "vitest.ignoreWorkspace": true
+}
+",
+      {
+        "executable": false,
+      },
+    ],
+  },
   "AGENTS.md": [
     "# Contributor Guidelines
 
@@ -9240,6 +10041,80 @@ exports[`ts-package feature combinations > cli only 1`] = `
       "executable": false,
     },
   ],
+  ".vscode": {
+    "extensions.json": [
+      "{
+    "recommendations": [
+        "VoidZero.vite-plus-extension-pack",
+        "TypeScriptTeam.native-preview"
+    ]
+}
+",
+      {
+        "executable": false,
+      },
+    ],
+    "settings.json": [
+      "{
+    "js/ts.preferences.importModuleSpecifierEnding": "js",
+    "js/ts.experimental.useTsgo": true,
+
+    "oxc.enable.oxlint": true,
+    "oxc.enable.oxfmt": true,
+
+    "editor.codeActionsOnSave": {
+        "source.fixAll.oxc": "always",
+        "source.addMissingImports.ts": "explicit",
+        "source.removeUnused.ts": "never"
+    },
+    "editor.defaultFormatter": "oxc.oxc-vscode",
+    "editor.formatOnSave": true,
+    "editor.formatOnSaveMode": "file",
+
+    "[typescript]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[tsx]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[javascript]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[jsx]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[css]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[json]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[jsonc]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[markdown]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "explorer.fileNesting.enabled": true,
+    "explorer.fileNesting.expand": false,
+    "explorer.fileNesting.patterns": {
+        "package.json": ".github*, .npmrc, .prettierignore, .vscode*, biome.json*, bun.lock*, components.json, eslint.config.*, .node-version,.oxfmtrc.jsonc, .oxlintrc.jsonc, pnpm-*.yaml, prettier.config.*, tsconfig.*, wrangler.toml, wrangler.*.toml, wrangler.json*, wrangler.*.json, wrangler.*.jsonc, workspace.json",
+        "readme*": "agent*, authors, backers*, changelog*, citation*, claude*, code_of_conduct*, codeowners, contributing*, contributors, copying, credits, governance.md, history.md, license*, maintainers, readme*, security.md, sponsors*"
+    },
+    "biome.enabled": false,
+    "prettier.enable": false,
+    "eslint.enable": false,
+    "dprint.experimentalLsp": false,
+    "deno.enable": false,
+    "unocss.disable": true,
+    "vitest.ignoreWorkspace": true
+}
+",
+      {
+        "executable": false,
+      },
+    ],
+  },
   "AGENTS.md": [
     "# Contributor Guidelines
 
@@ -9662,6 +10537,80 @@ exports[`ts-package feature combinations > generator + sea 1`] = `
       "executable": false,
     },
   ],
+  ".vscode": {
+    "extensions.json": [
+      "{
+    "recommendations": [
+        "VoidZero.vite-plus-extension-pack",
+        "TypeScriptTeam.native-preview"
+    ]
+}
+",
+      {
+        "executable": false,
+      },
+    ],
+    "settings.json": [
+      "{
+    "js/ts.preferences.importModuleSpecifierEnding": "js",
+    "js/ts.experimental.useTsgo": true,
+
+    "oxc.enable.oxlint": true,
+    "oxc.enable.oxfmt": true,
+
+    "editor.codeActionsOnSave": {
+        "source.fixAll.oxc": "always",
+        "source.addMissingImports.ts": "explicit",
+        "source.removeUnused.ts": "never"
+    },
+    "editor.defaultFormatter": "oxc.oxc-vscode",
+    "editor.formatOnSave": true,
+    "editor.formatOnSaveMode": "file",
+
+    "[typescript]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[tsx]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[javascript]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[jsx]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[css]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[json]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[jsonc]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[markdown]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "explorer.fileNesting.enabled": true,
+    "explorer.fileNesting.expand": false,
+    "explorer.fileNesting.patterns": {
+        "package.json": ".github*, .npmrc, .prettierignore, .vscode*, biome.json*, bun.lock*, components.json, eslint.config.*, .node-version,.oxfmtrc.jsonc, .oxlintrc.jsonc, pnpm-*.yaml, prettier.config.*, tsconfig.*, wrangler.toml, wrangler.*.toml, wrangler.json*, wrangler.*.json, wrangler.*.jsonc, workspace.json",
+        "readme*": "agent*, authors, backers*, changelog*, citation*, claude*, code_of_conduct*, codeowners, contributing*, contributors, copying, credits, governance.md, history.md, license*, maintainers, readme*, security.md, sponsors*"
+    },
+    "biome.enabled": false,
+    "prettier.enable": false,
+    "eslint.enable": false,
+    "dprint.experimentalLsp": false,
+    "deno.enable": false,
+    "unocss.disable": true,
+    "vitest.ignoreWorkspace": true
+}
+",
+      {
+        "executable": false,
+      },
+    ],
+  },
   "AGENTS.md": [
     "# Contributor Guidelines
 
@@ -10086,6 +11035,80 @@ exports[`ts-package feature combinations > generator only 1`] = `
       "executable": false,
     },
   ],
+  ".vscode": {
+    "extensions.json": [
+      "{
+    "recommendations": [
+        "VoidZero.vite-plus-extension-pack",
+        "TypeScriptTeam.native-preview"
+    ]
+}
+",
+      {
+        "executable": false,
+      },
+    ],
+    "settings.json": [
+      "{
+    "js/ts.preferences.importModuleSpecifierEnding": "js",
+    "js/ts.experimental.useTsgo": true,
+
+    "oxc.enable.oxlint": true,
+    "oxc.enable.oxfmt": true,
+
+    "editor.codeActionsOnSave": {
+        "source.fixAll.oxc": "always",
+        "source.addMissingImports.ts": "explicit",
+        "source.removeUnused.ts": "never"
+    },
+    "editor.defaultFormatter": "oxc.oxc-vscode",
+    "editor.formatOnSave": true,
+    "editor.formatOnSaveMode": "file",
+
+    "[typescript]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[tsx]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[javascript]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[jsx]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[css]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[json]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[jsonc]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[markdown]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "explorer.fileNesting.enabled": true,
+    "explorer.fileNesting.expand": false,
+    "explorer.fileNesting.patterns": {
+        "package.json": ".github*, .npmrc, .prettierignore, .vscode*, biome.json*, bun.lock*, components.json, eslint.config.*, .node-version,.oxfmtrc.jsonc, .oxlintrc.jsonc, pnpm-*.yaml, prettier.config.*, tsconfig.*, wrangler.toml, wrangler.*.toml, wrangler.json*, wrangler.*.json, wrangler.*.jsonc, workspace.json",
+        "readme*": "agent*, authors, backers*, changelog*, citation*, claude*, code_of_conduct*, codeowners, contributing*, contributors, copying, credits, governance.md, history.md, license*, maintainers, readme*, security.md, sponsors*"
+    },
+    "biome.enabled": false,
+    "prettier.enable": false,
+    "eslint.enable": false,
+    "dprint.experimentalLsp": false,
+    "deno.enable": false,
+    "unocss.disable": true,
+    "vitest.ignoreWorkspace": true
+}
+",
+      {
+        "executable": false,
+      },
+    ],
+  },
   "AGENTS.md": [
     "# Contributor Guidelines
 
@@ -10494,6 +11517,80 @@ exports[`ts-package feature combinations > sea only 1`] = `
       "executable": false,
     },
   ],
+  ".vscode": {
+    "extensions.json": [
+      "{
+    "recommendations": [
+        "VoidZero.vite-plus-extension-pack",
+        "TypeScriptTeam.native-preview"
+    ]
+}
+",
+      {
+        "executable": false,
+      },
+    ],
+    "settings.json": [
+      "{
+    "js/ts.preferences.importModuleSpecifierEnding": "js",
+    "js/ts.experimental.useTsgo": true,
+
+    "oxc.enable.oxlint": true,
+    "oxc.enable.oxfmt": true,
+
+    "editor.codeActionsOnSave": {
+        "source.fixAll.oxc": "always",
+        "source.addMissingImports.ts": "explicit",
+        "source.removeUnused.ts": "never"
+    },
+    "editor.defaultFormatter": "oxc.oxc-vscode",
+    "editor.formatOnSave": true,
+    "editor.formatOnSaveMode": "file",
+
+    "[typescript]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[tsx]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[javascript]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[jsx]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[css]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[json]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[jsonc]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "[markdown]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    },
+    "explorer.fileNesting.enabled": true,
+    "explorer.fileNesting.expand": false,
+    "explorer.fileNesting.patterns": {
+        "package.json": ".github*, .npmrc, .prettierignore, .vscode*, biome.json*, bun.lock*, components.json, eslint.config.*, .node-version,.oxfmtrc.jsonc, .oxlintrc.jsonc, pnpm-*.yaml, prettier.config.*, tsconfig.*, wrangler.toml, wrangler.*.toml, wrangler.json*, wrangler.*.json, wrangler.*.jsonc, workspace.json",
+        "readme*": "agent*, authors, backers*, changelog*, citation*, claude*, code_of_conduct*, codeowners, contributing*, contributors, copying, credits, governance.md, history.md, license*, maintainers, readme*, security.md, sponsors*"
+    },
+    "biome.enabled": false,
+    "prettier.enable": false,
+    "eslint.enable": false,
+    "dprint.experimentalLsp": false,
+    "deno.enable": false,
+    "unocss.disable": true,
+    "vitest.ignoreWorkspace": true
+}
+",
+      {
+        "executable": false,
+      },
+    ],
+  },
   "AGENTS.md": [
     "# Contributor Guidelines
 
