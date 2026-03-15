@@ -6,7 +6,7 @@ function buildDependencyCommands(context: TemplateContext): string[] {
     const commands: string[] = [];
 
     // Common dev dependencies for all templates
-    // vite must be added as a devDep so the pnpm override maps it to vite-plus-core
+    // Vite must be added as a devDep so the pnpm override maps it to vite-plus-core
     commands.push(
         "vp add -D vite-plus @types/node @typescript/native-preview vite@npm:@voidzero-dev/vite-plus-core@latest vitest@npm:@voidzero-dev/vite-plus-test@latest",
     );
@@ -24,7 +24,7 @@ function buildDependencyCommands(context: TemplateContext): string[] {
 
     if (context.isReactRouter) {
         // @react-router/node + isbot required by the vite plugin to resolve server
-        // runtime. Without isbot, the plugin runs `npm install` which fails on pnpm.
+        // Runtime. Without isbot, the plugin runs `npm install` which fails on pnpm.
         commands.push("vp add @react-router/node isbot");
     }
 
@@ -75,12 +75,7 @@ export function buildScripts(context: TemplateContext): CreatedScript[] {
 
     // Phase 3: Symlinks and git init
     scripts.push({
-        commands: [
-            "ln -sf AGENTS.md CLAUDE.md",
-            "git init",
-            "git add -A",
-            "git commit -m initial",
-        ],
+        commands: ["ln -sf AGENTS.md CLAUDE.md", "git init", "git add -A", "git commit -m initial"],
         phase: 3,
     });
 

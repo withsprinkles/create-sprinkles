@@ -1,13 +1,10 @@
 import babel from "@rolldown/plugin-babel";
 import { reactCompilerPreset } from "@vitejs/plugin-react";
 
-export interface ReactCompilerConfig {
-    /** Controls the strategy for determining which functions the React Compiler will optimize. */
-    compilationMode?: "infer" | "annotation" | "syntax" | "all";
-    /** Configures the React version compatibility for the compiled output. */
-    target?: "17" | "18" | "19";
-}
+export type ReactCompilerConfig = Partial<Parameters<typeof reactCompilerPreset>[0]>;
 
 export function reactCompiler(config: ReactCompilerConfig = {}) {
-    return babel({ presets: [reactCompilerPreset(config)] } as Parameters<typeof babel>[0]);
+    return babel({
+        presets: [reactCompilerPreset(config as Parameters<typeof reactCompilerPreset>[0])],
+    } as Parameters<typeof babel>[0]);
 }

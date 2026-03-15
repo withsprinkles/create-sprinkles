@@ -633,8 +633,7 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
       },
     ],
     "routes.ts": [
-      "import { index } from "@react-router/dev/routes";
-import type { RouteConfig } from "@react-router/dev/routes";
+      "import { index, type RouteConfig } from "@react-router/dev/routes";
 
 export default [index("home.tsx")] satisfies RouteConfig;
 ",
@@ -677,15 +676,12 @@ export default [index("home.tsx")] satisfies RouteConfig;
     "import babel from "@rolldown/plugin-babel";
 import { reactCompilerPreset } from "@vitejs/plugin-react";
 
-export interface ReactCompilerConfig {
-    /** Controls the strategy for determining which functions the React Compiler will optimize. */
-    compilationMode?: "infer" | "annotation" | "syntax" | "all";
-    /** Configures the React version compatibility for the compiled output. */
-    target?: "17" | "18" | "19";
-}
+export type ReactCompilerConfig = Partial<Parameters<typeof reactCompilerPreset>[0]>;
 
 export function reactCompiler(config: ReactCompilerConfig = {}) {
-    return babel({ presets: [reactCompilerPreset(config)] } as Parameters<typeof babel>[0]);
+    return babel({
+        presets: [reactCompilerPreset(config as Parameters<typeof reactCompilerPreset>[0])],
+    } as Parameters<typeof babel>[0]);
 }
 ",
     {
@@ -840,17 +836,32 @@ export default defineConfig({
         rules: {
             "eslint/default-param-last": "error",
             "eslint/func-style": ["error", "declaration"],
+            "eslint/id-length": "off",
+            "eslint/init-declarations": "off",
+            "eslint/max-lines-per-function": "off",
+            "eslint/max-statements": "off",
+            "eslint/capitalized-comments": "off",
             "eslint/no-cond-assign": "off",
+            "eslint/no-continue": "off",
             "eslint/no-dupe-else-if": "error",
+            "eslint/no-duplicate-imports": "off",
             "eslint/no-else-return": "error",
             "eslint/no-empty-pattern": "warn",
             "eslint/no-irregular-whitespace": "error",
             "eslint/no-lonely-if": "warn",
+            "eslint/no-magic-numbers": "off",
             "eslint/no-param-reassign": "error",
+            "eslint/no-shadow": "off",
             "eslint/no-template-curly-in-string": "warn",
+            "eslint/no-ternary": "off",
+            "eslint/no-undefined": "off",
             "eslint/no-unused-expressions": "error",
+            "eslint/no-warning-comments": "off",
+            "eslint/no-unused-vars": "off",
             "eslint/no-useless-escape": "warn",
+            "eslint/require-await": "off",
             "eslint/sort-imports": "off",
+            "eslint/sort-keys": "off",
 
             "import/extensions": [
                 "error",
@@ -871,6 +882,7 @@ export default defineConfig({
             "import/no-commonjs": "warn",
             "import/no-default-export": "off",
             "import/no-named-export": "off",
+            "import/no-nodejs-modules": "off",
             "import/no-relative-parent-imports": "off",
             "import/prefer-default-export": "off",
 
@@ -897,6 +909,7 @@ export default defineConfig({
             "react/exhaustive-deps": "warn",
             "react/jsx-boolean-value": "warn",
             "react/jsx-filename-extension": "off",
+            "react/jsx-max-depth": "off",
             "react/jsx-fragments": "warn",
             "react/jsx-key": "error",
             "react/jsx-no-constructed-context-values": "error",
@@ -1837,8 +1850,7 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
       },
     ],
     "routes.ts": [
-      "import { index } from "@react-router/dev/routes";
-import type { RouteConfig } from "@react-router/dev/routes";
+      "import { index, type RouteConfig } from "@react-router/dev/routes";
 
 export default [index("home.tsx")] satisfies RouteConfig;
 ",
@@ -3093,15 +3105,12 @@ export function createMetaStore(): MetaStore {
     "import babel from "@rolldown/plugin-babel";
 import { reactCompilerPreset } from "@vitejs/plugin-react";
 
-export interface ReactCompilerConfig {
-    /** Controls the strategy for determining which functions the React Compiler will optimize. */
-    compilationMode?: "infer" | "annotation" | "syntax" | "all";
-    /** Configures the React version compatibility for the compiled output. */
-    target?: "17" | "18" | "19";
-}
+export type ReactCompilerConfig = Partial<Parameters<typeof reactCompilerPreset>[0]>;
 
 export function reactCompiler(config: ReactCompilerConfig = {}) {
-    return babel({ presets: [reactCompilerPreset(config)] } as Parameters<typeof babel>[0]);
+    return babel({
+        presets: [reactCompilerPreset(config as Parameters<typeof reactCompilerPreset>[0])],
+    } as Parameters<typeof babel>[0]);
 }
 ",
     {
@@ -3259,17 +3268,32 @@ export default defineConfig({
         rules: {
             "eslint/default-param-last": "error",
             "eslint/func-style": ["error", "declaration"],
+            "eslint/id-length": "off",
+            "eslint/init-declarations": "off",
+            "eslint/max-lines-per-function": "off",
+            "eslint/max-statements": "off",
+            "eslint/capitalized-comments": "off",
             "eslint/no-cond-assign": "off",
+            "eslint/no-continue": "off",
             "eslint/no-dupe-else-if": "error",
+            "eslint/no-duplicate-imports": "off",
             "eslint/no-else-return": "error",
             "eslint/no-empty-pattern": "warn",
             "eslint/no-irregular-whitespace": "error",
             "eslint/no-lonely-if": "warn",
+            "eslint/no-magic-numbers": "off",
             "eslint/no-param-reassign": "error",
+            "eslint/no-shadow": "off",
             "eslint/no-template-curly-in-string": "warn",
+            "eslint/no-ternary": "off",
+            "eslint/no-undefined": "off",
             "eslint/no-unused-expressions": "error",
+            "eslint/no-warning-comments": "off",
+            "eslint/no-unused-vars": "off",
             "eslint/no-useless-escape": "warn",
+            "eslint/require-await": "off",
             "eslint/sort-imports": "off",
+            "eslint/sort-keys": "off",
 
             "import/extensions": [
                 "error",
@@ -3290,6 +3314,7 @@ export default defineConfig({
             "import/no-commonjs": "warn",
             "import/no-default-export": "off",
             "import/no-named-export": "off",
+            "import/no-nodejs-modules": "off",
             "import/no-relative-parent-imports": "off",
             "import/prefer-default-export": "off",
 
@@ -3316,6 +3341,7 @@ export default defineConfig({
             "react/exhaustive-deps": "warn",
             "react/jsx-boolean-value": "warn",
             "react/jsx-filename-extension": "off",
+            "react/jsx-max-depth": "off",
             "react/jsx-fragments": "warn",
             "react/jsx-key": "error",
             "react/jsx-no-constructed-context-values": "error",
@@ -4089,8 +4115,7 @@ export default function App() {
       },
     ],
     "routes.ts": [
-      "import { index } from "@react-router/dev/routes";
-import type { RouteConfig } from "@react-router/dev/routes";
+      "import { index, type RouteConfig } from "@react-router/dev/routes";
 
 export default [index("home.tsx")] satisfies RouteConfig;
 ",
@@ -4133,15 +4158,12 @@ export default [index("home.tsx")] satisfies RouteConfig;
     "import babel from "@rolldown/plugin-babel";
 import { reactCompilerPreset } from "@vitejs/plugin-react";
 
-export interface ReactCompilerConfig {
-    /** Controls the strategy for determining which functions the React Compiler will optimize. */
-    compilationMode?: "infer" | "annotation" | "syntax" | "all";
-    /** Configures the React version compatibility for the compiled output. */
-    target?: "17" | "18" | "19";
-}
+export type ReactCompilerConfig = Partial<Parameters<typeof reactCompilerPreset>[0]>;
 
 export function reactCompiler(config: ReactCompilerConfig = {}) {
-    return babel({ presets: [reactCompilerPreset(config)] } as Parameters<typeof babel>[0]);
+    return babel({
+        presets: [reactCompilerPreset(config as Parameters<typeof reactCompilerPreset>[0])],
+    } as Parameters<typeof babel>[0]);
 }
 ",
     {
@@ -4267,17 +4289,32 @@ export default defineConfig({
         rules: {
             "eslint/default-param-last": "error",
             "eslint/func-style": ["error", "declaration"],
+            "eslint/id-length": "off",
+            "eslint/init-declarations": "off",
+            "eslint/max-lines-per-function": "off",
+            "eslint/max-statements": "off",
+            "eslint/capitalized-comments": "off",
             "eslint/no-cond-assign": "off",
+            "eslint/no-continue": "off",
             "eslint/no-dupe-else-if": "error",
+            "eslint/no-duplicate-imports": "off",
             "eslint/no-else-return": "error",
             "eslint/no-empty-pattern": "warn",
             "eslint/no-irregular-whitespace": "error",
             "eslint/no-lonely-if": "warn",
+            "eslint/no-magic-numbers": "off",
             "eslint/no-param-reassign": "error",
+            "eslint/no-shadow": "off",
             "eslint/no-template-curly-in-string": "warn",
+            "eslint/no-ternary": "off",
+            "eslint/no-undefined": "off",
             "eslint/no-unused-expressions": "error",
+            "eslint/no-warning-comments": "off",
+            "eslint/no-unused-vars": "off",
             "eslint/no-useless-escape": "warn",
+            "eslint/require-await": "off",
             "eslint/sort-imports": "off",
+            "eslint/sort-keys": "off",
 
             "import/extensions": [
                 "error",
@@ -4298,6 +4335,7 @@ export default defineConfig({
             "import/no-commonjs": "warn",
             "import/no-default-export": "off",
             "import/no-named-export": "off",
+            "import/no-nodejs-modules": "off",
             "import/no-relative-parent-imports": "off",
             "import/prefer-default-export": "off",
 
@@ -4324,6 +4362,7 @@ export default defineConfig({
             "react/exhaustive-deps": "warn",
             "react/jsx-boolean-value": "warn",
             "react/jsx-filename-extension": "off",
+            "react/jsx-max-depth": "off",
             "react/jsx-fragments": "warn",
             "react/jsx-key": "error",
             "react/jsx-no-constructed-context-values": "error",
@@ -4910,17 +4949,7 @@ vp dev
   ],
   "app": {
     "home.tsx": [
-      "import type { Route } from "./+types/home.ts";
-
-import { queryClient } from "./root.tsx";
-
-export async function clientLoader(_args: Route.ClientLoaderArgs) {
-    // Pre-populate query cache before render
-    // await queryClient.ensureQueryData(yourQueryOptions);
-    return {};
-}
-
-export default function Home() {
+      "export default function Home() {
     return (
         <main>
             <h1>Welcome to test-repo</h1>
@@ -4943,7 +4972,7 @@ import { Outlet, Scripts } from "react-router";
 const convex = new ConvexReactClient(import.meta.env.VITE_CONVEX_URL);
 const convexQueryClient = new ConvexQueryClient(convex);
 
-export const queryClient = new QueryClient({
+const queryClient = new QueryClient({
     defaultOptions: {
         queries: {
             queryKeyHashFn: convexQueryClient.hashFn(),
@@ -4991,8 +5020,7 @@ export default function App() {
       },
     ],
     "routes.ts": [
-      "import { index } from "@react-router/dev/routes";
-import type { RouteConfig } from "@react-router/dev/routes";
+      "import { index, type RouteConfig } from "@react-router/dev/routes";
 
 export default [index("home.tsx")] satisfies RouteConfig;
 ",
@@ -5052,15 +5080,12 @@ export default defineSchema({
     "import babel from "@rolldown/plugin-babel";
 import { reactCompilerPreset } from "@vitejs/plugin-react";
 
-export interface ReactCompilerConfig {
-    /** Controls the strategy for determining which functions the React Compiler will optimize. */
-    compilationMode?: "infer" | "annotation" | "syntax" | "all";
-    /** Configures the React version compatibility for the compiled output. */
-    target?: "17" | "18" | "19";
-}
+export type ReactCompilerConfig = Partial<Parameters<typeof reactCompilerPreset>[0]>;
 
 export function reactCompiler(config: ReactCompilerConfig = {}) {
-    return babel({ presets: [reactCompilerPreset(config)] } as Parameters<typeof babel>[0]);
+    return babel({
+        presets: [reactCompilerPreset(config as Parameters<typeof reactCompilerPreset>[0])],
+    } as Parameters<typeof babel>[0]);
 }
 ",
     {
@@ -5186,17 +5211,32 @@ export default defineConfig({
         rules: {
             "eslint/default-param-last": "error",
             "eslint/func-style": ["error", "declaration"],
+            "eslint/id-length": "off",
+            "eslint/init-declarations": "off",
+            "eslint/max-lines-per-function": "off",
+            "eslint/max-statements": "off",
+            "eslint/capitalized-comments": "off",
             "eslint/no-cond-assign": "off",
+            "eslint/no-continue": "off",
             "eslint/no-dupe-else-if": "error",
+            "eslint/no-duplicate-imports": "off",
             "eslint/no-else-return": "error",
             "eslint/no-empty-pattern": "warn",
             "eslint/no-irregular-whitespace": "error",
             "eslint/no-lonely-if": "warn",
+            "eslint/no-magic-numbers": "off",
             "eslint/no-param-reassign": "error",
+            "eslint/no-shadow": "off",
             "eslint/no-template-curly-in-string": "warn",
+            "eslint/no-ternary": "off",
+            "eslint/no-undefined": "off",
             "eslint/no-unused-expressions": "error",
+            "eslint/no-warning-comments": "off",
+            "eslint/no-unused-vars": "off",
             "eslint/no-useless-escape": "warn",
+            "eslint/require-await": "off",
             "eslint/sort-imports": "off",
+            "eslint/sort-keys": "off",
 
             "import/extensions": [
                 "error",
@@ -5217,6 +5257,7 @@ export default defineConfig({
             "import/no-commonjs": "warn",
             "import/no-default-export": "off",
             "import/no-named-export": "off",
+            "import/no-nodejs-modules": "off",
             "import/no-relative-parent-imports": "off",
             "import/prefer-default-export": "off",
 
@@ -5243,6 +5284,7 @@ export default defineConfig({
             "react/exhaustive-deps": "warn",
             "react/jsx-boolean-value": "warn",
             "react/jsx-filename-extension": "off",
+            "react/jsx-max-depth": "off",
             "react/jsx-fragments": "warn",
             "react/jsx-key": "error",
             "react/jsx-no-constructed-context-values": "error",
@@ -5891,8 +5933,7 @@ export function ErrorBoundary({ error }: { error: unknown }) {
       },
     ],
     "routes.ts": [
-      "import { index } from "@react-router/dev/routes";
-import type { RouteConfig } from "@react-router/dev/routes";
+      "import { index, type RouteConfig } from "@react-router/dev/routes";
 
 export default [index("home.tsx")] satisfies RouteConfig;
 ",
@@ -5950,15 +5991,12 @@ export default defineSchema({
     "import babel from "@rolldown/plugin-babel";
 import { reactCompilerPreset } from "@vitejs/plugin-react";
 
-export interface ReactCompilerConfig {
-    /** Controls the strategy for determining which functions the React Compiler will optimize. */
-    compilationMode?: "infer" | "annotation" | "syntax" | "all";
-    /** Configures the React version compatibility for the compiled output. */
-    target?: "17" | "18" | "19";
-}
+export type ReactCompilerConfig = Partial<Parameters<typeof reactCompilerPreset>[0]>;
 
 export function reactCompiler(config: ReactCompilerConfig = {}) {
-    return babel({ presets: [reactCompilerPreset(config)] } as Parameters<typeof babel>[0]);
+    return babel({
+        presets: [reactCompilerPreset(config as Parameters<typeof reactCompilerPreset>[0])],
+    } as Parameters<typeof babel>[0]);
 }
 ",
     {
@@ -6001,6 +6039,7 @@ export default {
         "module": "ESNext",
         "target": "ESNext",
         "lib": ["ESNext", "DOM", "DOM.Iterable"],
+        "types": ["vite/client"],
         "jsx": "react-jsx",
         "rootDirs": [".", "./.react-router/types"],
         "paths": {
@@ -6085,17 +6124,32 @@ export default defineConfig({
         rules: {
             "eslint/default-param-last": "error",
             "eslint/func-style": ["error", "declaration"],
+            "eslint/id-length": "off",
+            "eslint/init-declarations": "off",
+            "eslint/max-lines-per-function": "off",
+            "eslint/max-statements": "off",
+            "eslint/capitalized-comments": "off",
             "eslint/no-cond-assign": "off",
+            "eslint/no-continue": "off",
             "eslint/no-dupe-else-if": "error",
+            "eslint/no-duplicate-imports": "off",
             "eslint/no-else-return": "error",
             "eslint/no-empty-pattern": "warn",
             "eslint/no-irregular-whitespace": "error",
             "eslint/no-lonely-if": "warn",
+            "eslint/no-magic-numbers": "off",
             "eslint/no-param-reassign": "error",
+            "eslint/no-shadow": "off",
             "eslint/no-template-curly-in-string": "warn",
+            "eslint/no-ternary": "off",
+            "eslint/no-undefined": "off",
             "eslint/no-unused-expressions": "error",
+            "eslint/no-warning-comments": "off",
+            "eslint/no-unused-vars": "off",
             "eslint/no-useless-escape": "warn",
+            "eslint/require-await": "off",
             "eslint/sort-imports": "off",
+            "eslint/sort-keys": "off",
 
             "import/extensions": [
                 "error",
@@ -6116,6 +6170,7 @@ export default defineConfig({
             "import/no-commonjs": "warn",
             "import/no-default-export": "off",
             "import/no-named-export": "off",
+            "import/no-nodejs-modules": "off",
             "import/no-relative-parent-imports": "off",
             "import/prefer-default-export": "off",
 
@@ -6142,6 +6197,7 @@ export default defineConfig({
             "react/exhaustive-deps": "warn",
             "react/jsx-boolean-value": "warn",
             "react/jsx-filename-extension": "off",
+            "react/jsx-max-depth": "off",
             "react/jsx-fragments": "warn",
             "react/jsx-key": "error",
             "react/jsx-no-constructed-context-values": "error",
@@ -6255,7 +6311,6 @@ export default defineConfig({
     "{
     "$schema": "node_modules/wrangler/config-schema.json",
     "name": "test-repo",
-    "main": "./build/server/index.js",
     "compatibility_date": "2025-04-01",
     "compatibility_flags": ["nodejs_compat"],
     "assets": {
@@ -6748,11 +6803,14 @@ vp dev
   ],
   "app": {
     "home.tsx": [
-      "import type { Route } from "./+types/home.ts";
+      "import { createPreloader } from "~/tanstack-query-integration/query-preloader.ts";
+import type { QueryLoaderArgs } from "~/tanstack-query-integration/query-preloader.ts";
 
-import { createPreloader } from "~/tanstack-query-integration/query-preloader.ts";
+import type { Route } from "./+types/home.ts";
 
-export const loader = createPreloader<Route.LoaderArgs, void>(async ({ preload }) => {
+// TODO: Remove @ts-expect-error once preload is used
+// @ts-expect-error TS6133 — preload is unused until you call it with your query options
+export const loader = createPreloader(async ({ preload }: QueryLoaderArgs<Route.LoaderArgs>) => {
     // Pre-populate query cache before render
     // await preload(yourQueryOptions);
 });
@@ -6898,8 +6956,7 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
       },
     ],
     "routes.ts": [
-      "import { index } from "@react-router/dev/routes";
-import type { RouteConfig } from "@react-router/dev/routes";
+      "import { index, type RouteConfig } from "@react-router/dev/routes";
 
 export default [index("home.tsx")] satisfies RouteConfig;
 ",
@@ -6911,9 +6968,10 @@ export default [index("home.tsx")] satisfies RouteConfig;
       "middleware.ts": [
         "import type { QueryClient } from "@tanstack/react-query";
 
+import type { MiddlewareFunction } from "react-router";
+
 import assert from "node:assert";
-import { createContext, RouterContextProvider } from 'react-router';
-import type { MiddlewareFunction } from 'react-router';
+import { createContext, RouterContextProvider } from "react-router";
 
 const QUERY_CLIENT = createContext<QueryClient | null>(null);
 
@@ -6940,11 +6998,10 @@ export function getQueryClient(context: Readonly<RouterContextProvider>): QueryC
 } from "@tanstack/react-query";
 import type { LoaderFunctionArgs } from "react-router";
 
-import { on } from "@remix-run/interaction";
 import { dehydrate } from "@tanstack/react-query";
 import { useMatches } from "react-router";
 
-import { getQueryClient } from "./middleware";
+import { getQueryClient } from "./middleware.ts";
 
 const DEHYDRATED_STATE_KEY = "@tanstack/react-query:dehydrated-state";
 
@@ -6958,7 +7015,9 @@ function mergeDehydratedStates(states: DehydratedState[]): DehydratedState {
     const byHash = new Map<string, (typeof allQueries)[number]>();
 
     for (const query of allQueries) {
-        if (!query) {continue;}
+        if (!query) {
+            continue;
+        }
         byHash.set(query.queryHash, query);
     }
 
@@ -6992,13 +7051,8 @@ export function createPreloader<
             if (args.request.signal.aborted) {
                 query.cancelQueries();
             } else {
-                on(args.request.signal, {
-                    abort: {
-                        listener: () => {
-                            query.cancelQueries();
-                        },
-                        once: true,
-                    },
+                args.request.signal.addEventListener("abort", () => query.cancelQueries(), {
+                    once: true,
                 });
             }
         }
@@ -7119,15 +7173,12 @@ export default defineSchema({
     "import babel from "@rolldown/plugin-babel";
 import { reactCompilerPreset } from "@vitejs/plugin-react";
 
-export interface ReactCompilerConfig {
-    /** Controls the strategy for determining which functions the React Compiler will optimize. */
-    compilationMode?: "infer" | "annotation" | "syntax" | "all";
-    /** Configures the React version compatibility for the compiled output. */
-    target?: "17" | "18" | "19";
-}
+export type ReactCompilerConfig = Partial<Parameters<typeof reactCompilerPreset>[0]>;
 
 export function reactCompiler(config: ReactCompilerConfig = {}) {
-    return babel({ presets: [reactCompilerPreset(config)] } as Parameters<typeof babel>[0]);
+    return babel({
+        presets: [reactCompilerPreset(config as Parameters<typeof reactCompilerPreset>[0])],
+    } as Parameters<typeof babel>[0]);
 }
 ",
     {
@@ -7170,6 +7221,7 @@ export default {
         "module": "ESNext",
         "target": "ESNext",
         "lib": ["ESNext", "DOM", "DOM.Iterable"],
+        "types": ["vite/client"],
         "jsx": "react-jsx",
         "rootDirs": [".", "./.react-router/types"],
         "paths": {
@@ -7254,17 +7306,32 @@ export default defineConfig({
         rules: {
             "eslint/default-param-last": "error",
             "eslint/func-style": ["error", "declaration"],
+            "eslint/id-length": "off",
+            "eslint/init-declarations": "off",
+            "eslint/max-lines-per-function": "off",
+            "eslint/max-statements": "off",
+            "eslint/capitalized-comments": "off",
             "eslint/no-cond-assign": "off",
+            "eslint/no-continue": "off",
             "eslint/no-dupe-else-if": "error",
+            "eslint/no-duplicate-imports": "off",
             "eslint/no-else-return": "error",
             "eslint/no-empty-pattern": "warn",
             "eslint/no-irregular-whitespace": "error",
             "eslint/no-lonely-if": "warn",
+            "eslint/no-magic-numbers": "off",
             "eslint/no-param-reassign": "error",
+            "eslint/no-shadow": "off",
             "eslint/no-template-curly-in-string": "warn",
+            "eslint/no-ternary": "off",
+            "eslint/no-undefined": "off",
             "eslint/no-unused-expressions": "error",
+            "eslint/no-warning-comments": "off",
+            "eslint/no-unused-vars": "off",
             "eslint/no-useless-escape": "warn",
+            "eslint/require-await": "off",
             "eslint/sort-imports": "off",
+            "eslint/sort-keys": "off",
 
             "import/extensions": [
                 "error",
@@ -7285,6 +7352,7 @@ export default defineConfig({
             "import/no-commonjs": "warn",
             "import/no-default-export": "off",
             "import/no-named-export": "off",
+            "import/no-nodejs-modules": "off",
             "import/no-relative-parent-imports": "off",
             "import/prefer-default-export": "off",
 
@@ -7311,6 +7379,7 @@ export default defineConfig({
             "react/exhaustive-deps": "warn",
             "react/jsx-boolean-value": "warn",
             "react/jsx-filename-extension": "off",
+            "react/jsx-max-depth": "off",
             "react/jsx-fragments": "warn",
             "react/jsx-key": "error",
             "react/jsx-no-constructed-context-values": "error",
@@ -7424,7 +7493,6 @@ export default defineConfig({
     "{
     "$schema": "node_modules/wrangler/config-schema.json",
     "name": "test-repo",
-    "main": "./build/server/index.js",
     "compatibility_date": "2025-04-01",
     "compatibility_flags": ["nodejs_compat"],
     "assets": {
@@ -7716,17 +7784,32 @@ export default defineConfig({
         rules: {
             "eslint/default-param-last": "error",
             "eslint/func-style": ["error", "declaration"],
+            "eslint/id-length": "off",
+            "eslint/init-declarations": "off",
+            "eslint/max-lines-per-function": "off",
+            "eslint/max-statements": "off",
+            "eslint/capitalized-comments": "off",
             "eslint/no-cond-assign": "off",
+            "eslint/no-continue": "off",
             "eslint/no-dupe-else-if": "error",
+            "eslint/no-duplicate-imports": "off",
             "eslint/no-else-return": "error",
             "eslint/no-empty-pattern": "warn",
             "eslint/no-irregular-whitespace": "error",
             "eslint/no-lonely-if": "warn",
+            "eslint/no-magic-numbers": "off",
             "eslint/no-param-reassign": "error",
+            "eslint/no-shadow": "off",
             "eslint/no-template-curly-in-string": "warn",
+            "eslint/no-ternary": "off",
+            "eslint/no-undefined": "off",
             "eslint/no-unused-expressions": "error",
+            "eslint/no-warning-comments": "off",
+            "eslint/no-unused-vars": "off",
             "eslint/no-useless-escape": "warn",
+            "eslint/require-await": "off",
             "eslint/sort-imports": "off",
+            "eslint/sort-keys": "off",
 
             "import/extensions": [
                 "error",
@@ -7747,6 +7830,7 @@ export default defineConfig({
             "import/no-commonjs": "warn",
             "import/no-default-export": "off",
             "import/no-named-export": "off",
+            "import/no-nodejs-modules": "off",
             "import/no-relative-parent-imports": "off",
             "import/prefer-default-export": "off",
 
@@ -8172,17 +8256,32 @@ export default defineConfig({
         rules: {
             "eslint/default-param-last": "error",
             "eslint/func-style": ["error", "declaration"],
+            "eslint/id-length": "off",
+            "eslint/init-declarations": "off",
+            "eslint/max-lines-per-function": "off",
+            "eslint/max-statements": "off",
+            "eslint/capitalized-comments": "off",
             "eslint/no-cond-assign": "off",
+            "eslint/no-continue": "off",
             "eslint/no-dupe-else-if": "error",
+            "eslint/no-duplicate-imports": "off",
             "eslint/no-else-return": "error",
             "eslint/no-empty-pattern": "warn",
             "eslint/no-irregular-whitespace": "error",
             "eslint/no-lonely-if": "warn",
+            "eslint/no-magic-numbers": "off",
             "eslint/no-param-reassign": "error",
+            "eslint/no-shadow": "off",
             "eslint/no-template-curly-in-string": "warn",
+            "eslint/no-ternary": "off",
+            "eslint/no-undefined": "off",
             "eslint/no-unused-expressions": "error",
+            "eslint/no-warning-comments": "off",
+            "eslint/no-unused-vars": "off",
             "eslint/no-useless-escape": "warn",
+            "eslint/require-await": "off",
             "eslint/sort-imports": "off",
+            "eslint/sort-keys": "off",
 
             "import/extensions": [
                 "error",
@@ -8203,6 +8302,7 @@ export default defineConfig({
             "import/no-commonjs": "warn",
             "import/no-default-export": "off",
             "import/no-named-export": "off",
+            "import/no-nodejs-modules": "off",
             "import/no-relative-parent-imports": "off",
             "import/prefer-default-export": "off",
 
@@ -8612,17 +8712,32 @@ export default defineConfig({
         rules: {
             "eslint/default-param-last": "error",
             "eslint/func-style": ["error", "declaration"],
+            "eslint/id-length": "off",
+            "eslint/init-declarations": "off",
+            "eslint/max-lines-per-function": "off",
+            "eslint/max-statements": "off",
+            "eslint/capitalized-comments": "off",
             "eslint/no-cond-assign": "off",
+            "eslint/no-continue": "off",
             "eslint/no-dupe-else-if": "error",
+            "eslint/no-duplicate-imports": "off",
             "eslint/no-else-return": "error",
             "eslint/no-empty-pattern": "warn",
             "eslint/no-irregular-whitespace": "error",
             "eslint/no-lonely-if": "warn",
+            "eslint/no-magic-numbers": "off",
             "eslint/no-param-reassign": "error",
+            "eslint/no-shadow": "off",
             "eslint/no-template-curly-in-string": "warn",
+            "eslint/no-ternary": "off",
+            "eslint/no-undefined": "off",
             "eslint/no-unused-expressions": "error",
+            "eslint/no-warning-comments": "off",
+            "eslint/no-unused-vars": "off",
             "eslint/no-useless-escape": "warn",
+            "eslint/require-await": "off",
             "eslint/sort-imports": "off",
+            "eslint/sort-keys": "off",
 
             "import/extensions": [
                 "error",
@@ -8643,6 +8758,7 @@ export default defineConfig({
             "import/no-commonjs": "warn",
             "import/no-default-export": "off",
             "import/no-named-export": "off",
+            "import/no-nodejs-modules": "off",
             "import/no-relative-parent-imports": "off",
             "import/prefer-default-export": "off",
 
@@ -9033,17 +9149,32 @@ export default defineConfig({
         rules: {
             "eslint/default-param-last": "error",
             "eslint/func-style": ["error", "declaration"],
+            "eslint/id-length": "off",
+            "eslint/init-declarations": "off",
+            "eslint/max-lines-per-function": "off",
+            "eslint/max-statements": "off",
+            "eslint/capitalized-comments": "off",
             "eslint/no-cond-assign": "off",
+            "eslint/no-continue": "off",
             "eslint/no-dupe-else-if": "error",
+            "eslint/no-duplicate-imports": "off",
             "eslint/no-else-return": "error",
             "eslint/no-empty-pattern": "warn",
             "eslint/no-irregular-whitespace": "error",
             "eslint/no-lonely-if": "warn",
+            "eslint/no-magic-numbers": "off",
             "eslint/no-param-reassign": "error",
+            "eslint/no-shadow": "off",
             "eslint/no-template-curly-in-string": "warn",
+            "eslint/no-ternary": "off",
+            "eslint/no-undefined": "off",
             "eslint/no-unused-expressions": "error",
+            "eslint/no-warning-comments": "off",
+            "eslint/no-unused-vars": "off",
             "eslint/no-useless-escape": "warn",
+            "eslint/require-await": "off",
             "eslint/sort-imports": "off",
+            "eslint/sort-keys": "off",
 
             "import/extensions": [
                 "error",
@@ -9064,6 +9195,7 @@ export default defineConfig({
             "import/no-commonjs": "warn",
             "import/no-default-export": "off",
             "import/no-named-export": "off",
+            "import/no-nodejs-modules": "off",
             "import/no-relative-parent-imports": "off",
             "import/prefer-default-export": "off",
 
@@ -9438,17 +9570,32 @@ export default defineConfig({
         rules: {
             "eslint/default-param-last": "error",
             "eslint/func-style": ["error", "declaration"],
+            "eslint/id-length": "off",
+            "eslint/init-declarations": "off",
+            "eslint/max-lines-per-function": "off",
+            "eslint/max-statements": "off",
+            "eslint/capitalized-comments": "off",
             "eslint/no-cond-assign": "off",
+            "eslint/no-continue": "off",
             "eslint/no-dupe-else-if": "error",
+            "eslint/no-duplicate-imports": "off",
             "eslint/no-else-return": "error",
             "eslint/no-empty-pattern": "warn",
             "eslint/no-irregular-whitespace": "error",
             "eslint/no-lonely-if": "warn",
+            "eslint/no-magic-numbers": "off",
             "eslint/no-param-reassign": "error",
+            "eslint/no-shadow": "off",
             "eslint/no-template-curly-in-string": "warn",
+            "eslint/no-ternary": "off",
+            "eslint/no-undefined": "off",
             "eslint/no-unused-expressions": "error",
+            "eslint/no-warning-comments": "off",
+            "eslint/no-unused-vars": "off",
             "eslint/no-useless-escape": "warn",
+            "eslint/require-await": "off",
             "eslint/sort-imports": "off",
+            "eslint/sort-keys": "off",
 
             "import/extensions": [
                 "error",
@@ -9469,6 +9616,7 @@ export default defineConfig({
             "import/no-commonjs": "warn",
             "import/no-default-export": "off",
             "import/no-named-export": "off",
+            "import/no-nodejs-modules": "off",
             "import/no-relative-parent-imports": "off",
             "import/prefer-default-export": "off",
 
@@ -9845,17 +9993,32 @@ export default defineConfig({
         rules: {
             "eslint/default-param-last": "error",
             "eslint/func-style": ["error", "declaration"],
+            "eslint/id-length": "off",
+            "eslint/init-declarations": "off",
+            "eslint/max-lines-per-function": "off",
+            "eslint/max-statements": "off",
+            "eslint/capitalized-comments": "off",
             "eslint/no-cond-assign": "off",
+            "eslint/no-continue": "off",
             "eslint/no-dupe-else-if": "error",
+            "eslint/no-duplicate-imports": "off",
             "eslint/no-else-return": "error",
             "eslint/no-empty-pattern": "warn",
             "eslint/no-irregular-whitespace": "error",
             "eslint/no-lonely-if": "warn",
+            "eslint/no-magic-numbers": "off",
             "eslint/no-param-reassign": "error",
+            "eslint/no-shadow": "off",
             "eslint/no-template-curly-in-string": "warn",
+            "eslint/no-ternary": "off",
+            "eslint/no-undefined": "off",
             "eslint/no-unused-expressions": "error",
+            "eslint/no-warning-comments": "off",
+            "eslint/no-unused-vars": "off",
             "eslint/no-useless-escape": "warn",
+            "eslint/require-await": "off",
             "eslint/sort-imports": "off",
+            "eslint/sort-keys": "off",
 
             "import/extensions": [
                 "error",
@@ -9876,6 +10039,7 @@ export default defineConfig({
             "import/no-commonjs": "warn",
             "import/no-default-export": "off",
             "import/no-named-export": "off",
+            "import/no-nodejs-modules": "off",
             "import/no-relative-parent-imports": "off",
             "import/prefer-default-export": "off",
 
@@ -10236,17 +10400,32 @@ export default defineConfig({
         rules: {
             "eslint/default-param-last": "error",
             "eslint/func-style": ["error", "declaration"],
+            "eslint/id-length": "off",
+            "eslint/init-declarations": "off",
+            "eslint/max-lines-per-function": "off",
+            "eslint/max-statements": "off",
+            "eslint/capitalized-comments": "off",
             "eslint/no-cond-assign": "off",
+            "eslint/no-continue": "off",
             "eslint/no-dupe-else-if": "error",
+            "eslint/no-duplicate-imports": "off",
             "eslint/no-else-return": "error",
             "eslint/no-empty-pattern": "warn",
             "eslint/no-irregular-whitespace": "error",
             "eslint/no-lonely-if": "warn",
+            "eslint/no-magic-numbers": "off",
             "eslint/no-param-reassign": "error",
+            "eslint/no-shadow": "off",
             "eslint/no-template-curly-in-string": "warn",
+            "eslint/no-ternary": "off",
+            "eslint/no-undefined": "off",
             "eslint/no-unused-expressions": "error",
+            "eslint/no-warning-comments": "off",
+            "eslint/no-unused-vars": "off",
             "eslint/no-useless-escape": "warn",
+            "eslint/require-await": "off",
             "eslint/sort-imports": "off",
+            "eslint/sort-keys": "off",
 
             "import/extensions": [
                 "error",
@@ -10267,6 +10446,7 @@ export default defineConfig({
             "import/no-commonjs": "warn",
             "import/no-default-export": "off",
             "import/no-named-export": "off",
+            "import/no-nodejs-modules": "off",
             "import/no-relative-parent-imports": "off",
             "import/prefer-default-export": "off",
 
@@ -10606,17 +10786,32 @@ export default defineConfig({
         rules: {
             "eslint/default-param-last": "error",
             "eslint/func-style": ["error", "declaration"],
+            "eslint/id-length": "off",
+            "eslint/init-declarations": "off",
+            "eslint/max-lines-per-function": "off",
+            "eslint/max-statements": "off",
+            "eslint/capitalized-comments": "off",
             "eslint/no-cond-assign": "off",
+            "eslint/no-continue": "off",
             "eslint/no-dupe-else-if": "error",
+            "eslint/no-duplicate-imports": "off",
             "eslint/no-else-return": "error",
             "eslint/no-empty-pattern": "warn",
             "eslint/no-irregular-whitespace": "error",
             "eslint/no-lonely-if": "warn",
+            "eslint/no-magic-numbers": "off",
             "eslint/no-param-reassign": "error",
+            "eslint/no-shadow": "off",
             "eslint/no-template-curly-in-string": "warn",
+            "eslint/no-ternary": "off",
+            "eslint/no-undefined": "off",
             "eslint/no-unused-expressions": "error",
+            "eslint/no-warning-comments": "off",
+            "eslint/no-unused-vars": "off",
             "eslint/no-useless-escape": "warn",
+            "eslint/require-await": "off",
             "eslint/sort-imports": "off",
+            "eslint/sort-keys": "off",
 
             "import/extensions": [
                 "error",
@@ -10637,6 +10832,7 @@ export default defineConfig({
             "import/no-commonjs": "warn",
             "import/no-default-export": "off",
             "import/no-named-export": "off",
+            "import/no-nodejs-modules": "off",
             "import/no-relative-parent-imports": "off",
             "import/prefer-default-export": "off",
 

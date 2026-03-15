@@ -1,9 +1,12 @@
 {{#if hasConvex}}
+import { createPreloader } from "~/tanstack-query-integration/query-preloader.ts";
+import type { QueryLoaderArgs } from "~/tanstack-query-integration/query-preloader.ts";
+
 import type { Route } from "./+types/home.ts";
 
-import { createPreloader } from "~/tanstack-query-integration/query-preloader.ts";
-
-export const loader = createPreloader<Route.LoaderArgs, void>(async ({ preload }) => {
+// TODO: Remove @ts-expect-error once preload is used
+// @ts-expect-error TS6133 — preload is unused until you call it with your query options
+export const loader = createPreloader(async ({ preload }: QueryLoaderArgs<Route.LoaderArgs>) => {
     // Pre-populate query cache before render
     // await preload(yourQueryOptions);
 });

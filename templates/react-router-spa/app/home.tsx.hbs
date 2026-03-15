@@ -1,15 +1,3 @@
-{{#if hasConvex}}
-import type { Route } from "./+types/home.ts";
-
-import { queryClient } from "./root.tsx";
-
-export async function clientLoader(_args: Route.ClientLoaderArgs) {
-    // Pre-populate query cache before render
-    // await queryClient.ensureQueryData(yourQueryOptions);
-    return {};
-}
-
-{{/if}}
 export default function Home() {
     return (
         <main>

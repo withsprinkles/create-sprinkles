@@ -11,7 +11,7 @@ import { Outlet, Scripts } from "react-router";
 const convex = new ConvexReactClient(import.meta.env.VITE_CONVEX_URL);
 const convexQueryClient = new ConvexQueryClient(convex);
 
-export const queryClient = new QueryClient({
+const queryClient = new QueryClient({
     defaultOptions: {
         queries: {
             queryKeyHashFn: convexQueryClient.hashFn(),

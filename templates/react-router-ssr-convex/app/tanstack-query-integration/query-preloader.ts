@@ -6,11 +6,10 @@ import type {
 } from "@tanstack/react-query";
 import type { LoaderFunctionArgs } from "react-router";
 
-import { on } from "@remix-run/interaction";
 import { dehydrate } from "@tanstack/react-query";
 import { useMatches } from "react-router";
 
-import { getQueryClient } from "./middleware";
+import { getQueryClient } from "./middleware.ts";
 
 const DEHYDRATED_STATE_KEY = "@tanstack/react-query:dehydrated-state";
 
@@ -24,7 +23,9 @@ function mergeDehydratedStates(states: DehydratedState[]): DehydratedState {
     const byHash = new Map<string, (typeof allQueries)[number]>();
 
     for (const query of allQueries) {
-        if (!query) {continue;}
+        if (!query) {
+            continue;
+        }
         byHash.set(query.queryHash, query);
     }
 
@@ -58,13 +59,8 @@ export function createPreloader<
             if (args.request.signal.aborted) {
                 query.cancelQueries();
             } else {
-                on(args.request.signal, {
-                    abort: {
-                        listener: () => {
-                            query.cancelQueries();
-                        },
-                        once: true,
-                    },
+                args.request.signal.addEventListener("abort", () => query.cancelQueries(), {
+                    once: true,
                 });
             }
         }

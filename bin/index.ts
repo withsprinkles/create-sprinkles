@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-import { runTemplate } from "bingo";
 import * as prompts from "@clack/prompts";
+import { runTemplate } from "bingo";
 import path from "node:path";
 
 import template from "../src/template.ts";
@@ -11,11 +11,11 @@ const directory = await prompts.text({
     message: "Where should we create the project?",
     placeholder: "./my-project",
     validate: value => {
-        if (!value) return "Directory is required";
+        if (!value) {return "Directory is required";}
     },
 });
 
-if (prompts.isCancel(directory)) process.exit(0);
+if (prompts.isCancel(directory)) {process.exit(0);}
 
 const kind = await prompts.select({
     message: "What kind of project?",
@@ -27,7 +27,7 @@ const kind = await prompts.select({
     ],
 });
 
-if (prompts.isCancel(kind)) process.exit(0);
+if (prompts.isCancel(kind)) {process.exit(0);}
 
 let convex = false;
 let contentLayer = false;
@@ -37,19 +37,19 @@ let sea = false;
 
 if (kind === "react-router-spa" || kind === "react-router-ssr") {
     const answer = await prompts.confirm({
-        message: "Include Convex backend?",
         initialValue: false,
+        message: "Include Convex backend?",
     });
-    if (prompts.isCancel(answer)) process.exit(0);
+    if (prompts.isCancel(answer)) {process.exit(0);}
     convex = answer;
 }
 
 if (kind === "react-router-rsc") {
     const answer = await prompts.confirm({
-        message: "Include content-layer plugin?",
         initialValue: false,
+        message: "Include content-layer plugin?",
     });
-    if (prompts.isCancel(answer)) process.exit(0);
+    if (prompts.isCancel(answer)) {process.exit(0);}
     contentLayer = answer;
 }
 
@@ -63,7 +63,7 @@ if (kind === "ts-package") {
         ],
         required: false,
     });
-    if (prompts.isCancel(features)) process.exit(0);
+    if (prompts.isCancel(features)) {process.exit(0);}
     cli = features.includes("cli");
     generator = features.includes("generator");
     sea = features.includes("sea");
@@ -76,11 +76,11 @@ const owner = await prompts.text({
     message: "GitHub owner or organization?",
     placeholder: "my-org",
     validate: value => {
-        if (!value) return "Owner is required";
+        if (!value) {return "Owner is required";}
     },
 });
 
-if (prompts.isCancel(owner)) process.exit(0);
+if (prompts.isCancel(owner)) {process.exit(0);}
 
 const spinner = prompts.spinner();
 spinner.start("Scaffolding project...");
