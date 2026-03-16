@@ -54,6 +54,7 @@ export default defineConfig({
         rules: {
             "eslint/default-param-last": "error",
             "eslint/func-style": ["error", "declaration"],
+            "eslint/max-lines-per-function": "off",
             "eslint/max-statements": "off",
             "eslint/no-cond-assign": "off",
             "eslint/no-dupe-else-if": "error",

@@ -463,7 +463,7 @@ describe("buildScripts", () => {
         expect(scripts).toContainEqual(
             expect.objectContaining({
                 commands: expect.arrayContaining([
-                    "vp add @std/jsonc @std/yaml gray-matter github-slugger",
+                    "vp add jsr:@std/jsonc jsr:@std/yaml gray-matter github-slugger @remix-run/data-schema",
                 ]),
                 phase: 0,
             }),

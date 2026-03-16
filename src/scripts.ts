@@ -5,11 +5,8 @@ import type { TemplateContext } from "./context.ts";
 function buildDependencyCommands(context: TemplateContext): string[] {
     const commands: string[] = [];
 
-    // Common dev dependencies for all templates
-    // Vite must be added as a devDep so the pnpm override maps it to vite-plus-core
-    commands.push(
-        "vp add -D vite-plus @types/node @typescript/native-preview vite@npm:@voidzero-dev/vite-plus-core@latest vitest@npm:@voidzero-dev/vite-plus-test@latest",
-    );
+    // Non-vite-plus dev dependencies first
+    commands.push("vp add -D @types/node @typescript/native-preview");
 
     if (context.isReactRouter) {
         commands.push("vp add react react-dom react-router");
@@ -37,7 +34,7 @@ function buildDependencyCommands(context: TemplateContext): string[] {
     }
 
     if (context.hasContentLayer) {
-        commands.push("vp add @std/jsonc @std/yaml gray-matter github-slugger");
+        commands.push("vp add jsr:@std/jsonc jsr:@std/yaml gray-matter github-slugger @remix-run/data-schema");
         commands.push("vp add -D @mdx-js/rollup");
     }
 
@@ -50,6 +47,15 @@ function buildDependencyCommands(context: TemplateContext): string[] {
             commands.push("vp add bingo bingo-handlebars zod");
         }
     }
+
+    // Vite-plus MUST be installed last: the vite-plus npm package ships a
+    // Node_modules/.bin/vp shim that only supports a subset of commands (no
+    // `add`).  execa's preferLocal option (default true for tagged templates)
+    // Causes that shim to shadow the global vp binary, so every subsequent
+    // `vp add` would fail with "Command 'add' not found".
+    commands.push(
+        "vp add -D vite-plus vite@npm:@voidzero-dev/vite-plus-core@latest vitest@npm:@voidzero-dev/vite-plus-test@latest",
+    );
 
     return commands;
 }
