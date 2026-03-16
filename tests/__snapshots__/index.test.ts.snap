@@ -709,6 +709,15 @@ export default [index("home.tsx")] satisfies RouteConfig;
         "executable": false,
       },
     ],
+    "styles": {
+      "tailwind.css": [
+        "@import "tailwindcss";
+",
+        {
+          "executable": false,
+        },
+      ],
+    },
   },
   "package.json": [
     "{
@@ -2007,6 +2016,15 @@ export default [index("home.tsx")] satisfies RouteConfig;
         "executable": false,
       },
     ],
+    "styles": {
+      "tailwind.css": [
+        "@import "tailwindcss";
+",
+        {
+          "executable": false,
+        },
+      ],
+    },
   },
   "content-layer": {
     "api.ts": [
@@ -4397,6 +4415,15 @@ export default [index("home.tsx")] satisfies RouteConfig;
         "executable": false,
       },
     ],
+    "styles": {
+      "tailwind.css": [
+        "@import "tailwindcss";
+",
+        {
+          "executable": false,
+        },
+      ],
+    },
   },
   "package.json": [
     "{
@@ -5377,6 +5404,15 @@ export default [index("home.tsx")] satisfies RouteConfig;
         "executable": false,
       },
     ],
+    "styles": {
+      "tailwind.css": [
+        "@import "tailwindcss";
+",
+        {
+          "executable": false,
+        },
+      ],
+    },
   },
   "convex": {
     "schema.ts": [
@@ -6365,6 +6401,15 @@ export default [index("home.tsx")] satisfies RouteConfig;
         "executable": false,
       },
     ],
+    "styles": {
+      "tailwind.css": [
+        "@import "tailwindcss";
+",
+        {
+          "executable": false,
+        },
+      ],
+    },
   },
   "convex": {
     "schema.ts": [
@@ -7463,6 +7508,15 @@ export default [index("home.tsx")] satisfies RouteConfig;
         "executable": false,
       },
     ],
+    "styles": {
+      "tailwind.css": [
+        "@import "tailwindcss";
+",
+        {
+          "executable": false,
+        },
+      ],
+    },
     "tanstack-query-integration": {
       "middleware.ts": [
         "import type { QueryClient } from "@tanstack/react-query";
