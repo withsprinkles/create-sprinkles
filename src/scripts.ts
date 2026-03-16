@@ -13,7 +13,7 @@ function buildDependencyCommands(context: TemplateContext): string[] {
         commands.push(
             "vp add -D @types/react @types/react-dom @react-router/dev @tailwindcss/vite tailwindcss vite-plugin-devtools-json",
         );
-        commands.push("vp add -D @rolldown/plugin-babel @vitejs/plugin-react");
+        commands.push("vp add -D @rolldown/plugin-babel @vitejs/plugin-react babel-plugin-react-compiler");
         commands.push("vp add -D @cloudflare/vite-plugin wrangler");
         // Lint plugins referenced in vite.config.ts jsPlugins
         commands.push("vp add -D eslint-plugin-perfectionist eslint-plugin-react-hooks");
