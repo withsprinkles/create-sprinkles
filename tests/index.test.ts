@@ -484,8 +484,11 @@ describe("buildScripts", () => {
         const scripts = buildScripts(ctx);
 
         const depScript = scripts.find(
-            script =>
-                script.phase === 0 && Array.isArray(script.commands) && script.commands.length > 1,
+            (script): script is Exclude<typeof script, string> =>
+                typeof script !== "string" &&
+                script.phase === 0 &&
+                Array.isArray(script.commands) &&
+                script.commands.length > 1,
         );
         const allCommands = depScript?.commands.join(" ") ?? "";
 
