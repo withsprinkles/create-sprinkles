@@ -74,8 +74,9 @@ export function buildScripts(context: TemplateContext): CreatedScript[] {
         scripts.push({ commands: ["vpx wrangler types"], phase: 1 });
     }
 
-    // Phase 2: Format and lint fix
-    scripts.push({ commands: ["vp check --fix"], phase: 2 });
+    // Phase 2: Format generated code (skip lint/typecheck — virtual module
+    // types like sprinkles:content don't exist until the first `vp dev` run)
+    scripts.push({ commands: ["vp fmt"], phase: 2 });
 
     // Phase 3: Kind-specific setup
     if (context.hasConvex) {

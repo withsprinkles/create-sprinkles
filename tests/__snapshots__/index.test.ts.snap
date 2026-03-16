@@ -877,11 +877,6 @@ export default defineConfig({
     lint: {
         categories: {
             correctness: "error",
-            nursery: "warn",
-            pedantic: "warn",
-            perf: "error",
-            restriction: "error",
-            style: "warn",
             suspicious: "error",
         },
         env: {
@@ -2706,11 +2701,21 @@ import { createDataStore, createMetaStore } from "./store.ts";
 
 /** Serializes a value to a JavaScript expression string, preserving Date instances. */
 function toJSLiteral(value: unknown): string {
-    if (value === null || value === undefined) {return String(value);}
-    if (typeof value === "boolean" || typeof value === "number") {return String(value);}
-    if (typeof value === "string") {return JSON.stringify(value);}
-    if (value instanceof Date) {return \`new Date(\${JSON.stringify(value.toISOString())})\`;}
-    if (Array.isArray(value)) {return \`[\${value.map(toJSLiteral).join(",")}]\`;}
+    if (value === null || value === undefined) {
+        return String(value);
+    }
+    if (typeof value === "boolean" || typeof value === "number") {
+        return String(value);
+    }
+    if (typeof value === "string") {
+        return JSON.stringify(value);
+    }
+    if (value instanceof Date) {
+        return \`new Date(\${JSON.stringify(value.toISOString())})\`;
+    }
+    if (Array.isArray(value)) {
+        return \`[\${value.map(toJSLiteral).join(",")}]\`;
+    }
     if (typeof value === "object") {
         const entries = Object.entries(value as Record<string, unknown>).map(
             ([k, v]) => \`\${JSON.stringify(k)}:\${toJSLiteral(v)}\`,
@@ -2738,7 +2743,6 @@ export function contentLayer(options: ContentLayerPluginOptions = {}): Plugin {
     const { configPath = "app/content.config.ts" } = options;
     let config: ResolvedConfig;
     let stores = new Map<string, DataStore>();
-    let collections: Record<string, Collection> = {};
     // Map of entry file paths to their collection entries for HMR.
     // Multiple entries can share the same file (e.g. a JSONC file with an array of entries).
     let entryFilePaths = new Map<string, { collection: string; id: string }[]>();
@@ -2756,7 +2760,9 @@ export function contentLayer(options: ContentLayerPluginOptions = {}): Plugin {
         return async <Data extends Record<string, unknown>>(
             props: ParseDataOptions<Data>,
         ): Promise<Data> => {
-            if (!schema) {return props.data;}
+            if (!schema) {
+                return props.data;
+            }
             // Resolve schema (may be a function that takes SchemaContext)
             const resolvedSchema =
                 typeof schema === "function"
@@ -2784,8 +2790,11 @@ export function contentLayer(options: ContentLayerPluginOptions = {}): Plugin {
      * Loads all collections and populates stores. Uses atomic swap so that on error,
      * the previous valid state is preserved.
      */
-    async function runLoaders(root: string, server?: ViteDevServer) {
-        const newCollections = await loadConfig(root);
+    async function runLoaders(
+        root: string,
+        loadedCollections: Record<string, Collection>,
+        server?: ViteDevServer,
+    ) {
         const newStores = new Map<string, DataStore>();
         const newEntryFilePaths = new Map<string, { collection: string; id: string }[]>();
         const newWatchedPaths = new Set<string>();
@@ -2793,7 +2802,7 @@ export function contentLayer(options: ContentLayerPluginOptions = {}): Plugin {
         // Always watch the config file itself
         newWatchedPaths.add(resolve(root, configPath));
 
-        for (const [name, collection] of Object.entries(newCollections)) {
+        for (const [name, collection] of Object.entries(loadedCollections)) {
             const store = createDataStore();
             const meta = createMetaStore();
             newStores.set(name, store);
@@ -2828,7 +2837,6 @@ export function contentLayer(options: ContentLayerPluginOptions = {}): Plugin {
         }
 
         // Atomic swap: only update state after everything succeeds
-        collections = newCollections;
         stores = newStores;
         entryFilePaths = newEntryFilePaths;
         watchedContentPaths = newWatchedPaths;
@@ -2838,11 +2846,17 @@ export function contentLayer(options: ContentLayerPluginOptions = {}): Plugin {
     function isContentPath(filePath: string): boolean {
         const resolved = resolve(filePath);
         // Direct match: tracked entry file or watched path
-        if (entryFilePaths.has(resolved)) {return true;}
-        if (watchedContentPaths.has(resolved)) {return true;}
+        if (entryFilePaths.has(resolved)) {
+            return true;
+        }
+        if (watchedContentPaths.has(resolved)) {
+            return true;
+        }
         // Check if file is under a watched directory
         for (const watched of watchedContentPaths) {
-            if (resolved.startsWith(\`\${watched}/\`)) {return true;}
+            if (resolved.startsWith(\`\${watched}/\`)) {
+                return true;
+            }
         }
         return false;
     }
@@ -2877,12 +2891,12 @@ export function contentLayer(options: ContentLayerPluginOptions = {}): Plugin {
         return \`{\${lines.join(",\\n")}}\`;
     }
 
-    async function writeTypes(root: string) {
+    async function writeTypes(root: string, cols: Record<string, Collection>) {
         const outDir = join(root, ".sprinkles", "content-layer");
         await mkdir(outDir, { recursive: true });
 
         const collectionInfos: Record<string, { schema: unknown }> = {};
-        for (const [name, collection] of Object.entries(collections)) {
+        for (const [name, collection] of Object.entries(cols)) {
             collectionInfos[name] = { schema: collection.schema };
         }
         const configRelPath = relative(outDir, resolve(root, configPath)).replace(/\\\\/g, "/");
@@ -2905,7 +2919,9 @@ export function contentLayer(options: ContentLayerPluginOptions = {}): Plugin {
         for (const env of Object.values(server.environments)) {
             for (const id of moduleIds) {
                 const mod = env.moduleGraph.getModuleById(id);
-                if (mod) {env.moduleGraph.invalidateModule(mod);}
+                if (mod) {
+                    env.moduleGraph.invalidateModule(mod);
+                }
             }
         }
     }
@@ -2913,7 +2929,9 @@ export function contentLayer(options: ContentLayerPluginOptions = {}): Plugin {
     /** Handles a content-related file event during development. */
     async function handleContentChange(server: ViteDevServer, filePath: string) {
         const resolvedPath = resolve(filePath);
-        if (!isContentPath(resolvedPath)) {return;}
+        if (!isContentPath(resolvedPath)) {
+            return;
+        }
 
         // Collect entry keys that existed before reload for module invalidation
         const previousEntryKeys: string[] = [];
@@ -2924,14 +2942,26 @@ export function contentLayer(options: ContentLayerPluginOptions = {}): Plugin {
             }
         }
 
+        let loadedCollections: Record<string, Collection>;
         try {
-            await runLoaders(config.root, server);
-            await writeTypes(config.root);
+            loadedCollections = await loadConfig(config.root);
+        } catch (error) {
+            config.logger.error(
+                \`[content-layer] Failed to load content config:\\n\${error instanceof Error ? error.message : String(error)}\`,
+            );
+            return;
+        }
+
+        // Always update types when config is valid
+        await writeTypes(config.root, loadedCollections);
+
+        try {
+            await runLoaders(config.root, loadedCollections, server);
         } catch (error) {
             config.logger.error(
                 \`[content-layer] \${error instanceof Error ? error.message : String(error)}\`,
             );
-            // Keep previous valid state — don't reload with broken content
+            // Keep previous valid content state
             return;
         }
 
@@ -2941,7 +2971,9 @@ export function contentLayer(options: ContentLayerPluginOptions = {}): Plugin {
         if (newMappings) {
             for (const m of newMappings) {
                 const key = \`\${m.collection}/\${m.id}\`;
-                if (!entryKeys.includes(key)) {entryKeys.push(key);}
+                if (!entryKeys.includes(key)) {
+                    entryKeys.push(key);
+                }
             }
         }
 
@@ -2951,13 +2983,26 @@ export function contentLayer(options: ContentLayerPluginOptions = {}): Plugin {
 
     return {
         async buildStart() {
+            // Load config first — types only depend on schemas, not content data
+            let loadedCollections: Record<string, Collection>;
             try {
-                await runLoaders(config.root);
-                await writeTypes(config.root);
+                loadedCollections = await loadConfig(config.root);
             } catch (error) {
-                // In build mode, errors should fail the build
                 if (config.command === "build") throw error;
-                // In dev mode, log the error and continue with empty/previous state
+                config.logger.error(
+                    \`[content-layer] Failed to load content config:\\n\${error instanceof Error ? error.message : String(error)}\`,
+                );
+                return;
+            }
+
+            // Always write types when config is valid
+            await writeTypes(config.root, loadedCollections);
+
+            // Then load content data (loaders may fail independently)
+            try {
+                await runLoaders(config.root, loadedCollections);
+            } catch (error) {
+                if (config.command === "build") throw error;
                 config.logger.error(
                     \`[content-layer] Failed to load content:\\n\${error instanceof Error ? error.message : String(error)}\`,
                 );
@@ -3396,11 +3441,6 @@ export default defineConfig({
     lint: {
         categories: {
             correctness: "error",
-            nursery: "warn",
-            pedantic: "warn",
-            perf: "error",
-            restriction: "error",
-            style: "warn",
             suspicious: "error",
         },
         env: {
@@ -4498,11 +4538,6 @@ export default defineConfig({
     lint: {
         categories: {
             correctness: "error",
-            nursery: "warn",
-            pedantic: "warn",
-            perf: "error",
-            restriction: "error",
-            style: "warn",
             suspicious: "error",
         },
         env: {
@@ -5500,11 +5535,6 @@ export default defineConfig({
     lint: {
         categories: {
             correctness: "error",
-            nursery: "warn",
-            pedantic: "warn",
-            perf: "error",
-            restriction: "error",
-            style: "warn",
             suspicious: "error",
         },
         env: {
@@ -6493,11 +6523,6 @@ export default defineConfig({
     lint: {
         categories: {
             correctness: "error",
-            nursery: "warn",
-            pedantic: "warn",
-            perf: "error",
-            restriction: "error",
-            style: "warn",
             suspicious: "error",
         },
         env: {
@@ -7755,11 +7780,6 @@ export default defineConfig({
     lint: {
         categories: {
             correctness: "error",
-            nursery: "warn",
-            pedantic: "warn",
-            perf: "error",
-            restriction: "error",
-            style: "warn",
             suspicious: "error",
         },
         env: {
@@ -8313,11 +8333,6 @@ export default defineConfig({
     lint: {
         categories: {
             correctness: "error",
-            nursery: "warn",
-            pedantic: "warn",
-            perf: "error",
-            restriction: "error",
-            style: "warn",
             suspicious: "error",
         },
         env: {
@@ -8860,11 +8875,6 @@ export default defineConfig({
     lint: {
         categories: {
             correctness: "error",
-            nursery: "warn",
-            pedantic: "warn",
-            perf: "error",
-            restriction: "error",
-            style: "warn",
             suspicious: "error",
         },
         env: {
@@ -9391,11 +9401,6 @@ export default defineConfig({
     lint: {
         categories: {
             correctness: "error",
-            nursery: "warn",
-            pedantic: "warn",
-            perf: "error",
-            restriction: "error",
-            style: "warn",
             suspicious: "error",
         },
         env: {
@@ -9903,11 +9908,6 @@ export default defineConfig({
     lint: {
         categories: {
             correctness: "error",
-            nursery: "warn",
-            pedantic: "warn",
-            perf: "error",
-            restriction: "error",
-            style: "warn",
             suspicious: "error",
         },
         env: {
@@ -10399,11 +10399,6 @@ export default defineConfig({
     lint: {
         categories: {
             correctness: "error",
-            nursery: "warn",
-            pedantic: "warn",
-            perf: "error",
-            restriction: "error",
-            style: "warn",
             suspicious: "error",
         },
         env: {
@@ -10897,11 +10892,6 @@ export default defineConfig({
     lint: {
         categories: {
             correctness: "error",
-            nursery: "warn",
-            pedantic: "warn",
-            perf: "error",
-            restriction: "error",
-            style: "warn",
             suspicious: "error",
         },
         env: {
@@ -11379,11 +11369,6 @@ export default defineConfig({
     lint: {
         categories: {
             correctness: "error",
-            nursery: "warn",
-            pedantic: "warn",
-            perf: "error",
-            restriction: "error",
-            style: "warn",
             suspicious: "error",
         },
         env: {
@@ -11840,11 +11825,6 @@ export default defineConfig({
     lint: {
         categories: {
             correctness: "error",
-            nursery: "warn",
-            pedantic: "warn",
-            perf: "error",
-            restriction: "error",
-            style: "warn",
             suspicious: "error",
         },
         env: {
