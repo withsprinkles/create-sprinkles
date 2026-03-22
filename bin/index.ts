@@ -3,9 +3,10 @@ import * as prompts from "@clack/prompts";
 import { runTemplate } from "bingo";
 import path from "node:path";
 
-import template from "../src/template.ts"; // Resolved to dist/index.mjs at build time
+import { NAME } from "../src/index.ts"; // Resolved to dist/index.mjs at build time
+import template from "../src/template.ts";
 
-prompts.intro("@withsprinkles/workbench");
+prompts.intro(NAME);
 
 const directory = await prompts.text({
     message: "Where should we create the project?",

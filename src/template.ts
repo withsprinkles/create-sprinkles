@@ -7,6 +7,7 @@ import path from "node:path";
 import type { TemplateContext } from "./context.ts";
 
 import { buildContext } from "./context.ts";
+import { NAME } from "./index.ts";
 import { mergeFiles } from "./merge.ts";
 import { options } from "./options.ts";
 import { buildScripts } from "./scripts.ts";
@@ -87,7 +88,7 @@ async function buildLayers(context: TemplateContext): Promise<CreatedDirectory> 
 export default createTemplate({
     about: {
         description: "Get started with development by creating projects from templates quickly.",
-        name: "@withsprinkles/workbench",
+        name: NAME,
     },
 
     options,
