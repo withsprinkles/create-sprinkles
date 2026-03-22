@@ -7,7 +7,7 @@ import path from "node:path";
 import type { TemplateContext } from "./context.ts";
 
 import { buildContext } from "./context.ts";
-import { NAME } from "./index.ts";
+import { NAME } from "./metadata.ts";
 import { mergeFiles } from "./merge.ts";
 import { options } from "./options.ts";
 import { buildScripts } from "./scripts.ts";
