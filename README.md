@@ -52,6 +52,7 @@ Server-rendered app with React Router, Tailwind CSS, Vite+, and Cloudflare deplo
 React Server Components with React Router, Tailwind CSS, Vite+, and Cloudflare deployment.
 
 - Optional: Content-layer plugin for MDX-based content
+- Optional: Single Executable Application (SEA) — bundles the server and all client assets into a single portable Node.js binary via `node:sea`
 
 ## License
 
