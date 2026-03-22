@@ -5,9 +5,9 @@ import path from "node:path";
 
 import type { TemplateContext } from "./context.ts";
 
-const faviconBase64 = readFileSync(path.join(import.meta.dirname, "assets/favicon.ico")).toString(
-    "base64",
-);
+const faviconBase64 = readFileSync(
+    path.join(import.meta.dirname, "../assets/favicon.ico"),
+).toString("base64");
 
 function buildDependencyCommands(context: TemplateContext): string[] {
     const commands: string[] = [];
