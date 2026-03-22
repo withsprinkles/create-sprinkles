@@ -7,8 +7,8 @@ import path from "node:path";
 import type { TemplateContext } from "./context.ts";
 
 import { buildContext } from "./context.ts";
-import { NAME } from "./metadata.ts";
 import { mergeFiles } from "./merge.ts";
+import { NAME } from "./metadata.ts";
 import { options } from "./options.ts";
 import { buildScripts } from "./scripts.ts";
 import { buildSuggestions } from "./suggestions.ts";
@@ -55,6 +55,14 @@ async function collectAddonLayers(context: TemplateContext): Promise<(CreatedDir
 
     if (context.isSSR && context.hasConvex) {
         addons.push(await tryHandlebars("react-router-ssr-convex", context));
+    }
+
+    if (context.isRSC && !context.hasSEA) {
+        addons.push(await tryHandlebars("react-router-rsc-cloudflare", context));
+    }
+
+    if (context.hasSEA) {
+        addons.push(await tryHandlebars("react-router-rsc-sea", context));
     }
 
     if (context.hasContentLayer) {

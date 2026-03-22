@@ -1,5 +1,7 @@
 {{#if isRSC}}
+{{#unless hasSEA}}
 import { cloudflare } from "@cloudflare/vite-plugin";
+{{/unless}}
 {{#if hasContentLayer}}
 import mdx from "@mdx-js/rollup";
 {{/if}}
@@ -26,7 +28,9 @@ import { defineConfig } from "vite-plus";
 {{/if}}
 
 {{#if isReactRouter}}
+{{#unless hasSEA}}
 const IS_TEST = Boolean(process.env.VITEST);
+{{/unless}}
 
 {{/if}}
 export default defineConfig({
@@ -107,7 +111,9 @@ export default defineConfig({
             node: true,
         },
 {{#if isRSC}}
+{{#unless hasSEA}}
         ignorePatterns: ["**/worker-configuration.d.ts"],
+{{/unless}}
 {{/if}}
 {{#if isReactRouter}}
         jsPlugins: [
@@ -281,6 +287,19 @@ export default defineConfig({
     },
 {{/if}}
 {{#if isRSC}}
+{{#if hasSEA}}
+    plugins: [
+{{#if hasContentLayer}}
+        contentLayer(),
+        mdx(),
+{{/if}}
+        reactRouter(),
+        rsc(),
+        reactCompiler(),
+        tailwindcss(),
+        devtoolsJson(),
+    ],
+{{else}}
     plugins: [
 {{#if hasContentLayer}}
         contentLayer(),
@@ -307,6 +326,7 @@ export default defineConfig({
         tailwindcss(),
         devtoolsJson(),
     ],
+{{/if}}
 {{else if isSSR}}
     plugins: [
         tailwindcss(),
@@ -338,6 +358,22 @@ export default defineConfig({
     run: {
         tasks: {
 {{#if isRSC}}
+{{#if hasSEA}}
+            build: {
+                // Compound command — each half is cached independently.
+                // vp build runs React Router's production build,
+                // then the script bundles everything into a SEA.
+                command: "vp build && node scripts/build-exe.ts",
+                env: ["NODE_ENV"],
+            },
+            typecheck: {
+                command: "tsgo --noEmit",
+                dependsOn: ["typegen:react-router"],
+            },
+            "typegen:react-router": {
+                command: "react-router typegen",
+            },
+{{else}}
             deploy: {
                 cache: false,
                 command: "vp build && wrangler deploy",
@@ -352,6 +388,7 @@ export default defineConfig({
             "typegen:react-router": {
                 command: "react-router typegen",
             },
+{{/if}}
 {{else if isReactRouter}}
             deploy: {
                 cache: false,

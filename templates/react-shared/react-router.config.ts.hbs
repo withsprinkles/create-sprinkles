@@ -1,6 +1,9 @@
 import type { Config } from "@react-router/dev/config";
 
 export default {
+{{#if hasSEA}}
+    buildDirectory: "dist",
+{{/if}}
     future: {
         v8_middleware: true,
         v8_viteEnvironmentApi: true,

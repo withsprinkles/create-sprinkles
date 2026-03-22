@@ -86,6 +86,33 @@ describe("template snapshots", () => {
         expect(creation.files).toMatchSnapshot();
     });
 
+    it("RSC kind (with SEA)", async () => {
+        const creation = await testTemplate(template, {
+            options: {
+                kind: "react-router-rsc",
+                owner: "test-owner",
+                repository: "test-repo",
+                sea: true,
+            },
+        });
+
+        expect(creation.files).toMatchSnapshot();
+    });
+
+    it("RSC kind (with content-layer + SEA)", async () => {
+        const creation = await testTemplate(template, {
+            options: {
+                contentLayer: true,
+                kind: "react-router-rsc",
+                owner: "test-owner",
+                repository: "test-repo",
+                sea: true,
+            },
+        });
+
+        expect(creation.files).toMatchSnapshot();
+    });
+
     it("ts-package base", async () => {
         const creation = await testTemplate(template, {
             options: {
@@ -307,6 +334,37 @@ describe("buildContext", () => {
         expect(ctx.hasContentLayer).toBe(false);
     });
 
+    it("RSC with SEA: hasSEA", () => {
+        const ctx = buildContext({
+            cli: false,
+            contentLayer: false,
+            convex: false,
+            generator: false,
+            kind: "react-router-rsc",
+            owner: "o",
+            repository: "r",
+            sea: true,
+        });
+
+        expect(ctx.isRSC).toBe(true);
+        expect(ctx.hasSEA).toBe(true);
+    });
+
+    it("SEA ignored for non-RSC kinds", () => {
+        const ctx = buildContext({
+            cli: false,
+            contentLayer: false,
+            convex: false,
+            generator: false,
+            kind: "react-router-spa",
+            owner: "o",
+            repository: "r",
+            sea: true,
+        });
+
+        expect(ctx.hasSEA).toBe(false);
+    });
+
     it("ts-package: isPackage, not isReactRouter, no Convex", () => {
         const ctx = buildContext({
             cli: true,
@@ -447,6 +505,33 @@ describe("buildScripts", () => {
         });
     });
 
+    it("RSC with SEA: no wrangler typegen, includes SEA deps", () => {
+        const ctx = buildContext({
+            cli: false,
+            contentLayer: false,
+            convex: false,
+            generator: false,
+            kind: "react-router-rsc",
+            owner: "o",
+            repository: "r",
+            sea: true,
+        });
+        const scripts = buildScripts(ctx);
+
+        expect(scripts).not.toContainEqual(
+            expect.objectContaining({
+                commands: ["vpx wrangler types -c wrangler.rsc.jsonc"],
+            }),
+        );
+
+        expect(scripts).toContainEqual(
+            expect.objectContaining({
+                commands: expect.arrayContaining(["vp add @remix-run/node-fetch-server mime"]),
+                phase: 0,
+            }),
+        );
+    });
+
     it("RSC with content-layer: includes content-layer deps", () => {
         const ctx = buildContext({
             cli: false,
@@ -533,6 +618,25 @@ describe("buildSuggestions", () => {
         const suggestions = buildSuggestions(ctx);
 
         expect(suggestions).toContain("Log in to Cloudflare: vpx wrangler login");
+        expect(suggestions).toContain("Start the dev server: vp dev");
+    });
+
+    it("RSC with SEA: build suggestion, no Cloudflare login", () => {
+        const ctx = buildContext({
+            cli: false,
+            contentLayer: false,
+            convex: false,
+            generator: false,
+            kind: "react-router-rsc",
+            owner: "o",
+            repository: "r",
+            sea: true,
+        });
+
+        const suggestions = buildSuggestions(ctx);
+
+        expect(suggestions).toContain("Build the executable: vp run build");
+        expect(suggestions).not.toContain("Log in to Cloudflare: vpx wrangler login");
         expect(suggestions).toContain("Start the dev server: vp dev");
     });
 

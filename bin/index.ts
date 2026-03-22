@@ -54,14 +54,19 @@ if (kind === "react-router-spa" || kind === "react-router-ssr") {
 }
 
 if (kind === "react-router-rsc") {
-    const answer = await prompts.confirm({
-        initialValue: false,
-        message: "Include content-layer plugin?",
+    const features = await prompts.multiselect({
+        message: "Include optional features?",
+        options: [
+            { label: "Content-layer plugin", value: "contentLayer" as const },
+            { label: "Single Executable Application (SEA)", value: "sea" as const },
+        ],
+        required: false,
     });
-    if (prompts.isCancel(answer)) {
+    if (prompts.isCancel(features)) {
         process.exit(0);
     }
-    contentLayer = answer;
+    contentLayer = features.includes("contentLayer");
+    sea = features.includes("sea");
 }
 
 if (kind === "ts-package") {

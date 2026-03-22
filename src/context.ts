@@ -12,6 +12,7 @@ export interface TemplateContext extends Options {
     isReactRouter: boolean;
     hasConvex: boolean;
     hasContentLayer: boolean;
+    hasSEA: boolean;
     ssr: boolean;
 }
 
@@ -24,6 +25,7 @@ export function buildContext(opts: Options): TemplateContext {
         ...opts,
         hasContentLayer: isRSC && Boolean(opts.contentLayer),
         hasConvex: (isSPA || isSSR) && Boolean(opts.convex),
+        hasSEA: isRSC && Boolean(opts.sea),
         isPackage: opts.kind === "ts-package",
         isRSC,
         isReactRouter: opts.kind !== "ts-package",

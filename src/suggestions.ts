@@ -7,8 +7,12 @@ export function buildSuggestions(context: TemplateContext): string[] {
         suggestions.push("Open the Convex dashboard: https://dashboard.convex.dev");
     }
 
-    if (context.isSSR || context.isRSC) {
+    if ((context.isSSR || context.isRSC) && !context.hasSEA) {
         suggestions.push("Log in to Cloudflare: vpx wrangler login");
+    }
+
+    if (context.hasSEA) {
+        suggestions.push("Build the executable: vp run build");
     }
 
     if (context.isReactRouter) {

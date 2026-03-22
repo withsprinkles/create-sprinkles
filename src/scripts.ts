@@ -16,7 +16,9 @@ function buildDependencyCommands(context: TemplateContext): string[] {
         commands.push(
             "vp add -D @rolldown/plugin-babel @vitejs/plugin-react babel-plugin-react-compiler",
         );
-        commands.push("vp add -D @cloudflare/vite-plugin wrangler");
+        if (!context.hasSEA) {
+            commands.push("vp add -D @cloudflare/vite-plugin wrangler");
+        }
         // Lint plugins referenced in vite.config.ts jsPlugins
         commands.push("vp add -D eslint-plugin-perfectionist eslint-plugin-react-hooks");
     }
@@ -33,6 +35,11 @@ function buildDependencyCommands(context: TemplateContext): string[] {
 
     if (context.isRSC) {
         commands.push("vp add -D @vitejs/plugin-rsc");
+    }
+
+    if (context.hasSEA) {
+        commands.push("vp add @remix-run/node-fetch-server mime");
+        commands.push("vp add -D tsdown");
     }
 
     if (context.hasContentLayer) {
@@ -72,7 +79,7 @@ export function buildScripts(context: TemplateContext): CreatedScript[] {
     scripts.push({ commands: phase0Commands, phase: 0 });
 
     // Phase 1: Generate Cloudflare types that vp check needs
-    if (context.isRSC) {
+    if (context.isRSC && !context.hasSEA) {
         scripts.push({ commands: ["vpx wrangler types -c wrangler.rsc.jsonc"], phase: 1 });
     } else if (context.isSSR) {
         scripts.push({ commands: ["vpx wrangler types"], phase: 1 });

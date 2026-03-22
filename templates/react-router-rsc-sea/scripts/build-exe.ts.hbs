@@ -1,0 +1,53 @@
+import { readdirSync, writeFileSync } from "node:fs";
+import { join, relative } from "node:path";
+import { build } from "tsdown";
+
+import packageJson from "../package.json" with { type: "json" };
+
+const CLIENT_DIR = "dist/client";
+
+// ── Collect every file under dist/client/ ──────────────────────
+function collectFiles(dir: string, base = dir) {
+    const files = [] as string[];
+    for (const entry of readdirSync(dir, { withFileTypes: true })) {
+        const full = join(dir, entry.name);
+        if (entry.isDirectory()) {
+            files.push(...collectFiles(full, base));
+        } else {
+            // Key = path relative to CLIENT_DIR, e.g. "assets/index-abc123.js"
+            files.push(relative(base, full));
+        }
+    }
+    return files;
+}
+
+let clientFiles = collectFiles(CLIENT_DIR);
+
+// ── Write manifest so server.ts knows which keys exist ──────────
+writeFileSync("dist/asset-manifest.json", JSON.stringify(clientFiles, null, 2));
+
+// ── Build the SEA asset map: key → file path on disk ────────────
+// node:sea's getAsset(key) uses these keys at runtime
+let assets = Object.fromEntries(clientFiles.map(file => [file, join(CLIENT_DIR, file)]));
+
+console.log(`Embedding ${clientFiles.length} client assets into executable`);
+
+// ── Run tsdown with exe enabled ─────────────────────────────────
+await build({
+    entry: ["server.ts"],
+    outDir: "build",
+    format: "esm",
+    target: "node25",
+    // Bundle everything — the React Router server build, @remix-run/node-fetch-server, etc.
+    noExternal: [/.*/],
+    exe: {
+        fileName: packageJson.name,
+        seaConfig: {
+            disableExperimentalSEAWarning: true,
+            useCodeCache: false,
+            assets, // ← every client file, keyed by its URL path
+        },
+    },
+});
+
+console.log(`Done — executable written to build/${packageJson.name}`);
