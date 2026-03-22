@@ -113,6 +113,28 @@ describe("template snapshots", () => {
         expect(creation.files).toMatchSnapshot();
     });
 
+    it("React Router templates include react-shared layer files", async () => {
+        for (const kind of ["react-router-spa", "react-router-ssr", "react-router-rsc"] as const) {
+            const creation = await testTemplate(template, {
+                options: { kind, owner: "test-owner", repository: "test-repo" },
+            });
+            const files = creation.files as Record<string, unknown>;
+            const app = files.app as Record<string, unknown>;
+            const styles = app.styles as Record<string, unknown>;
+
+            expect(app["routes.ts"], `${kind}: routes.ts missing`).toBeDefined();
+            expect(styles?.["tailwind.css"], `${kind}: tailwind.css missing`).toBeDefined();
+            expect(
+                files["react-compiler.plugin.ts"],
+                `${kind}: react-compiler.plugin.ts missing`,
+            ).toBeDefined();
+            expect(
+                files["react-router.config.ts"],
+                `${kind}: react-router.config.ts missing`,
+            ).toBeDefined();
+        }
+    });
+
     it("ts-package base", async () => {
         const creation = await testTemplate(template, {
             options: {
@@ -483,6 +505,52 @@ describe("buildScripts", () => {
 
         expect(scripts).not.toContainEqual(
             expect.objectContaining({ commands: ["vpx convex dev --once"] }),
+        );
+    });
+
+    it("React Router templates include favicon script", () => {
+        for (const kind of ["react-router-spa", "react-router-ssr", "react-router-rsc"] as const) {
+            const ctx = buildContext({
+                cli: false,
+                contentLayer: false,
+                convex: false,
+                generator: false,
+                kind,
+                owner: "o",
+                repository: "r",
+                sea: false,
+            });
+            const scripts = buildScripts(ctx);
+
+            expect(scripts).toContainEqual(
+                expect.objectContaining({
+                    commands: expect.arrayContaining([
+                        expect.stringContaining("base64 -d > public/favicon.ico"),
+                    ]),
+                }),
+            );
+        }
+    });
+
+    it("ts-package does not include favicon script", () => {
+        const ctx = buildContext({
+            cli: false,
+            contentLayer: false,
+            convex: false,
+            generator: false,
+            kind: "ts-package",
+            owner: "o",
+            repository: "r",
+            sea: false,
+        });
+        const scripts = buildScripts(ctx);
+
+        expect(scripts).not.toContainEqual(
+            expect.objectContaining({
+                commands: expect.arrayContaining([
+                    expect.stringContaining("base64 -d > public/favicon.ico"),
+                ]),
+            }),
         );
     });
 

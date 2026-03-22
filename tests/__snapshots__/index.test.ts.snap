@@ -700,6 +700,24 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
         "executable": false,
       },
     ],
+    "routes.ts": [
+      "import { index, type RouteConfig } from "@react-router/dev/routes";
+
+export default [index("home.tsx")] satisfies RouteConfig;
+",
+      {
+        "executable": false,
+      },
+    ],
+    "styles": {
+      "tailwind.css": [
+        "@import "tailwindcss";
+",
+        {
+          "executable": false,
+        },
+      ],
+    },
   },
   "package.json": [
     "{
@@ -722,6 +740,37 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
         }
     }
 }
+",
+    {
+      "executable": false,
+    },
+  ],
+  "react-compiler.plugin.ts": [
+    "import babel from "@rolldown/plugin-babel";
+import { reactCompilerPreset } from "@vitejs/plugin-react";
+
+export type ReactCompilerConfig = Partial<Parameters<typeof reactCompilerPreset>[0]>;
+
+export function reactCompiler(config: ReactCompilerConfig = {}) {
+    return babel({
+        presets: [reactCompilerPreset(config as Parameters<typeof reactCompilerPreset>[0])],
+    } as Parameters<typeof babel>[0]);
+}
+",
+    {
+      "executable": false,
+    },
+  ],
+  "react-router.config.ts": [
+    "import type { Config } from "@react-router/dev/config";
+
+export default {
+    future: {
+        v8_middleware: true,
+        v8_viteEnvironmentApi: true,
+    },
+    ssr: true,
+} satisfies Config;
 ",
     {
       "executable": false,
@@ -1904,6 +1953,24 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
         "executable": false,
       },
     ],
+    "routes.ts": [
+      "import { index, type RouteConfig } from "@react-router/dev/routes";
+
+export default [index("home.tsx")] satisfies RouteConfig;
+",
+      {
+        "executable": false,
+      },
+    ],
+    "styles": {
+      "tailwind.css": [
+        "@import "tailwindcss";
+",
+        {
+          "executable": false,
+        },
+      ],
+    },
   },
   "package.json": [
     "{
@@ -1926,6 +1993,38 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
         }
     }
 }
+",
+    {
+      "executable": false,
+    },
+  ],
+  "react-compiler.plugin.ts": [
+    "import babel from "@rolldown/plugin-babel";
+import { reactCompilerPreset } from "@vitejs/plugin-react";
+
+export type ReactCompilerConfig = Partial<Parameters<typeof reactCompilerPreset>[0]>;
+
+export function reactCompiler(config: ReactCompilerConfig = {}) {
+    return babel({
+        presets: [reactCompilerPreset(config as Parameters<typeof reactCompilerPreset>[0])],
+    } as Parameters<typeof babel>[0]);
+}
+",
+    {
+      "executable": false,
+    },
+  ],
+  "react-router.config.ts": [
+    "import type { Config } from "@react-router/dev/config";
+
+export default {
+    buildDirectory: "dist",
+    future: {
+        v8_middleware: true,
+        v8_viteEnvironmentApi: true,
+    },
+    ssr: true,
+} satisfies Config;
 ",
     {
       "executable": false,
@@ -3113,6 +3212,24 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
         "executable": false,
       },
     ],
+    "routes.ts": [
+      "import { index, type RouteConfig } from "@react-router/dev/routes";
+
+export default [index("home.tsx")] satisfies RouteConfig;
+",
+      {
+        "executable": false,
+      },
+    ],
+    "styles": {
+      "tailwind.css": [
+        "@import "tailwindcss";
+",
+        {
+          "executable": false,
+        },
+      ],
+    },
   },
   "content-layer": {
     "api.ts": [
@@ -4397,6 +4514,38 @@ export function createMetaStore(): MetaStore {
         }
     }
 }
+",
+    {
+      "executable": false,
+    },
+  ],
+  "react-compiler.plugin.ts": [
+    "import babel from "@rolldown/plugin-babel";
+import { reactCompilerPreset } from "@vitejs/plugin-react";
+
+export type ReactCompilerConfig = Partial<Parameters<typeof reactCompilerPreset>[0]>;
+
+export function reactCompiler(config: ReactCompilerConfig = {}) {
+    return babel({
+        presets: [reactCompilerPreset(config as Parameters<typeof reactCompilerPreset>[0])],
+    } as Parameters<typeof babel>[0]);
+}
+",
+    {
+      "executable": false,
+    },
+  ],
+  "react-router.config.ts": [
+    "import type { Config } from "@react-router/dev/config";
+
+export default {
+    buildDirectory: "dist",
+    future: {
+        v8_middleware: true,
+        v8_viteEnvironmentApi: true,
+    },
+    ssr: true,
+} satisfies Config;
 ",
     {
       "executable": false,
@@ -5589,6 +5738,24 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
         "executable": false,
       },
     ],
+    "routes.ts": [
+      "import { index, type RouteConfig } from "@react-router/dev/routes";
+
+export default [index("home.tsx")] satisfies RouteConfig;
+",
+      {
+        "executable": false,
+      },
+    ],
+    "styles": {
+      "tailwind.css": [
+        "@import "tailwindcss";
+",
+        {
+          "executable": false,
+        },
+      ],
+    },
   },
   "content-layer": {
     "api.ts": [
@@ -6878,6 +7045,37 @@ export function createMetaStore(): MetaStore {
       "executable": false,
     },
   ],
+  "react-compiler.plugin.ts": [
+    "import babel from "@rolldown/plugin-babel";
+import { reactCompilerPreset } from "@vitejs/plugin-react";
+
+export type ReactCompilerConfig = Partial<Parameters<typeof reactCompilerPreset>[0]>;
+
+export function reactCompiler(config: ReactCompilerConfig = {}) {
+    return babel({
+        presets: [reactCompilerPreset(config as Parameters<typeof reactCompilerPreset>[0])],
+    } as Parameters<typeof babel>[0]);
+}
+",
+    {
+      "executable": false,
+    },
+  ],
+  "react-router.config.ts": [
+    "import type { Config } from "@react-router/dev/config";
+
+export default {
+    future: {
+        v8_middleware: true,
+        v8_viteEnvironmentApi: true,
+    },
+    ssr: true,
+} satisfies Config;
+",
+    {
+      "executable": false,
+    },
+  ],
   "tsconfig.json": [
     "{
     "include": [
@@ -7939,6 +8137,24 @@ export default function App() {
         "executable": false,
       },
     ],
+    "routes.ts": [
+      "import { index, type RouteConfig } from "@react-router/dev/routes";
+
+export default [index("home.tsx")] satisfies RouteConfig;
+",
+      {
+        "executable": false,
+      },
+    ],
+    "styles": {
+      "tailwind.css": [
+        "@import "tailwindcss";
+",
+        {
+          "executable": false,
+        },
+      ],
+    },
   },
   "package.json": [
     "{
@@ -7961,6 +8177,37 @@ export default function App() {
         }
     }
 }
+",
+    {
+      "executable": false,
+    },
+  ],
+  "react-compiler.plugin.ts": [
+    "import babel from "@rolldown/plugin-babel";
+import { reactCompilerPreset } from "@vitejs/plugin-react";
+
+export type ReactCompilerConfig = Partial<Parameters<typeof reactCompilerPreset>[0]>;
+
+export function reactCompiler(config: ReactCompilerConfig = {}) {
+    return babel({
+        presets: [reactCompilerPreset(config as Parameters<typeof reactCompilerPreset>[0])],
+    } as Parameters<typeof babel>[0]);
+}
+",
+    {
+      "executable": false,
+    },
+  ],
+  "react-router.config.ts": [
+    "import type { Config } from "@react-router/dev/config";
+
+export default {
+    future: {
+        v8_middleware: true,
+        v8_viteEnvironmentApi: true,
+    },
+    ssr: false,
+} satisfies Config;
 ",
     {
       "executable": false,
@@ -8879,6 +9126,24 @@ export default function App() {
         "executable": false,
       },
     ],
+    "routes.ts": [
+      "import { index, type RouteConfig } from "@react-router/dev/routes";
+
+export default [index("home.tsx")] satisfies RouteConfig;
+",
+      {
+        "executable": false,
+      },
+    ],
+    "styles": {
+      "tailwind.css": [
+        "@import "tailwindcss";
+",
+        {
+          "executable": false,
+        },
+      ],
+    },
   },
   "convex": {
     "schema.ts": [
@@ -8918,6 +9183,37 @@ export default defineSchema({
         }
     }
 }
+",
+    {
+      "executable": false,
+    },
+  ],
+  "react-compiler.plugin.ts": [
+    "import babel from "@rolldown/plugin-babel";
+import { reactCompilerPreset } from "@vitejs/plugin-react";
+
+export type ReactCompilerConfig = Partial<Parameters<typeof reactCompilerPreset>[0]>;
+
+export function reactCompiler(config: ReactCompilerConfig = {}) {
+    return babel({
+        presets: [reactCompilerPreset(config as Parameters<typeof reactCompilerPreset>[0])],
+    } as Parameters<typeof babel>[0]);
+}
+",
+    {
+      "executable": false,
+    },
+  ],
+  "react-router.config.ts": [
+    "import type { Config } from "@react-router/dev/config";
+
+export default {
+    future: {
+        v8_middleware: true,
+        v8_viteEnvironmentApi: true,
+    },
+    ssr: false,
+} satisfies Config;
 ",
     {
       "executable": false,
@@ -9827,6 +10123,24 @@ export function ErrorBoundary({ error }: { error: unknown }) {
         "executable": false,
       },
     ],
+    "routes.ts": [
+      "import { index, type RouteConfig } from "@react-router/dev/routes";
+
+export default [index("home.tsx")] satisfies RouteConfig;
+",
+      {
+        "executable": false,
+      },
+    ],
+    "styles": {
+      "tailwind.css": [
+        "@import "tailwindcss";
+",
+        {
+          "executable": false,
+        },
+      ],
+    },
   },
   "convex": {
     "schema.ts": [
@@ -9864,6 +10178,37 @@ export default defineSchema({
         }
     }
 }
+",
+    {
+      "executable": false,
+    },
+  ],
+  "react-compiler.plugin.ts": [
+    "import babel from "@rolldown/plugin-babel";
+import { reactCompilerPreset } from "@vitejs/plugin-react";
+
+export type ReactCompilerConfig = Partial<Parameters<typeof reactCompilerPreset>[0]>;
+
+export function reactCompiler(config: ReactCompilerConfig = {}) {
+    return babel({
+        presets: [reactCompilerPreset(config as Parameters<typeof reactCompilerPreset>[0])],
+    } as Parameters<typeof babel>[0]);
+}
+",
+    {
+      "executable": false,
+    },
+  ],
+  "react-router.config.ts": [
+    "import type { Config } from "@react-router/dev/config";
+
+export default {
+    future: {
+        v8_middleware: true,
+        v8_viteEnvironmentApi: true,
+    },
+    ssr: true,
+} satisfies Config;
 ",
     {
       "executable": false,
@@ -10885,6 +11230,24 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
         "executable": false,
       },
     ],
+    "routes.ts": [
+      "import { index, type RouteConfig } from "@react-router/dev/routes";
+
+export default [index("home.tsx")] satisfies RouteConfig;
+",
+      {
+        "executable": false,
+      },
+    ],
+    "styles": {
+      "tailwind.css": [
+        "@import "tailwindcss";
+",
+        {
+          "executable": false,
+        },
+      ],
+    },
     "tanstack-query-integration": {
       "middleware.ts": [
         "import type { QueryClient } from "@tanstack/react-query";
@@ -11081,6 +11444,37 @@ export default defineSchema({
         }
     }
 }
+",
+    {
+      "executable": false,
+    },
+  ],
+  "react-compiler.plugin.ts": [
+    "import babel from "@rolldown/plugin-babel";
+import { reactCompilerPreset } from "@vitejs/plugin-react";
+
+export type ReactCompilerConfig = Partial<Parameters<typeof reactCompilerPreset>[0]>;
+
+export function reactCompiler(config: ReactCompilerConfig = {}) {
+    return babel({
+        presets: [reactCompilerPreset(config as Parameters<typeof reactCompilerPreset>[0])],
+    } as Parameters<typeof babel>[0]);
+}
+",
+    {
+      "executable": false,
+    },
+  ],
+  "react-router.config.ts": [
+    "import type { Config } from "@react-router/dev/config";
+
+export default {
+    future: {
+        v8_middleware: true,
+        v8_viteEnvironmentApi: true,
+    },
+    ssr: true,
+} satisfies Config;
 ",
     {
       "executable": false,

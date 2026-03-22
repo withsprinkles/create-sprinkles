@@ -1,6 +1,13 @@
 import type { CreatedScript } from "bingo";
 
+import { readFileSync } from "node:fs";
+import path from "node:path";
+
 import type { TemplateContext } from "./context.ts";
+
+const faviconBase64 = readFileSync(path.join(import.meta.dirname, "assets/favicon.ico")).toString(
+    "base64",
+);
 
 function buildDependencyCommands(context: TemplateContext): string[] {
     const commands: string[] = [];
@@ -92,6 +99,17 @@ export function buildScripts(context: TemplateContext): CreatedScript[] {
     // Phase 3: Kind-specific setup
     if (context.hasConvex) {
         scripts.push({ commands: ["vpx convex dev --once"], phase: 3, silent: true });
+    }
+
+    // Phase 3.5: Write binary assets that bingo-handlebars can't handle
+    if (context.isReactRouter) {
+        scripts.push({
+            commands: [
+                "mkdir -p public",
+                `echo '${faviconBase64}' | base64 -d > public/favicon.ico`,
+            ],
+            phase: 3,
+        });
     }
 
     // Phase 4: Symlinks and git init
