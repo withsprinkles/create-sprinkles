@@ -129,7 +129,7 @@ export function runScripts(scripts: Script[], cwd: string): void {
 ### `src/template.ts`
 
 - Remove `createTemplate` wrapper — `produce()` becomes a plain async function
-- Remove `tryHandlebars` — replace with direct `renderTemplates` calls
+- Remove `tryHandlebars` entirely — replace with direct `renderTemplates` calls. The silent `try/catch` in `tryHandlebars` was a workaround for `bingo-handlebars` unreliability; all template directories are statically known and always exist, so errors should surface naturally.
 - `buildLayers` and `collectAddonLayers` stay structurally identical, just calling `renderTemplates` instead of `handlebars()`
 
 ```ts
@@ -157,8 +157,10 @@ runScripts(creation.scripts, resolvedDir);
 
 ### `src/index.ts`
 
-- Export `produce` instead of `template`
+- Export `produce` instead of `template` — this is a breaking change to the public API
 - Continue exporting `options`, `buildContext`, `TemplateContext`
+- Also export `Creation`, `FileTree`, `Script` types for consumers
+- This warrants a semver major bump (v1.0.0 or v0.4.0 depending on convention)
 
 ### `src/scripts.ts`
 
@@ -174,6 +176,8 @@ runScripts(creation.scripts, resolvedDir);
 
 - Replace `testTemplate(template, { options })` with direct `produce(options)` calls
 - All assertion logic remains identical (same `creation.files` shape)
+- Clean up dead type guard code (e.g., `Exclude<typeof script, string>` at line 640) since `Script` is always an object
+- Regenerate all snapshots after migration: `vp test -- -u`
 
 ## Dependency Changes
 
@@ -191,7 +195,12 @@ runScripts(creation.scripts, resolvedDir);
 - Clack-based CLI UX (`bin/index.ts`) — prompts unchanged
 - Binary favicon workaround via base64 script — unchanged
 
+### `bin/index.ts` (additional cleanup)
+
+- `creation.suggestions?.length` can be simplified to `creation.suggestions.length` since `produce()` always returns a non-partial `Creation`
+
 ## Notes
 
 - The favicon.ico workaround stays because `renderTemplates` reads files as UTF-8 strings. Binary files in template directories would need separate handling if needed in the future.
 - Bingo ran scripts within a phase in parallel, but each phase currently has at most one `Script` object, so sequential execution is simpler and correct. Parallelism can be added later if needed.
+- The `mergeFiles` type guard (`!Array.isArray(value)`) becomes slightly redundant since `FileTree` never contains arrays, but it's harmless and not worth changing.
