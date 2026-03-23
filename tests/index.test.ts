@@ -1,4 +1,3 @@
-import { testTemplate } from "bingo-testers";
 import { describe, expect, it } from "vite-plus/test";
 
 import { buildContext } from "../src/context.ts";
@@ -6,121 +5,103 @@ import { mergeFiles } from "../src/merge.ts";
 import { options } from "../src/options.ts";
 import { buildScripts } from "../src/scripts.ts";
 import { buildSuggestions } from "../src/suggestions.ts";
-import template from "../src/template.ts";
+import { produce } from "../src/template.ts";
 
 // ── Snapshot tests for all 4 kinds ─────────────────────────────────────────
 
 describe("template snapshots", () => {
     it("SPA kind (no Convex)", async () => {
-        const creation = await testTemplate(template, {
-            options: {
-                kind: "react-router-spa",
-                owner: "test-owner",
-                repository: "test-repo",
-            },
+        let creation = await produce({
+            kind: "react-router-spa",
+            owner: "test-owner",
+            repository: "test-repo",
         });
 
         expect(creation.files).toMatchSnapshot();
     });
 
     it("SPA kind (with Convex)", async () => {
-        const creation = await testTemplate(template, {
-            options: {
-                convex: true,
-                kind: "react-router-spa",
-                owner: "test-owner",
-                repository: "test-repo",
-            },
+        let creation = await produce({
+            convex: true,
+            kind: "react-router-spa",
+            owner: "test-owner",
+            repository: "test-repo",
         });
 
         expect(creation.files).toMatchSnapshot();
     });
 
     it("SSR kind (no Convex)", async () => {
-        const creation = await testTemplate(template, {
-            options: {
-                kind: "react-router-ssr",
-                owner: "test-owner",
-                repository: "test-repo",
-            },
+        let creation = await produce({
+            kind: "react-router-ssr",
+            owner: "test-owner",
+            repository: "test-repo",
         });
 
         expect(creation.files).toMatchSnapshot();
     });
 
     it("SSR kind (with Convex)", async () => {
-        const creation = await testTemplate(template, {
-            options: {
-                convex: true,
-                kind: "react-router-ssr",
-                owner: "test-owner",
-                repository: "test-repo",
-            },
+        let creation = await produce({
+            convex: true,
+            kind: "react-router-ssr",
+            owner: "test-owner",
+            repository: "test-repo",
         });
 
         expect(creation.files).toMatchSnapshot();
     });
 
     it("RSC kind (no content-layer)", async () => {
-        const creation = await testTemplate(template, {
-            options: {
-                kind: "react-router-rsc",
-                owner: "test-owner",
-                repository: "test-repo",
-            },
+        let creation = await produce({
+            kind: "react-router-rsc",
+            owner: "test-owner",
+            repository: "test-repo",
         });
 
         expect(creation.files).toMatchSnapshot();
     });
 
     it("RSC kind (with content-layer)", async () => {
-        const creation = await testTemplate(template, {
-            options: {
-                contentLayer: true,
-                kind: "react-router-rsc",
-                owner: "test-owner",
-                repository: "test-repo",
-            },
+        let creation = await produce({
+            contentLayer: true,
+            kind: "react-router-rsc",
+            owner: "test-owner",
+            repository: "test-repo",
         });
 
         expect(creation.files).toMatchSnapshot();
     });
 
     it("RSC kind (with SEA)", async () => {
-        const creation = await testTemplate(template, {
-            options: {
-                kind: "react-router-rsc",
-                owner: "test-owner",
-                repository: "test-repo",
-                sea: true,
-            },
+        let creation = await produce({
+            kind: "react-router-rsc",
+            owner: "test-owner",
+            repository: "test-repo",
+            sea: true,
         });
 
         expect(creation.files).toMatchSnapshot();
     });
 
     it("RSC kind (with content-layer + SEA)", async () => {
-        const creation = await testTemplate(template, {
-            options: {
-                contentLayer: true,
-                kind: "react-router-rsc",
-                owner: "test-owner",
-                repository: "test-repo",
-                sea: true,
-            },
+        let creation = await produce({
+            contentLayer: true,
+            kind: "react-router-rsc",
+            owner: "test-owner",
+            repository: "test-repo",
+            sea: true,
         });
 
         expect(creation.files).toMatchSnapshot();
     });
 
     it("React Router templates include react-shared layer files", async () => {
-        for (const kind of ["react-router-spa", "react-router-ssr", "react-router-rsc"] as const) {
-            const creation = await testTemplate(template, {
-                options: { kind, owner: "test-owner", repository: "test-repo" },
-            });
-            const files = creation.files as Record<string, unknown>;
-            const app = files.app as Record<string, unknown>;
-            const styles = app.styles as Record<string, unknown>;
+        for (let kind of ["react-router-spa", "react-router-ssr", "react-router-rsc"] as const) {
+            let creation = await produce({ kind, owner: "test-owner", repository: "test-repo" });
+            let files = creation.files as Record<string, unknown>;
+            let app = files.app as Record<string, unknown>;
+            let styles = app.styles as Record<string, unknown>;
 
             expect(app["routes.ts"], `${kind}: routes.ts missing`).toBeDefined();
             expect(styles?.["tailwind.css"], `${kind}: tailwind.css missing`).toBeDefined();
@@ -136,12 +117,10 @@ describe("template snapshots", () => {
     });
 
     it("ts-package base", async () => {
-        const creation = await testTemplate(template, {
-            options: {
-                kind: "ts-package",
-                owner: "test-owner",
-                repository: "test-repo",
-            },
+        let creation = await produce({
+            kind: "ts-package",
+            owner: "test-owner",
+            repository: "test-repo",
         });
 
         expect(creation.files).toMatchSnapshot();
@@ -152,96 +131,82 @@ describe("template snapshots", () => {
 
 describe("ts-package feature combinations", () => {
     it("cli only", async () => {
-        const creation = await testTemplate(template, {
-            options: {
-                cli: true,
-                kind: "ts-package",
-                owner: "test-owner",
-                repository: "test-repo",
-            },
+        let creation = await produce({
+            cli: true,
+            kind: "ts-package",
+            owner: "test-owner",
+            repository: "test-repo",
         });
 
         expect(creation.files).toMatchSnapshot();
     });
 
     it("generator only", async () => {
-        const creation = await testTemplate(template, {
-            options: {
-                generator: true,
-                kind: "ts-package",
-                owner: "test-owner",
-                repository: "test-repo",
-            },
+        let creation = await produce({
+            generator: true,
+            kind: "ts-package",
+            owner: "test-owner",
+            repository: "test-repo",
         });
 
         expect(creation.files).toMatchSnapshot();
     });
 
     it("sea only", async () => {
-        const creation = await testTemplate(template, {
-            options: {
-                kind: "ts-package",
-                owner: "test-owner",
-                repository: "test-repo",
-                sea: true,
-            },
+        let creation = await produce({
+            kind: "ts-package",
+            owner: "test-owner",
+            repository: "test-repo",
+            sea: true,
         });
 
         expect(creation.files).toMatchSnapshot();
     });
 
     it("cli + generator", async () => {
-        const creation = await testTemplate(template, {
-            options: {
-                cli: true,
-                generator: true,
-                kind: "ts-package",
-                owner: "test-owner",
-                repository: "test-repo",
-            },
+        let creation = await produce({
+            cli: true,
+            generator: true,
+            kind: "ts-package",
+            owner: "test-owner",
+            repository: "test-repo",
         });
 
         expect(creation.files).toMatchSnapshot();
     });
 
     it("cli + sea", async () => {
-        const creation = await testTemplate(template, {
-            options: {
-                cli: true,
-                kind: "ts-package",
-                owner: "test-owner",
-                repository: "test-repo",
-                sea: true,
-            },
+        let creation = await produce({
+            cli: true,
+            kind: "ts-package",
+            owner: "test-owner",
+            repository: "test-repo",
+            sea: true,
         });
 
         expect(creation.files).toMatchSnapshot();
     });
 
     it("generator + sea", async () => {
-        const creation = await testTemplate(template, {
-            options: {
-                generator: true,
-                kind: "ts-package",
-                owner: "test-owner",
-                repository: "test-repo",
-                sea: true,
-            },
+        let creation = await produce({
+            generator: true,
+            kind: "ts-package",
+            owner: "test-owner",
+            repository: "test-repo",
+            sea: true,
         });
 
         expect(creation.files).toMatchSnapshot();
     });
 
     it("cli + generator + sea", async () => {
-        const creation = await testTemplate(template, {
-            options: {
-                cli: true,
-                generator: true,
-                kind: "ts-package",
-                owner: "test-owner",
-                repository: "test-repo",
-                sea: true,
-            },
+        let creation = await produce({
+            cli: true,
+            generator: true,
+            kind: "ts-package",
+            owner: "test-owner",
+            repository: "test-repo",
+            sea: true,
         });
 
         expect(creation.files).toMatchSnapshot();
@@ -508,50 +473,31 @@ describe("buildScripts", () => {
         );
     });
 
-    it("React Router templates include favicon script", () => {
-        for (const kind of ["react-router-spa", "react-router-ssr", "react-router-rsc"] as const) {
-            const ctx = buildContext({
-                cli: false,
-                contentLayer: false,
-                convex: false,
-                generator: false,
+    it("React Router templates include favicon in file tree", async () => {
+        for (let kind of ["react-router-spa", "react-router-ssr", "react-router-rsc"] as const) {
+            let creation = await produce({
                 kind,
-                owner: "o",
-                repository: "r",
-                sea: false,
+                owner: "test-owner",
+                repository: "test-repo",
             });
-            const scripts = buildScripts(ctx);
+            let files = creation.files as Record<string, unknown>;
+            let pub = files.public as Record<string, unknown>;
 
-            expect(scripts).toContainEqual(
-                expect.objectContaining({
-                    commands: expect.arrayContaining([
-                        expect.stringContaining("base64 -d > public/favicon.ico"),
-                    ]),
-                }),
+            expect(Buffer.isBuffer(pub["favicon.ico"]), `${kind}: favicon.ico should be a Buffer`).toBe(
+                true,
             );
         }
     });
 
-    it("ts-package does not include favicon script", () => {
-        const ctx = buildContext({
-            cli: false,
-            contentLayer: false,
-            convex: false,
-            generator: false,
+    it("ts-package does not include favicon", async () => {
+        let creation = await produce({
             kind: "ts-package",
-            owner: "o",
-            repository: "r",
-            sea: false,
+            owner: "test-owner",
+            repository: "test-repo",
         });
-        const scripts = buildScripts(ctx);
+        let files = creation.files as Record<string, unknown>;
 
-        expect(scripts).not.toContainEqual(
-            expect.objectContaining({
-                commands: expect.arrayContaining([
-                    expect.stringContaining("base64 -d > public/favicon.ico"),
-                ]),
-            }),
-        );
+        expect(files.public).toBeUndefined();
     });
 
     it("RSC: runs wrangler typegen before check", () => {
@@ -636,12 +582,8 @@ describe("buildScripts", () => {
         });
         const scripts = buildScripts(ctx);
 
-        const depScript = scripts.find(
-            (script): script is Exclude<typeof script, string> =>
-                typeof script !== "string" &&
-                script.phase === 0 &&
-                Array.isArray(script.commands) &&
-                script.commands.length > 1,
+        let depScript = scripts.find(
+            script => script.phase === 0 && script.commands.length > 1,
         );
         const allCommands = depScript?.commands.join(" ") ?? "";
 
