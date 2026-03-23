@@ -594,7 +594,7 @@ describe("buildScripts", () => {
 
         expect(scripts).toContainEqual(
             expect.objectContaining({
-                commands: expect.arrayContaining(["vp add @remix-run/node-fetch-server mime"]),
+                commands: expect.arrayContaining(["vp add @remix-run/node-fetch-server @remix-run/mime"]),
                 phase: 0,
             }),
         );
