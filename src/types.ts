@@ -1,4 +1,6 @@
-export type FileTree = Record<string, string | Buffer | FileTree>;
+export interface FileTree {
+    [key: string]: string | Buffer | FileTree;
+}
 
 export interface Script {
     commands: string[];

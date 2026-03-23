@@ -1,11 +1,11 @@
-import type { CreatedDirectory } from "bingo-fs";
+import type { FileTree } from "./types.ts";
 
-function isDirectory(value: unknown): value is CreatedDirectory {
-    return typeof value === "object" && value !== null && !Array.isArray(value);
+function isDirectory(value: unknown): value is FileTree {
+    return typeof value === "object" && value !== null && !Array.isArray(value) && !Buffer.isBuffer(value);
 }
 
-export function mergeFiles(...layers: (CreatedDirectory | null | void)[]): CreatedDirectory {
-    const result: CreatedDirectory = {};
+export function mergeFiles(...layers: (FileTree | null | void)[]): FileTree {
+    const result: FileTree = {};
 
     for (const layer of layers) {
         if (layer) {
@@ -13,7 +13,7 @@ export function mergeFiles(...layers: (CreatedDirectory | null | void)[]): Creat
                 const existing = result[key];
 
                 if (isDirectory(existing) && isDirectory(value)) {
-                    result[key] = mergeFiles(existing, value as CreatedDirectory);
+                    result[key] = mergeFiles(existing, value as FileTree);
                 } else {
                     result[key] = value;
                 }
