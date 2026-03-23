@@ -16,7 +16,6 @@
         "create-sprinkles": "dist/bin.mjs"
     },
     "files": [
-        "assets",
         "dist",
         "templates"
     ],
