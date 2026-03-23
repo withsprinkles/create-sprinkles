@@ -1,6 +1,6 @@
-import type { Script } from "./types.ts";
-
 import { execFileSync } from "node:child_process";
+
+import type { Script } from "./types.ts";
 
 export function runScripts(scripts: Script[], cwd: string): void {
     let phases = [...new Set(scripts.map(s => s.phase))].sort((a, b) => a - b);

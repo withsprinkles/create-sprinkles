@@ -23,20 +23,21 @@ export type FileTree = Record<string, string | Buffer | FileTree>;
 
 // Script execution descriptor
 export interface Script {
-  commands: string[];
-  phase: number;
-  silent?: boolean;
+    commands: string[];
+    phase: number;
+    silent?: boolean;
 }
 
 // What produce() returns
 export interface Creation {
-  files: FileTree;
-  scripts: Script[];
-  suggestions: string[];
+    files: FileTree;
+    scripts: Script[];
+    suggestions: string[];
 }
 ```
 
 Simplifications vs Bingo:
+
 - `FileTree` drops `false`, `undefined`, tuple, and metadata variants (unused)
 - `FileTree` adds `Buffer` support for binary files — something `bingo-handlebars` couldn't handle
 - `Script` is always an object with required `phase` (no bare string form)
@@ -50,27 +51,27 @@ import fs from "node:fs/promises";
 import path from "node:path";
 
 function isBinary(buffer: Buffer): boolean {
-  return buffer.includes(0);
+    return buffer.includes(0);
 }
 
 export async function renderTemplates(dir: string, context: object): Promise<FileTree> {
-  let tree: FileTree = {};
+    let tree: FileTree = {};
 
-  for (let entry of await fs.readdir(dir, { withFileTypes: true })) {
-    let fullPath = path.join(dir, entry.name);
+    for (let entry of await fs.readdir(dir, { withFileTypes: true })) {
+        let fullPath = path.join(dir, entry.name);
 
-    if (entry.isDirectory()) {
-      tree[entry.name] = await renderTemplates(fullPath, context);
-    } else if (entry.name.endsWith(".hbs")) {
-      let source = await fs.readFile(fullPath, "utf-8");
-      tree[entry.name.slice(0, -4)] = Handlebars.compile(source)(context);
-    } else {
-      let buffer = await fs.readFile(fullPath);
-      tree[entry.name] = isBinary(buffer) ? buffer : buffer.toString("utf-8");
+        if (entry.isDirectory()) {
+            tree[entry.name] = await renderTemplates(fullPath, context);
+        } else if (entry.name.endsWith(".hbs")) {
+            let source = await fs.readFile(fullPath, "utf-8");
+            tree[entry.name.slice(0, -4)] = Handlebars.compile(source)(context);
+        } else {
+            let buffer = await fs.readFile(fullPath);
+            tree[entry.name] = isBinary(buffer) ? buffer : buffer.toString("utf-8");
+        }
     }
-  }
 
-  return tree;
+    return tree;
 }
 ```
 
@@ -87,17 +88,17 @@ import fs from "node:fs/promises";
 import path from "node:path";
 
 export async function writeTree(dir: string, tree: FileTree): Promise<void> {
-  await fs.mkdir(dir, { recursive: true });
+    await fs.mkdir(dir, { recursive: true });
 
-  for (let [name, entry] of Object.entries(tree)) {
-    let target = path.join(dir, name);
+    for (let [name, entry] of Object.entries(tree)) {
+        let target = path.join(dir, name);
 
-    if (typeof entry === "string" || Buffer.isBuffer(entry)) {
-      await fs.writeFile(target, entry);
-    } else {
-      await writeTree(target, entry);
+        if (typeof entry === "string" || Buffer.isBuffer(entry)) {
+            await fs.writeFile(target, entry);
+        } else {
+            await writeTree(target, entry);
+        }
     }
-  }
 }
 ```
 
@@ -109,21 +110,21 @@ Uses `execFileSync` from `node:child_process` for safe command execution. Each c
 import { execFileSync } from "node:child_process";
 
 export function runScripts(scripts: Script[], cwd: string): void {
-  let phases = [...new Set(scripts.map(s => s.phase))].sort((a, b) => a - b);
+    let phases = [...new Set(scripts.map(s => s.phase))].sort((a, b) => a - b);
 
-  for (let phase of phases) {
-    let batch = scripts.filter(s => s.phase === phase);
+    for (let phase of phases) {
+        let batch = scripts.filter(s => s.phase === phase);
 
-    for (let script of batch) {
-      for (let command of script.commands) {
-        try {
-          execFileSync("/bin/sh", ["-c", command], { cwd, stdio: "pipe" });
-        } catch (error) {
-          if (!script.silent) throw error;
+        for (let script of batch) {
+            for (let command of script.commands) {
+                try {
+                    execFileSync("/bin/sh", ["-c", command], { cwd, stdio: "pipe" });
+                } catch (error) {
+                    if (!script.silent) throw error;
+                }
+            }
         }
-      }
     }
-  }
 }
 ```
 
@@ -143,11 +144,11 @@ export function runScripts(scripts: Script[], cwd: string): void {
 
 ```ts
 export async function produce(options: Options): Promise<Creation> {
-  let context = buildContext(options);
-  let files = await buildLayers(context);
-  let scripts = buildScripts(context);
-  let suggestions = buildSuggestions(context);
-  return { files, scripts, suggestions };
+    let context = buildContext(options);
+    let files = await buildLayers(context);
+    let scripts = buildScripts(context);
+    let suggestions = buildSuggestions(context);
+    return { files, scripts, suggestions };
 }
 ```
 
@@ -157,7 +158,16 @@ export async function produce(options: Options): Promise<Creation> {
 - Call `produce()`, `writeTree()`, `runScripts()` directly:
 
 ```ts
-let creation = await produce({ cli, contentLayer, convex, generator, kind, owner, repository, sea });
+let creation = await produce({
+    cli,
+    contentLayer,
+    convex,
+    generator,
+    kind,
+    owner,
+    repository,
+    sea,
+});
 await writeTree(resolvedDir, creation.files);
 runScripts(creation.scripts, resolvedDir);
 ```

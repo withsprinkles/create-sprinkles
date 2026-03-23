@@ -1,7 +1,7 @@
-import type { FileTree } from "./types.ts";
-
 import fs from "node:fs/promises";
 import path from "node:path";
+
+import type { FileTree } from "./types.ts";
 
 export async function writeTree(dir: string, tree: FileTree): Promise<void> {
     await fs.mkdir(dir, { recursive: true });

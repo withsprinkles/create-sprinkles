@@ -1,7 +1,12 @@
 import type { FileTree } from "./types.ts";
 
 function isDirectory(value: unknown): value is FileTree {
-    return typeof value === "object" && value !== null && !Array.isArray(value) && !Buffer.isBuffer(value);
+    return (
+        typeof value === "object" &&
+        value !== null &&
+        !Array.isArray(value) &&
+        !Buffer.isBuffer(value)
+    );
 }
 
 export function mergeFiles(...layers: (FileTree | null | void)[]): FileTree {

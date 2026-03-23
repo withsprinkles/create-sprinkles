@@ -1,8 +1,8 @@
-import type { FileTree } from "./types.ts";
-
 import Handlebars from "handlebars";
 import fs from "node:fs/promises";
 import path from "node:path";
+
+import type { FileTree } from "./types.ts";
 
 function isBinary(buffer: Buffer): boolean {
     return buffer.includes(0);

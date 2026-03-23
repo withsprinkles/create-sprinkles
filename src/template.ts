@@ -1,7 +1,7 @@
+import path from "node:path";
+
 import type { TemplateContext } from "./context.ts";
 import type { Creation, FileTree } from "./types.ts";
-
-import path from "node:path";
 
 import { buildContext } from "./context.ts";
 import { mergeFiles } from "./merge.ts";
@@ -28,7 +28,9 @@ async function collectAddonLayers(context: TemplateContext): Promise<(FileTree |
     }
 
     if (context.isPackage && context.generator) {
-        addons.push(await renderTemplates(path.join(templatesDir, "ts-package-generator"), context));
+        addons.push(
+            await renderTemplates(path.join(templatesDir, "ts-package-generator"), context),
+        );
     }
 
     if (context.isPackage && context.sea) {
@@ -40,19 +42,30 @@ async function collectAddonLayers(context: TemplateContext): Promise<(FileTree |
     }
 
     if (context.isSSR && context.hasConvex) {
-        addons.push(await renderTemplates(path.join(templatesDir, "react-router-ssr-convex"), context));
+        addons.push(
+            await renderTemplates(path.join(templatesDir, "react-router-ssr-convex"), context),
+        );
     }
 
     if (context.isRSC && !context.hasSEA) {
-        addons.push(await renderTemplates(path.join(templatesDir, "react-router-rsc-cloudflare"), context));
+        addons.push(
+            await renderTemplates(path.join(templatesDir, "react-router-rsc-cloudflare"), context),
+        );
     }
 
     if (context.hasSEA) {
-        addons.push(await renderTemplates(path.join(templatesDir, "react-router-rsc-sea"), context));
+        addons.push(
+            await renderTemplates(path.join(templatesDir, "react-router-rsc-sea"), context),
+        );
     }
 
     if (context.hasContentLayer) {
-        addons.push(await renderTemplates(path.join(templatesDir, "react-router-rsc-content-layer"), context));
+        addons.push(
+            await renderTemplates(
+                path.join(templatesDir, "react-router-rsc-content-layer"),
+                context,
+            ),
+        );
     }
 
     return addons;

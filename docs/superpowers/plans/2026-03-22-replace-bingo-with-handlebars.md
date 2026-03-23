@@ -14,27 +14,28 @@
 
 ## File Map
 
-| File | Action | Responsibility |
-|------|--------|---------------|
-| `src/types.ts` | Create | `FileTree`, `Script`, `Creation` type definitions |
-| `src/render.ts` | Create | Compile `.hbs` templates, read binary/text files from template dirs |
-| `src/write.ts` | Create | Write a `FileTree` to disk recursively |
-| `src/exec.ts` | Create | Run `Script[]` in phased order |
-| `src/template.ts` | Modify | Replace Bingo wrapper with plain `produce()` function |
-| `src/merge.ts` | Modify | Swap `CreatedDirectory` type for `FileTree` |
-| `src/scripts.ts` | Modify | Swap `CreatedScript` type for `Script`, remove favicon workaround |
-| `src/index.ts` | Modify | Update exports |
-| `bin/index.ts` | Modify | Replace `runTemplate` with direct `produce`/`writeTree`/`runScripts` calls |
-| `tests/index.test.ts` | Modify | Replace `testTemplate` with direct `produce()` calls |
-| `templates/react-shared/public/favicon.ico` | Create (move) | Binary favicon, moved from `assets/` |
-| `assets/favicon.ico` | Delete | No longer needed |
-| `package.json` | Modify | Swap dependencies, remove `"assets"` from `files` |
+| File                                        | Action        | Responsibility                                                             |
+| ------------------------------------------- | ------------- | -------------------------------------------------------------------------- |
+| `src/types.ts`                              | Create        | `FileTree`, `Script`, `Creation` type definitions                          |
+| `src/render.ts`                             | Create        | Compile `.hbs` templates, read binary/text files from template dirs        |
+| `src/write.ts`                              | Create        | Write a `FileTree` to disk recursively                                     |
+| `src/exec.ts`                               | Create        | Run `Script[]` in phased order                                             |
+| `src/template.ts`                           | Modify        | Replace Bingo wrapper with plain `produce()` function                      |
+| `src/merge.ts`                              | Modify        | Swap `CreatedDirectory` type for `FileTree`                                |
+| `src/scripts.ts`                            | Modify        | Swap `CreatedScript` type for `Script`, remove favicon workaround          |
+| `src/index.ts`                              | Modify        | Update exports                                                             |
+| `bin/index.ts`                              | Modify        | Replace `runTemplate` with direct `produce`/`writeTree`/`runScripts` calls |
+| `tests/index.test.ts`                       | Modify        | Replace `testTemplate` with direct `produce()` calls                       |
+| `templates/react-shared/public/favicon.ico` | Create (move) | Binary favicon, moved from `assets/`                                       |
+| `assets/favicon.ico`                        | Delete        | No longer needed                                                           |
+| `package.json`                              | Modify        | Swap dependencies, remove `"assets"` from `files`                          |
 
 ---
 
 ### Task 1: Swap dependencies
 
 **Files:**
+
 - Modify: `package.json`
 
 - [ ] **Step 1: Remove Bingo packages and add Handlebars**
@@ -64,6 +65,7 @@ git commit -m "chore: replace bingo packages with handlebars"
 ### Task 2: Create `src/types.ts`
 
 **Files:**
+
 - Create: `src/types.ts`
 
 - [ ] **Step 1: Create the types file**
@@ -101,6 +103,7 @@ git commit -m "feat: add local FileTree, Script, and Creation types"
 ### Task 3: Create `src/render.ts`
 
 **Files:**
+
 - Create: `src/render.ts`
 
 - [ ] **Step 1: Create the render module**
@@ -154,6 +157,7 @@ git commit -m "feat: add renderTemplates for Handlebars template rendering with 
 ### Task 4: Create `src/write.ts`
 
 **Files:**
+
 - Create: `src/write.ts`
 
 - [ ] **Step 1: Create the write module**
@@ -196,6 +200,7 @@ git commit -m "feat: add writeTree for writing FileTree to disk"
 ### Task 5: Create `src/exec.ts`
 
 **Files:**
+
 - Create: `src/exec.ts`
 
 - [ ] **Step 1: Create the exec module**
@@ -241,6 +246,7 @@ git commit -m "feat: add runScripts for phased script execution"
 ### Task 6: Move favicon and remove `assets/`
 
 **Files:**
+
 - Create: `templates/react-shared/public/favicon.ico` (binary move)
 - Delete: `assets/favicon.ico`
 - Delete: `assets/` directory
@@ -290,6 +296,7 @@ git commit -m "refactor: move favicon.ico into react-shared template layer, remo
 These three files are migrated together because they have type dependencies — changing `merge.ts` alone would break `template.ts` until it is also updated.
 
 **Files:**
+
 - Modify: `src/merge.ts`
 - Modify: `src/scripts.ts`
 - Modify: `src/template.ts` (full rewrite)
@@ -330,7 +337,12 @@ to:
 
 ```ts
 function isDirectory(value: unknown): value is FileTree {
-    return typeof value === "object" && value !== null && !Array.isArray(value) && !Buffer.isBuffer(value);
+    return (
+        typeof value === "object" &&
+        value !== null &&
+        !Array.isArray(value) &&
+        !Buffer.isBuffer(value)
+    );
 }
 ```
 
@@ -370,16 +382,13 @@ const faviconBase64 = readFileSync(
 Remove the phase 3 favicon script block (lines 104-113):
 
 ```ts
-    // Phase 3.5: Write binary assets that bingo-handlebars can't handle
-    if (context.isReactRouter) {
-        scripts.push({
-            commands: [
-                "mkdir -p public",
-                `echo '${faviconBase64}' | base64 -d > public/favicon.ico`,
-            ],
-            phase: 3,
-        });
-    }
+// Phase 3.5: Write binary assets that bingo-handlebars can't handle
+if (context.isReactRouter) {
+    scripts.push({
+        commands: ["mkdir -p public", `echo '${faviconBase64}' | base64 -d > public/favicon.ico`],
+        phase: 3,
+    });
+}
 ```
 
 - [ ] **Step 6: Replace `CreatedScript` with `Script` in the return type**
@@ -425,7 +434,9 @@ async function collectAddonLayers(context: TemplateContext): Promise<(FileTree |
     }
 
     if (context.isPackage && context.generator) {
-        addons.push(await renderTemplates(path.join(templatesDir, "ts-package-generator"), context));
+        addons.push(
+            await renderTemplates(path.join(templatesDir, "ts-package-generator"), context),
+        );
     }
 
     if (context.isPackage && context.sea) {
@@ -437,19 +448,30 @@ async function collectAddonLayers(context: TemplateContext): Promise<(FileTree |
     }
 
     if (context.isSSR && context.hasConvex) {
-        addons.push(await renderTemplates(path.join(templatesDir, "react-router-ssr-convex"), context));
+        addons.push(
+            await renderTemplates(path.join(templatesDir, "react-router-ssr-convex"), context),
+        );
     }
 
     if (context.isRSC && !context.hasSEA) {
-        addons.push(await renderTemplates(path.join(templatesDir, "react-router-rsc-cloudflare"), context));
+        addons.push(
+            await renderTemplates(path.join(templatesDir, "react-router-rsc-cloudflare"), context),
+        );
     }
 
     if (context.hasSEA) {
-        addons.push(await renderTemplates(path.join(templatesDir, "react-router-rsc-sea"), context));
+        addons.push(
+            await renderTemplates(path.join(templatesDir, "react-router-rsc-sea"), context),
+        );
     }
 
     if (context.hasContentLayer) {
-        addons.push(await renderTemplates(path.join(templatesDir, "react-router-rsc-content-layer"), context));
+        addons.push(
+            await renderTemplates(
+                path.join(templatesDir, "react-router-rsc-content-layer"),
+                context,
+            ),
+        );
     }
 
     return addons;
@@ -501,8 +523,8 @@ git commit -m "refactor: migrate merge.ts, scripts.ts, and template.ts off Bingo
 
 ### Task 8: Migrate `src/index.ts`
 
-
 **Files:**
+
 - Modify: `src/index.ts`
 
 - [ ] **Step 1: Update exports**
@@ -534,6 +556,7 @@ git commit -m "refactor: update public exports — produce replaces template"
 ### Task 9: Migrate `bin/index.ts`
 
 **Files:**
+
 - Modify: `bin/index.ts`
 
 - [ ] **Step 1: Replace Bingo imports and runtime call**
@@ -602,7 +625,16 @@ with:
 
 ```ts
 try {
-    let creation = await produce({ cli, contentLayer, convex, generator, kind, owner, repository, sea });
+    let creation = await produce({
+        cli,
+        contentLayer,
+        convex,
+        generator,
+        kind,
+        owner,
+        repository,
+        sea,
+    });
     await writeTree(resolvedDir, creation.files);
     runScripts(creation.scripts, resolvedDir);
 
@@ -637,6 +669,7 @@ git commit -m "refactor: replace runTemplate with direct produce/writeTree/runSc
 ### Task 10: Migrate tests
 
 **Files:**
+
 - Modify: `tests/index.test.ts`
 
 - [ ] **Step 1: Replace imports**
@@ -707,7 +740,7 @@ The full list of test calls to update:
 8. "RSC kind (with content-layer + SEA)" — add `cli: false, convex: false, generator: false`
 9. "React Router templates include react-shared layer files" — add all missing boolean options
 10. "ts-package base" — add `cli: false, contentLayer: false, convex: false, generator: false, sea: false`
-11-17. All "ts-package feature combinations" — add missing booleans similarly
+    11-17. All "ts-package feature combinations" — add missing booleans similarly
 
 - [ ] **Step 3: Clean up dead type guard code**
 
@@ -726,9 +759,7 @@ const depScript = scripts.find(
 Replace with:
 
 ```ts
-let depScript = scripts.find(
-    script => script.phase === 0 && script.commands.length > 1,
-);
+let depScript = scripts.find(script => script.phase === 0 && script.commands.length > 1);
 ```
 
 - [ ] **Step 4: Replace favicon script tests with favicon file tree tests**

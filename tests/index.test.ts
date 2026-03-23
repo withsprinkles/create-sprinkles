@@ -483,9 +483,10 @@ describe("buildScripts", () => {
             let files = creation.files as Record<string, unknown>;
             let pub = files.public as Record<string, unknown>;
 
-            expect(Buffer.isBuffer(pub["favicon.ico"]), `${kind}: favicon.ico should be a Buffer`).toBe(
-                true,
-            );
+            expect(
+                Buffer.isBuffer(pub["favicon.ico"]),
+                `${kind}: favicon.ico should be a Buffer`,
+            ).toBe(true);
         }
     });
 
@@ -540,7 +541,9 @@ describe("buildScripts", () => {
 
         expect(scripts).toContainEqual(
             expect.objectContaining({
-                commands: expect.arrayContaining(["vp add @remix-run/node-fetch-server @remix-run/mime"]),
+                commands: expect.arrayContaining([
+                    "vp add @remix-run/node-fetch-server @remix-run/mime",
+                ]),
                 phase: 0,
             }),
         );
@@ -582,9 +585,7 @@ describe("buildScripts", () => {
         });
         const scripts = buildScripts(ctx);
 
-        let depScript = scripts.find(
-            script => script.phase === 0 && script.commands.length > 1,
-        );
+        let depScript = scripts.find(script => script.phase === 0 && script.commands.length > 1);
         const allCommands = depScript?.commands.join(" ") ?? "";
 
         expect(allCommands).not.toContain("gray-matter");
