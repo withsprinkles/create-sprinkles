@@ -1,6 +1,5 @@
-import type { Script } from "./types.ts";
-
 import type { TemplateContext } from "./context.ts";
+import type { Script } from "./types.ts";
 
 function buildDependencyCommands(context: TemplateContext): string[] {
     const commands: string[] = [];
@@ -55,7 +54,7 @@ function buildDependencyCommands(context: TemplateContext): string[] {
         }
 
         if (context.generator) {
-            commands.push("vp add bingo bingo-handlebars zod");
+            commands.push("vp add handlebars zod");
         }
     }
 

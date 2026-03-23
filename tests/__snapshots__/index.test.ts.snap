@@ -132238,8 +132238,18 @@ vp run dev
 \`\`\`
 ",
   "bin": {
-    "create.ts": "#!/usr/bin/env node import { runTemplateCLI } from "bingo"; import template from
-"../src/template.ts"; await runTemplateCLI(template);",
+    "create.ts": "#!/usr/bin/env node
+import { args } from "@bomb.sh/args";
+import path from "node:path";
+
+import { produce } from "../src/template.ts";
+import { writeTree } from "../src/write.ts";
+
+const { name } = args({ name: { type: "string", required: true } });
+
+const resolvedDir = path.resolve(name);
+const creation = await produce({ name });
+await writeTree(resolvedDir, creation.files);",
     "index.ts": "#!/usr/bin/env node import { cli } from "../src/cli.ts"; cli();",
   },
   "package.json": "{
@@ -132315,10 +132325,10 @@ export function cli(): void {
 It will be bundled * into a single file and embedded into the Node.js binary. * * @see
 https://nodejs.org/api/single-executable-applications.html */ import { greet } from "./index.ts";
 const name = process.argv[2] ?? "world"; console.log(greet(name));",
-    "template.ts": "import { createTemplate } from "bingo";
-import { handlebars } from "bingo-handlebars";
-import path from "node:path";
+    "template.ts": "import path from "node:path";
 import { z } from "zod";
+
+import { renderTemplates } from "./render.ts";
 
 const templatesDir = path.join(import.meta.dirname, "../templates");
 
@@ -132326,17 +132336,12 @@ const options = {
     name: z.string().describe("Project name"),
 };
 
-export default createTemplate({
-    about: {
-        description: "Scaffold a new project with test-repo.",
-        name: "@test-owner/test-repo",
-    },
-    options,
-    async produce({ options: opts }) {
-        const files = await handlebars(path.join(templatesDir, "default"), opts);
-        return { files };
-    },
-});
+export { options };
+
+export async function produce(opts: { name: string }) {
+    const files = await renderTemplates(path.join(templatesDir, "default"), opts);
+    return { files };
+}
 ",
   },
   "tests": {
@@ -132695,8 +132700,18 @@ vp run dev
 \`\`\`
 ",
   "bin": {
-    "create.ts": "#!/usr/bin/env node import { runTemplateCLI } from "bingo"; import template from
-"../src/template.ts"; await runTemplateCLI(template);",
+    "create.ts": "#!/usr/bin/env node
+import { args } from "@bomb.sh/args";
+import path from "node:path";
+
+import { produce } from "../src/template.ts";
+import { writeTree } from "../src/write.ts";
+
+const { name } = args({ name: { type: "string", required: true } });
+
+const resolvedDir = path.resolve(name);
+const creation = await produce({ name });
+await writeTree(resolvedDir, creation.files);",
     "index.ts": "#!/usr/bin/env node import { cli } from "../src/cli.ts"; cli();",
   },
   "package.json": "{
@@ -132766,10 +132781,10 @@ export function cli(): void {
     return \`Hello, \${name}!\`;
 }
 ",
-    "template.ts": "import { createTemplate } from "bingo";
-import { handlebars } from "bingo-handlebars";
-import path from "node:path";
+    "template.ts": "import path from "node:path";
 import { z } from "zod";
+
+import { renderTemplates } from "./render.ts";
 
 const templatesDir = path.join(import.meta.dirname, "../templates");
 
@@ -132777,17 +132792,12 @@ const options = {
     name: z.string().describe("Project name"),
 };
 
-export default createTemplate({
-    about: {
-        description: "Scaffold a new project with test-repo.",
-        name: "@test-owner/test-repo",
-    },
-    options,
-    async produce({ options: opts }) {
-        const files = await handlebars(path.join(templatesDir, "default"), opts);
-        return { files };
-    },
-});
+export { options };
+
+export async function produce(opts: { name: string }) {
+    const files = await renderTemplates(path.join(templatesDir, "default"), opts);
+    return { files };
+}
 ",
   },
   "tests": {
@@ -134004,8 +134014,18 @@ vp run dev
 \`\`\`
 ",
   "bin": {
-    "create.ts": "#!/usr/bin/env node import { runTemplateCLI } from "bingo"; import template from
-"../src/template.ts"; await runTemplateCLI(template);",
+    "create.ts": "#!/usr/bin/env node
+import { args } from "@bomb.sh/args";
+import path from "node:path";
+
+import { produce } from "../src/template.ts";
+import { writeTree } from "../src/write.ts";
+
+const { name } = args({ name: { type: "string", required: true } });
+
+const resolvedDir = path.resolve(name);
+const creation = await produce({ name });
+await writeTree(resolvedDir, creation.files);",
   },
   "package.json": "{
     "name": "@test-owner/test-repo",
@@ -134042,10 +134062,10 @@ vp run dev
 It will be bundled * into a single file and embedded into the Node.js binary. * * @see
 https://nodejs.org/api/single-executable-applications.html */ import { greet } from "./index.ts";
 const name = process.argv[2] ?? "world"; console.log(greet(name));",
-    "template.ts": "import { createTemplate } from "bingo";
-import { handlebars } from "bingo-handlebars";
-import path from "node:path";
+    "template.ts": "import path from "node:path";
 import { z } from "zod";
+
+import { renderTemplates } from "./render.ts";
 
 const templatesDir = path.join(import.meta.dirname, "../templates");
 
@@ -134053,17 +134073,12 @@ const options = {
     name: z.string().describe("Project name"),
 };
 
-export default createTemplate({
-    about: {
-        description: "Scaffold a new project with test-repo.",
-        name: "@test-owner/test-repo",
-    },
-    options,
-    async produce({ options: opts }) {
-        const files = await handlebars(path.join(templatesDir, "default"), opts);
-        return { files };
-    },
-});
+export { options };
+
+export async function produce(opts: { name: string }) {
+    const files = await renderTemplates(path.join(templatesDir, "default"), opts);
+    return { files };
+}
 ",
   },
   "tests": {
@@ -134422,8 +134437,18 @@ vp run dev
 \`\`\`
 ",
   "bin": {
-    "create.ts": "#!/usr/bin/env node import { runTemplateCLI } from "bingo"; import template from
-"../src/template.ts"; await runTemplateCLI(template);",
+    "create.ts": "#!/usr/bin/env node
+import { args } from "@bomb.sh/args";
+import path from "node:path";
+
+import { produce } from "../src/template.ts";
+import { writeTree } from "../src/write.ts";
+
+const { name } = args({ name: { type: "string", required: true } });
+
+const resolvedDir = path.resolve(name);
+const creation = await produce({ name });
+await writeTree(resolvedDir, creation.files);",
   },
   "package.json": "{
     "name": "@test-owner/test-repo",
@@ -134454,10 +134479,10 @@ vp run dev
     return \`Hello, \${name}!\`;
 }
 ",
-    "template.ts": "import { createTemplate } from "bingo";
-import { handlebars } from "bingo-handlebars";
-import path from "node:path";
+    "template.ts": "import path from "node:path";
 import { z } from "zod";
+
+import { renderTemplates } from "./render.ts";
 
 const templatesDir = path.join(import.meta.dirname, "../templates");
 
@@ -134465,17 +134490,12 @@ const options = {
     name: z.string().describe("Project name"),
 };
 
-export default createTemplate({
-    about: {
-        description: "Scaffold a new project with test-repo.",
-        name: "@test-owner/test-repo",
-    },
-    options,
-    async produce({ options: opts }) {
-        const files = await handlebars(path.join(templatesDir, "default"), opts);
-        return { files };
-    },
-});
+export { options };
+
+export async function produce(opts: { name: string }) {
+    const files = await renderTemplates(path.join(templatesDir, "default"), opts);
+    return { files };
+}
 ",
   },
   "tests": {

@@ -1,2 +1,12 @@
-#!/usr/bin/env node import { runTemplateCLI } from "bingo"; import template from
-"../src/template.ts"; await runTemplateCLI(template);
+#!/usr/bin/env node
+import { args } from "@bomb.sh/args";
+import path from "node:path";
+
+import { produce } from "../src/template.ts";
+import { writeTree } from "../src/write.ts";
+
+const { name } = args({ name: { type: "string", required: true } });
+
+const resolvedDir = path.resolve(name);
+const creation = await produce({ name });
+await writeTree(resolvedDir, creation.files);

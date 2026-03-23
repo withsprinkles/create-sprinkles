@@ -2,7 +2,15 @@ import type { z } from "zod";
 
 import type { options } from "./options.ts";
 
-type Options = { [Key in keyof typeof options]: z.infer<(typeof options)[Key]> };
+type Options = {
+    [Key in keyof typeof options as (typeof options)[Key] extends z.ZodOptional<z.ZodTypeAny>
+        ? never
+        : Key]: z.infer<(typeof options)[Key]>;
+} & {
+    [Key in keyof typeof options as (typeof options)[Key] extends z.ZodOptional<z.ZodTypeAny>
+        ? Key
+        : never]?: z.infer<(typeof options)[Key]>;
+};
 
 export interface TemplateContext extends Options {
     isSPA: boolean;

@@ -75,7 +75,7 @@ if (kind === "ts-package") {
         message: "Include optional features?",
         options: [
             { label: "CLI scaffold", value: "cli" as const },
-            { label: "Bingo generator scaffold", value: "generator" as const },
+            { label: "Handlebars generator scaffold", value: "generator" as const },
             { label: "Single Executable Application (SEA)", value: "sea" as const },
         ],
         required: false,
@@ -109,7 +109,16 @@ const spinner = prompts.spinner();
 spinner.start("Scaffolding project...");
 
 try {
-    let creation = await produce({ cli, contentLayer, convex, generator, kind, owner, repository, sea });
+    let creation = await produce({
+        cli,
+        contentLayer,
+        convex,
+        generator,
+        kind,
+        owner,
+        repository,
+        sea,
+    });
     await writeTree(resolvedDir, creation.files);
     runScripts(creation.scripts, resolvedDir);
 
