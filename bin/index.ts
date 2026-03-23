@@ -1,10 +1,11 @@
 #!/usr/bin/env node
 import * as prompts from "@clack/prompts";
-import { runTemplate } from "bingo";
 import path from "node:path";
 
+import { runScripts } from "../src/exec.ts";
 import { NAME } from "../src/metadata.ts";
-import template from "../src/template.ts";
+import { produce } from "../src/template.ts";
+import { writeTree } from "../src/write.ts";
 
 prompts.intro(NAME);
 
@@ -108,24 +109,13 @@ const spinner = prompts.spinner();
 spinner.start("Scaffolding project...");
 
 try {
-    const creation = await runTemplate(template, {
-        directory: resolvedDir,
-        mode: "setup",
-        options: {
-            cli,
-            contentLayer,
-            convex,
-            generator,
-            kind,
-            owner,
-            repository,
-            sea,
-        },
-    });
+    let creation = await produce({ cli, contentLayer, convex, generator, kind, owner, repository, sea });
+    await writeTree(resolvedDir, creation.files);
+    runScripts(creation.scripts, resolvedDir);
 
     spinner.stop("Project scaffolded!");
 
-    if (creation.suggestions?.length) {
+    if (creation.suggestions.length) {
         prompts.note(creation.suggestions.join("\n"), "Next steps");
     }
 
