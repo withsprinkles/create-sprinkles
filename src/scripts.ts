@@ -45,7 +45,7 @@ function buildDependencyCommands(context: TemplateContext): string[] {
     }
 
     if (context.hasSEA) {
-        commands.push("vp add @remix-run/node-fetch-server mime");
+        commands.push("vp add @remix-run/node-fetch-server @remix-run/mime");
         commands.push("vp add -D tsdown");
     }
 
