@@ -1,0 +1,13 @@
+[
+    // Site-wide settings loaded by the "settings" collection.
+    // Each object needs an "id" and "label" to satisfy the schema
+    // defined in app/content.config.ts.
+    {
+        "id": "site-title",
+        "label": "My Sprinkles Site"
+    },
+    {
+        "id": "site-description",
+        "label": "A site built with React Router RSC and the Sprinkles content layer."
+    }
+]

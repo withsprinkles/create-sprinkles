@@ -565,7 +565,7 @@ describe("buildScripts", () => {
         expect(scripts).toContainEqual(
             expect.objectContaining({
                 commands: expect.arrayContaining([
-                    "vp add jsr:@std/jsonc jsr:@std/yaml gray-matter github-slugger @remix-run/data-schema",
+                    "vp add @withsprinkles/content-layer @remix-run/data-schema",
                 ]),
                 phase: 0,
             }),

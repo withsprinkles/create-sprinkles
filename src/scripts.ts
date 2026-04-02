@@ -42,9 +42,7 @@ function buildDependencyCommands(context: TemplateContext): string[] {
     }
 
     if (context.hasContentLayer) {
-        commands.push(
-            "vp add jsr:@std/jsonc jsr:@std/yaml gray-matter github-slugger @remix-run/data-schema",
-        );
+        commands.push("vp add @withsprinkles/content-layer @remix-run/data-schema");
         commands.push("vp add -D @mdx-js/rollup");
     }
 

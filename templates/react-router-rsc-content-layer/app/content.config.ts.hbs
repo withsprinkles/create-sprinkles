@@ -1,6 +1,6 @@
 import * as s from "@remix-run/data-schema";
-import { defineCollection } from "sprinkles:content";
-import { file, glob } from "../content-layer/loaders/index.ts";
+import { defineCollection } from "@withsprinkles/content-layer";
+import { file, glob } from "@withsprinkles/content-layer/loaders";
 
 let posts = defineCollection({
     loader: glob({

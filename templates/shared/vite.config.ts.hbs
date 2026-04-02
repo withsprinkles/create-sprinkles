@@ -12,7 +12,7 @@ import devtoolsJson from "vite-plugin-devtools-json";
 import { defineConfig } from "vite-plus";
 
 {{#if hasContentLayer}}
-import { contentLayer } from "./content-layer/plugin.ts";
+import { contentLayer } from "@withsprinkles/content-layer/react";
 {{/if}}
 import { reactCompiler } from "./react-compiler.plugin.ts";
 {{else if isReactRouter}}
